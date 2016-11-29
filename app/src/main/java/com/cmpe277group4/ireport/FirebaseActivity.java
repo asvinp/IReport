@@ -41,14 +41,13 @@ public class FirebaseActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println("registe clicked");
                 registerUser();
             }
         });
     }
 
     private void registerUser() {
-        System.out.println("in registere");
+
         String email = emailText.getText().toString().trim();
         String password = passwordText.getText().toString().trim();
 
