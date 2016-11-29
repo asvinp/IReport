@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "66646918159",
+    "firebase_url": "https://ireport-e5283.firebaseio.com",
+    "project_id": "ireport-e5283",
+    "storage_bucket": "ireport-e5283.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:66646918159:android:6a0a13dc8ac8f307",
+        "android_client_info": {
+          "package_name": "com.cmpe277group4.ireport"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "66646918159-tjq5q4qit66njjdmv457i07o09hv30kq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwVTny0nQwfe8Hmu_sX26hx44xbg4z-hI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
