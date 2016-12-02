@@ -16,9 +16,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 
-/**
- * Created by 33843 on 12/1/2016.
- */
 public class ResidentRegistration extends Fragment {
 
     private EditText emailText;
@@ -67,6 +64,8 @@ public class ResidentRegistration extends Fragment {
                                     if(task.isComplete()){
                                         if(task.isSuccessful()){
                                             Toast.makeText(getContext(),"User registered",Toast.LENGTH_SHORT).show();
+                                            emailText.setText("");
+                                            passText.setText("");
                                         }else{
                                             Toast.makeText(getContext(),"Unable to register",Toast.LENGTH_SHORT).show();
                                         }

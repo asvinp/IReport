@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "66646918159-7pmc8cpsvh6564diidhjf8r0fr8kaob8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cmpe277group4.ireport",
+            "certificate_hash": "90451C1A617C94B2A83F37F59E7AFE78DB88DF09"
+          }
+        },
+        {
           "client_id": "66646918159-tjq5q4qit66njjdmv457i07o09hv30kq.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "66646918159-tjq5q4qit66njjdmv457i07o09hv30kq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

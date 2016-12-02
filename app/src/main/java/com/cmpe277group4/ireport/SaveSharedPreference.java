@@ -4,9 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-/**
- * Created by 33843 on 12/1/2016.
- */
 public class SaveSharedPreference {
 
     static final String USER_NAME = "username";
