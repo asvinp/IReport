@@ -33,9 +33,9 @@ public class ResidentRegistration extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.resident_registration,container,false);
-        emailText = (EditText) rootView.findViewById(R.id.email);
-        passText = (EditText) rootView.findViewById(R.id.password);
-        registerButton = (Button) rootView.findViewById(R.id.register);
+        emailText = (EditText) rootView.findViewById(R.id.residentemail);
+        passText = (EditText) rootView.findViewById(R.id.residentpassword);
+        registerButton = (Button) rootView.findViewById(R.id.residentregister);
 
         progressDialog = new ProgressDialog(getActivity());
 
@@ -43,27 +43,25 @@ public class ResidentRegistration extends Fragment {
             @Override
             public void onClick(View view) {
 
-                progressDialog.setMessage("Registering resident");
-                progressDialog.show();
-
-                boolean validation = true;
-
                 String email = emailText.getText().toString().trim();
                 String password = passText.getText().toString().trim();
+
                 if(factory.isStringEmpty(email)){
                     Toast.makeText(getContext(),factory.NULL_EMAIL,Toast.LENGTH_SHORT).show();
-                    validation = false;
+                    return;
                 }
 
                 if(factory.isStringEmpty(password)){
                     Toast.makeText(getContext(),factory.NULL_PASSWORD,Toast.LENGTH_SHORT).show();
-                    validation = false;
+                    return;
                 }
 
-                if(validation){
-                    FirebaseActivity firebase = new FirebaseActivity();
-                    firebase.registerResidentUser(email, password)
-                            .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                progressDialog.setMessage("Registering resident");
+
+                progressDialog.show();
+                FirebaseActivity firebase = new FirebaseActivity();
+                firebase.registerResidentUser(email, password)
+                        .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if(task.isComplete()){
@@ -79,7 +77,6 @@ public class ResidentRegistration extends Fragment {
                                 }
                             });
                 }
-            }
         });
         return rootView;
     }

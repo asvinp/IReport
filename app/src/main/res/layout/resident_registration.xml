@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/email_hint"
-            android:id="@+id/email"/>
+            android:id="@+id/residentemail"/>
 
         <EditText
             android:layout_margin="15dp"
@@ -30,11 +30,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/password_hint"
-            android:id="@+id/password"/>
+            android:id="@+id/residentpassword"/>
 
         <Button
             android:layout_margin="15dp"
-            android:id="@+id/register"
+            android:id="@+id/residentregister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/registerButtonString"/>
