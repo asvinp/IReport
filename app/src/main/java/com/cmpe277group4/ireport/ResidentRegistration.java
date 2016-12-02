@@ -44,13 +44,17 @@ public class ResidentRegistration extends Fragment {
                 String password = passText.getText().toString().trim();
 
                 if(factory.isStringEmpty(email)){
-                    Toast.makeText(getContext(),factory.NULL_EMAIL,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),getString(R.string.email_null),Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 if(factory.isStringEmpty(password)){
-                    Toast.makeText(getContext(),factory.NULL_PASSWORD,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),getString(R.string.password_null),Toast.LENGTH_SHORT).show();
                     return;
+                }
+
+                if(factory.isStringShort(password,6)){
+                    Toast.makeText(getContext(),getString(R.string.password_short), Toast.LENGTH_SHORT).show();
                 }
 
                 progressDialog.setMessage("Registering resident");

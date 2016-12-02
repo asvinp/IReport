@@ -1,5 +1,6 @@
 package com.cmpe277group4.ireport;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -29,12 +30,14 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 public class OfficialRegistration extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
 
-    EditText emailText;
-    EditText passText;
-    Button registerButton;
+    private EditText emailText;
+    private EditText passText;
+    private Button registerButton;
 
-    FirebaseAuth mAuth;
-    GoogleApiClient apiClient;
+    private ProgressDialog progressDialog;
+
+    private FirebaseAuth mAuth;
+    private GoogleApiClient apiClient;
 
     private final static String TAG = "Google Activity";
 
@@ -47,7 +50,8 @@ public class OfficialRegistration extends Fragment implements GoogleApiClient.On
         passText = (EditText) rootView.findViewById(R.id.officialpassword);
         registerButton = (Button) rootView.findViewById(R.id.officialregister);
 
-        Log.d("KEY",getString(R.string.default_web_client_id));
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("Registering Official");
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -101,6 +105,7 @@ public class OfficialRegistration extends Fragment implements GoogleApiClient.On
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
+        progressDialog.show();
         Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
 
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(),null);
@@ -117,6 +122,7 @@ public class OfficialRegistration extends Fragment implements GoogleApiClient.On
                     Toast.makeText(getContext(), "Authentication failed.",
                             Toast.LENGTH_SHORT).show();
                 }
+                progressDialog.hide();
             }
         });
     }

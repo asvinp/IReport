@@ -7,11 +7,9 @@ import android.text.TextUtils;
  */
 public class FactoryMethods {
 
-    public final String NULL_EMAIL = "Please enter email";
-    public final String NULL_PASSWORD = "Please enter password";
-
     public boolean isStringEmpty(String string){
         return TextUtils.isEmpty(string)?true:false;
     }
 
+    public boolean isStringShort(String password, int i) { return password.length() < 6?true:false; }
 }
