@@ -12,4 +12,8 @@
     <string name="email_null">Please enter email</string>
     <string name="password_null">Please enter password</string>
     <string name="password_short">Password should be more than 6 characters</string>
+    <string name="loginString">Login</string>
+
+    <string name="facebook_app_id">703321546499147</string>
+    <string name="fb_login_protocol_scheme">fb703321546499147</string>
 </resources>

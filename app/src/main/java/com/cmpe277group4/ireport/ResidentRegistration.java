@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,27 +13,53 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+
+import com.facebook.CallbackManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class ResidentRegistration extends Fragment {
 
     private EditText emailText;
     private EditText passText;
     private Button registerButton;
+    private Button fbLogin;
 
     private ProgressDialog progressDialog;
 
+    private FirebaseAuth mAuth;
+    private CallbackManager mCallbackManager;
+
     private final FactoryMethods factory = new FactoryMethods();
+
+    private final static String TAG = "Auth";
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View rootView = inflater.inflate(R.layout.resident_registration,container,false);
         emailText = (EditText) rootView.findViewById(R.id.residentemail);
         passText = (EditText) rootView.findViewById(R.id.residentpassword);
         registerButton = (Button) rootView.findViewById(R.id.residentregister);
+
+        mAuth = FirebaseAuth.getInstance();
+        mAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if(user != null){
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                }else{
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                }
+            }
+        });
+
+        mCallbackManager = CallbackManager.Factory.create();
 
         progressDialog = new ProgressDialog(getActivity());
 

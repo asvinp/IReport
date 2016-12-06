@@ -6,7 +6,8 @@ import android.preference.PreferenceManager;
 
 public class SaveSharedPreference {
 
-    static final String USER_NAME = "username";
+    private static final String USER_NAME = "username";
+    private static final String USER_TYPE = "user_type";
 
     static SharedPreferences getSharedPreferences(Context ctx){
         return PreferenceManager.getDefaultSharedPreferences(ctx);
@@ -16,6 +17,16 @@ public class SaveSharedPreference {
         SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
         editor.putString(USER_NAME,username);
         editor.commit();
+    }
+
+    public static void setUserType(Context ctx, int userType){
+        SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
+        editor.putInt(USER_TYPE,userType);
+        editor.commit();
+    }
+
+    public static int getUserType(Context ctx){
+        return getSharedPreferences(ctx).getInt(USER_TYPE,2);
     }
 
     public static String getUserName(Context ctx){
