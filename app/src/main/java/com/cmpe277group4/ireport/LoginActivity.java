@@ -140,28 +140,34 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                 if(task.isComplete()){
                                     if(task.isSuccessful()){
                                         Toast.makeText(LoginActivity.this,"User registered",Toast.LENGTH_SHORT).show();
-                                        JSONObject userParams = new JSONObject();
-                                        StringEntity entity = null;
-                                        try {
-                                            userParams.put("email",email);
-                                            entity = new StringEntity(userParams.toString());
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        } catch (UnsupportedEncodingException e) {
-                                            e.printStackTrace();
-                                        }
-                                        Log.d("Server", entity.toString());
-                                        userRegClient.get(LoginActivity.this,"http://ec2-54-187-196-140.us-west-2.compute.amazonaws.com/registerNewResident",entity,"application/json", new AsyncHttpResponseHandler() {
-                                            @Override
-                                            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                                                Log.d("Server","User data posted");
-                                            }
 
-                                            @Override
-                                            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                                                Log.d("Server",Integer.toString(statusCode));
-                                            }
-                                        });
+                                        // intent for profile activity ( pass email )
+                                        Intent intent= new Intent(LoginActivity.this, ProfileActivity.class);
+                                        intent.putExtra("email",email);
+                                        startActivity(intent);
+
+//                                        JSONObject userParams = new JSONObject();
+//                                        StringEntity entity = null;
+//                                        try {
+//                                            userParams.put("email",email);
+//                                            entity = new StringEntity(userParams.toString());
+//                                        } catch (JSONException e) {
+//                                            e.printStackTrace();
+//                                        } catch (UnsupportedEncodingException e) {
+//                                            e.printStackTrace();
+//                                        }
+//                                        Log.d("Server", entity.toString());
+//                                        userRegClient.get(LoginActivity.this,"http://ec2-54-187-196-140.us-west-2.compute.amazonaws.com/registerNewResident",entity,"application/json", new AsyncHttpResponseHandler() {
+//                                            @Override
+//                                            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+//                                                Log.d("Server","User data posted");
+//                                            }
+//
+//                                            @Override
+//                                            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+//                                                Log.d("Server",Integer.toString(statusCode));
+//                                            }
+//                                        });
                                         emailText.setText("");
                                         passText.setText("");
                                     }else{
