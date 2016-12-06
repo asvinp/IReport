@@ -217,8 +217,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 startActivityForResult(signInIntent,9001);
             }
         });
-
-
     }
 
     @Override
@@ -262,7 +260,34 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 //                SaveSharedPreference.setUserName(LoginActivity.this,account.getId());
 //                SaveSharedPreference.setUserType(LoginActivity.this,OFFICIAL);
                 Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
+                AsyncHttpClient officialClient = new AsyncHttpClient();
+                JSONObject officialParams = new JSONObject();
+                StringEntity entity = null;
+                try {
+                    officialParams.put("email",account.getEmail());
+                    officialParams.put("name",account.getDisplayName());
+                    entity = new StringEntity(officialParams.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                Log.d("Server", entity.toString());
+                officialClient.get(LoginActivity.this,"http://ec2-54-187-196-140.us-west-2.compute.amazonaws.com/officialNewRegister",entity,"application/json", new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                        SaveSharedPreference.setUserType(LoginActivity.this,OFFICIAL);
+                        SaveSharedPreference.setUserName(LoginActivity.this,account.getDisplayName());
+                        SaveSharedPreference.setUserId(LoginActivity.this, account.getEmail());
+                        Intent officialActivity = new Intent(LoginActivity.this, OfficialActivity.class);
+                        startActivity(officialActivity);
+                    }
 
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                        Log.d("Server",Integer.toString(statusCode));
+                    }
+                });
                 // If sign in fails, display a message to the user. If sign in succeeds
                 // the auth state listener will be notified and logic to handle the
                 // signed in user can be handled in the listener.
