@@ -20,15 +20,18 @@ public class StartActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(SaveSharedPreference.getUserName(StartActivity.this).length() == 0){
+                if(SaveSharedPreference.getUserName(StartActivity.this) == null){
                     //User not logged in
                     Intent fireBaseIntent = new Intent(StartActivity.this, LoginActivity.class);
                     startActivity(fireBaseIntent);
                 }else{
-                    if(SaveSharedPreference.getUserType(StartActivity.this) == 0){
+                    Log.d("START",SaveSharedPreference.getUserName(StartActivity.this));
+                    if(SaveSharedPreference.getUserType(StartActivity.this) == LoginActivity.RESIDENT){
                         Log.d("START","Resident " + SaveSharedPreference.getUserName(StartActivity.this));
-                    }else if(SaveSharedPreference.getUserType(StartActivity.this) == 1){
-                        Log.d("START","Official " + SaveSharedPreference.getUserName(StartActivity.this));
+                    }else if(SaveSharedPreference.getUserType(StartActivity.this) == LoginActivity.OFFICIAL){
+                        Log.d("START","Official " + SaveSharedPreference.getUserId(StartActivity.this));
+                        Intent officialIntent = new Intent(StartActivity.this,OfficialActivity.class);
+                        startActivity(officialIntent);
                     }else{
                         Log.d("START","Invalid User type");
                     }

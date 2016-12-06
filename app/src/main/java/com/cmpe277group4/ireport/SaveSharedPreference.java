@@ -3,6 +3,7 @@ package com.cmpe277group4.ireport;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 public class SaveSharedPreference {
 
@@ -27,6 +28,7 @@ public class SaveSharedPreference {
     }
 
     public static void setUserId(Context ctx, String id){
+        Log.d("a",id);
         SharedPreferences.Editor editor = getSharedPreferences(ctx).edit();
         editor.putString(USER_ID, id);
     }
@@ -36,10 +38,10 @@ public class SaveSharedPreference {
     }
 
     public static String getUserName(Context ctx){
-        return getSharedPreferences(ctx).getString(USER_NAME,"");
+        return getSharedPreferences(ctx).getString(USER_NAME,null);
     }
 
     public static String getUserId(Context ctx){
-        return getSharedPreferences(ctx).getString(USER_ID,"");
+        return getSharedPreferences(ctx).getString(USER_ID,null);
     }
 }

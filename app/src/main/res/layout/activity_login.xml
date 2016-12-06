@@ -77,13 +77,6 @@
                     android:layout_margin="15dp"
                     android:text="Facebook Login"/>
 
-
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Server Get"
-                    android:id="@+id/serverget"/>
-
             </LinearLayout>
         </LinearLayout>
 

@@ -16,6 +16,8 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -42,8 +44,10 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URI;
+import java.util.Arrays;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.HttpResponse;
@@ -53,8 +57,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
 
     //User type
-    private static final int RESIDENT = 0;
-    private static final int OFFICIAL = 1;
+    public static final int RESIDENT = 0;
+    public static final int OFFICIAL = 1;
 
     private static final String TAG = "Auth";
     private static final String SERVER_TAG = "Server";
@@ -75,8 +79,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private GoogleApiClient apiClient;
     private boolean officialReg = false;
-
-    private final String url = "http://localhost";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,8 +107,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         emailText = (EditText) findViewById(R.id.residentemail);
         passText = (EditText) findViewById(R.id.residentpassword);
         registerButton = (Button) findViewById(R.id.residentregister);
+        progressDialog = new ProgressDialog(this);
 
-        final AsyncHttpClient userRegClient = new AsyncHttpClient();
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,7 +130,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     Toast.makeText(LoginActivity.this,getString(R.string.password_short), Toast.LENGTH_SHORT).show();
                 }
 
-                progressDialog = new ProgressDialog(LoginActivity.this);
                 progressDialog.setMessage("Registering resident");
 
                 progressDialog.show();
@@ -145,29 +146,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                         Intent intent= new Intent(LoginActivity.this, ProfileActivity.class);
                                         intent.putExtra("email",email);
                                         startActivity(intent);
-
-//                                        JSONObject userParams = new JSONObject();
-//                                        StringEntity entity = null;
-//                                        try {
-//                                            userParams.put("email",email);
-//                                            entity = new StringEntity(userParams.toString());
-//                                        } catch (JSONException e) {
-//                                            e.printStackTrace();
-//                                        } catch (UnsupportedEncodingException e) {
-//                                            e.printStackTrace();
-//                                        }
-//                                        Log.d("Server", entity.toString());
-//                                        userRegClient.get(LoginActivity.this,"http://ec2-54-187-196-140.us-west-2.compute.amazonaws.com/registerNewResident",entity,"application/json", new AsyncHttpResponseHandler() {
-//                                            @Override
-//                                            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-//                                                Log.d("Server","User data posted");
-//                                            }
-//
-//                                            @Override
-//                                            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-//                                                Log.d("Server",Integer.toString(statusCode));
-//                                            }
-//                                        });
                                         emailText.setText("");
                                         passText.setText("");
                                     }else{
@@ -184,7 +162,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         callBackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton)findViewById(R.id.login_button);
-        loginButton.setReadPermissions("email");
+        loginButton.setReadPermissions(Arrays.asList("email","public_profile"));
         loginButton.registerCallback(callBackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -272,20 +250,23 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 try {
                     officialParams.put("email",account.getEmail());
                     officialParams.put("name",account.getDisplayName());
+//                    officialParams.put("address",Address);
                     entity = new StringEntity(officialParams.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
-                Log.d("Server", entity.toString());
+                Log.d("Server",account.getEmail());
                 officialClient.get(LoginActivity.this,"http://ec2-54-187-196-140.us-west-2.compute.amazonaws.com/officialNewRegister",entity,"application/json", new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                        SaveSharedPreference.setUserType(LoginActivity.this,OFFICIAL);
-                        SaveSharedPreference.setUserName(LoginActivity.this,account.getDisplayName());
-                        SaveSharedPreference.setUserId(LoginActivity.this, account.getEmail());
+//                        SaveSharedPreference.setUserType(LoginActivity.this,OFFICIAL);
+//                        SaveSharedPreference.setUserName(LoginActivity.this,account.getDisplayName());
+
+//                        SaveSharedPreference.setUserId(LoginActivity.this, account.getEmail());
                         Intent officialActivity = new Intent(LoginActivity.this, OfficialActivity.class);
+                        officialActivity.putExtra("emailId",account.getEmail());
                         startActivity(officialActivity);
                     }
 
@@ -305,7 +286,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         });
     }
 
-    private void handleFacebookAccessToken(AccessToken token) {
+    private void handleFacebookAccessToken(final AccessToken token) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
@@ -314,10 +295,22 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
-
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
+                        GraphRequest request = GraphRequest.newMeRequest(token, new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject object, GraphResponse response){
+                                Log.d("Facebook Response",response.toString());
+                                try {
+                                    Log.d("Facebook",object.getString("email"));
+                                    Log.d("Facebook",object.getString("name"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                        Bundle parameters = new Bundle();
+                        parameters.putString("fields", "id, name, email");
+                        request.setParameters(parameters);
+                        request.executeAsync();
                         if (!task.isSuccessful()) {
                             Log.w(TAG, "signInWithCredential", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
