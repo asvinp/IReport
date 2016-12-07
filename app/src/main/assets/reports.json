@@ -1,0 +1,53 @@
+{
+  "reports": [
+    {
+      "id": "000",
+      "time": "01/12/16 5:55pm",
+      "image" : "http://i4.walesonline.co.uk/news/local-news/article2522338.ece/ALTERNATES/s615/generic-litter.jpg",
+      "url": "http://www.delish.com/cooking/recipe-ideas/recipes/a11249/grilled-deviled-chickens-under-brick-mslo0510-recipe/",
+      "description": "Been 3 days, still no one has cleaned it",
+      "severity": "Urgent",
+      "size": "Minor",
+      "status": "still there",
+      "location" : "37.336584, -121.883863"
+    },
+
+    {
+      "id": "001",
+      "time": "04/12/16 5:30pm",
+      "image" : "http://i2.mirror.co.uk/incoming/article8558353.ece/ALTERNATES/s615b/Rubish2.jpg",
+      "url": "http://www.seriouseats.com/recipes/2011/06/stir-fried-rice-with-chinese-sausage-recipe.html",
+      "description": "Trash is blocking foot traffic",
+      "severity": "Medium",
+      "size": "Large",
+      "status": "removal confirmed",
+      "location" : "37.314163, -121.898470"
+    },
+
+    {
+      "id": "002",
+      "time": "02/12/16 2:55am",
+      "image" : "http://www.tampabay.com/resources/images/dti/rendered/2008/05/flo_1red0509_22521a_8col.jpg",
+      "url": "http://www.epicurious.com/recipes/food/views/Five-Spice-Chicken-Wings-109520",
+      "description": "Trash smells bad",
+      "severity": "Urgent",
+      "size": "Extra Large",
+      "status": "removal claimed",
+      "location" : "37.372300, -121.937952"
+    },
+
+    {
+      "id": "003",
+      "time": "03/12/16 6:55pm",
+      "image" : "http://i.dailymail.co.uk/i/pix/2013/08/15/article-2394394-1B4EF646000005DC-294_634x400.jpg",
+      "url": "http://www.seriouseats.com/recipes/2009/07/grilling-chinese-style-spare-ribs-recipe.html",
+      "description": "Too many flies",
+      "severity": "Minor",
+      "size": "Median",
+      "status": "still there",
+      "location" : "37.432035, -121.890425"
+    }
+
+
+  ]
+}

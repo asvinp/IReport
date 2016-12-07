@@ -8,6 +8,15 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_registration">RegistrationActivity</string>
 
+    <string name="thumbnail">thumbnail</string>
+
+    <string-array name="status_array">
+        <item>Still There</item>
+        <item>Removal Confirmed</item>
+        <item>Removal Claimed</item>
+    </string-array>
+    <string name="title_activity_maps">Map</string>
+
     <!-- Error Strings -->
     <string name="email_null">Please enter email</string>
     <string name="password_null">Please enter password</string>
