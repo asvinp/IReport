@@ -118,15 +118,15 @@ public class report_detail extends AppCompatActivity implements GeoTask.Geo, Loc
         //preset spinner according to JSON file
         if (status.equalsIgnoreCase("still there")) {
             //set spinner initial value
-            statusSpinner.setSelection(0);
+            statusSpinner.setSelection(0,false);
 
         } else if (status.equalsIgnoreCase("removal confirmed")) {
             //set spinner initial value
-            statusSpinner.setSelection(1);
+            statusSpinner.setSelection(1,false);
 
         } else if (status.equalsIgnoreCase("removal claimed")) {
             //set spinner initial value
-            statusSpinner.setSelection(2);
+            statusSpinner.setSelection(2,false);
 
         }
 
@@ -137,15 +137,10 @@ public class report_detail extends AppCompatActivity implements GeoTask.Geo, Loc
                 Log.v("statusspinner item", (String) parent.getItemAtPosition(position));
 
                 String selected = statusSpinner.getSelectedItem().toString();
-                if (selected.equalsIgnoreCase("still there")) {
-/*                    Code to write to JSON After ALERT maybe?*/
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(alertcontext);
-
-                    // set title
-                    alertDialogBuilder.setTitle("You Chose \"Still There\"");
-
-                    // set dialog message
-                    alertDialogBuilder
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(alertcontext);
+                alertDialogBuilder.setTitle("You Chose " + (String)parent.getItemAtPosition(position));
+                // set dialog message
+                alertDialogBuilder
                             .setMessage("Click OK to confirm!")
                             .setCancelable(false)
                             .setPositiveButton("OK",new DialogInterface.OnClickListener() {
@@ -168,13 +163,6 @@ public class report_detail extends AppCompatActivity implements GeoTask.Geo, Loc
 
                     // show it
                     alertDialog.show();
-
-
-                } else if (selected.equalsIgnoreCase("removal confirmed")) {
-/*                    Code to write to JSON maybe?*/
-                } else if (selected.equalsIgnoreCase("removal claimed")) {
-/*                    Code to write to JSON maybe?*/
-                }
             }
 
             @Override
@@ -182,8 +170,6 @@ public class report_detail extends AppCompatActivity implements GeoTask.Geo, Loc
                 // TODO Auto-generated method stub
             }
         });
-
-
     }
 
 
