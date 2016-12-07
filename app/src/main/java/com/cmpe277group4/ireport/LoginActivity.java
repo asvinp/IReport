@@ -301,6 +301,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             public void onCompleted(JSONObject object, GraphResponse response){
                                 Log.d("Facebook Response",response.toString());
                                 try {
+                                    Log.d("FBLogin",object.getString("email"));
+                                    Log.d("FBLogin",object.getString("name"));
                                     fbData[0] = object.getString("email");
                                     fbData[1] = object.getString("name");
                                 } catch (JSONException e) {
@@ -317,6 +319,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }else{
+//                            Log.d("FBLogin",fbData[0]);
+//                            Log.d("FBLogin",fbData[1]);
                             Intent residentIntent = new Intent(LoginActivity.this, ProfileActivity.class);
                             residentIntent.putExtra("email", fbData[0]);
                             residentIntent.putExtra("name",fbData[1]);
