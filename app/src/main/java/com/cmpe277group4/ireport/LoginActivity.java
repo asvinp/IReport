@@ -295,13 +295,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
+                        final String[] fbData = new String[2];
                         GraphRequest request = GraphRequest.newMeRequest(token, new GraphRequest.GraphJSONObjectCallback() {
                             @Override
                             public void onCompleted(JSONObject object, GraphResponse response){
                                 Log.d("Facebook Response",response.toString());
                                 try {
-                                    Log.d("Facebook",object.getString("email"));
-                                    Log.d("Facebook",object.getString("name"));
+                                    fbData[0] = object.getString("email");
+                                    fbData[1] = object.getString("name");
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -315,6 +316,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             Log.w(TAG, "signInWithCredential", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+                        }else{
+                            Intent residentIntent = new Intent(LoginActivity.this, ProfileActivity.class);
+                            residentIntent.putExtra("email", fbData[0]);
+                            residentIntent.putExtra("name",fbData[1]);
+                            startActivity(residentIntent);
                         }
                     }
                 });
