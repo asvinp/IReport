@@ -1,6 +1,8 @@
 package com.cmpe277group4.ireport;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -11,23 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.Spinner;
-import android.widget.TextView;
-
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -35,13 +20,17 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-public class report_detail extends AppCompatActivity implements LocationListener {
+public class report_detail extends AppCompatActivity implements GeoTask.Geo, LocationListener {
 
     Spinner statusSpinner;
-
     protected LocationManager locationManager;
     protected LocationListener locationListener;
+    String currentLoc;
+    String trashLoc;
+
+
     protected Context context;
+    final Context alertcontext = this;
     TextView txtLat;
     String lat;
     String provider;
@@ -54,6 +43,7 @@ public class report_detail extends AppCompatActivity implements LocationListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_detail);
 
+        //getLocation
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -65,8 +55,7 @@ public class report_detail extends AppCompatActivity implements LocationListener
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 9, this);
-
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 10, this);
 
         // get data from previous activity (MainActivity/MapsActivity)
         String id = this.getIntent().getExtras().getString("id");
@@ -78,6 +67,7 @@ public class report_detail extends AppCompatActivity implements LocationListener
         String severity = this.getIntent().getExtras().getString("severity");
         String size = this.getIntent().getExtras().getString("size");
         String location = this.getIntent().getExtras().getString("location");
+        trashLoc = location;
 
 
         //Set title of appscreen to id of report
@@ -112,9 +102,7 @@ public class report_detail extends AppCompatActivity implements LocationListener
 
         //Set spinner view
         statusSpinner = (Spinner) findViewById(R.id.statusSpinner);
-        //disable spinner (Maybe set it to disable after getting current user location and cross checking with range of location of trash)
-        //      statusSpinner.setEnabled(false);
-        //      statusSpinner.setClickable(false);
+
 
         //items for spinner
         String[] items = new String[]{"Still There", "Removal Confirmed", "Removal Claimed"};
@@ -125,8 +113,7 @@ public class report_detail extends AppCompatActivity implements LocationListener
 
         statusSpinner.setAdapter(adapter);
 
-        //disable spinner
-        statusSpinner.setEnabled(false);
+
 
         //preset spinner according to JSON file
         if (status.equalsIgnoreCase("still there")) {
@@ -151,7 +138,38 @@ public class report_detail extends AppCompatActivity implements LocationListener
 
                 String selected = statusSpinner.getSelectedItem().toString();
                 if (selected.equalsIgnoreCase("still there")) {
-/*                    Code to write to JSON maybe?*/
+/*                    Code to write to JSON After ALERT maybe?*/
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(alertcontext);
+
+                    // set title
+                    alertDialogBuilder.setTitle("You Chose \"Still There\"");
+
+                    // set dialog message
+                    alertDialogBuilder
+                            .setMessage("Click OK to confirm!")
+                            .setCancelable(false)
+                            .setPositiveButton("OK",new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,int id) {
+                                    // if this button is clicked, close
+                                    // current activity
+                                    dialog.cancel();
+                                }
+                            })
+                            .setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,int id) {
+                                    // if this button is clicked, just close
+                                    // the dialog box and do nothing
+                                    dialog.cancel();
+                                }
+                            });
+
+                    // create alert dialog
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+
+                    // show it
+                    alertDialog.show();
+
+
                 } else if (selected.equalsIgnoreCase("removal confirmed")) {
 /*                    Code to write to JSON maybe?*/
                 } else if (selected.equalsIgnoreCase("removal claimed")) {
@@ -171,7 +189,11 @@ public class report_detail extends AppCompatActivity implements LocationListener
 
     @Override
     public void onLocationChanged(Location location) {
+        currentLoc= "" + location.getLatitude() + "," + location.getLongitude();
+        trashLoc = trashLoc.replace(" ", "");
 
+        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=" + currentLoc + "&destinations=" + trashLoc + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyAP8hnEOoMqRMpvQ7glzj6phn7Z1M45g4M";
+        new GeoTask(report_detail.this).execute(url);
     }
 
     @Override
@@ -187,5 +209,19 @@ public class report_detail extends AppCompatActivity implements LocationListener
     @Override
     public void onProviderDisabled(String provider) {
 
+    }
+
+    @Override
+    public void setDouble(String result) {
+        Double dist=Double.parseDouble(result)/0.3048;
+        Log.d("dist in feet", String.valueOf(dist));
+        if (dist <= 30){
+            //enable spinner
+            statusSpinner.setEnabled(true);
+        }
+        else {
+            //disable spinner
+            statusSpinner.setEnabled(false);
+        }
     }
 }
