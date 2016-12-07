@@ -94,7 +94,7 @@ public class UpdateActivity extends AppCompatActivity {
                     profileObj.put("email",email);
                     profileObj.put("name",name);
                     profileObj.put("address",address);
-                    profileObj.put("ScreenName",screenName);
+                    profileObj.put("screenName",screenName);
                     entity = new StringEntity(profileObj.toString());
                 }catch(JSONException e){
                     e.printStackTrace();

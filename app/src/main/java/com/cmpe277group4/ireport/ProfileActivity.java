@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -94,8 +95,9 @@ public class ProfileActivity extends AppCompatActivity {
                     profileObj.put("email",email);
                     profileObj.put("name",name);
                     profileObj.put("address",address);
-                    profileObj.put("ScreenName",screenName);
+                    profileObj.put("screenName",screenName);
                     entity = new StringEntity(profileObj.toString());
+
                 }catch(JSONException e){
                     e.printStackTrace();
                 } catch (UnsupportedEncodingException e) {
@@ -114,6 +116,8 @@ public class ProfileActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                         Log.d(PROFILE_TAG,"Failure Status : " + Integer.toString(statusCode));
+                        Toast.makeText(ProfileActivity.this, "unable to poast data ",Toast.LENGTH_SHORT).show();
+
                     }
                 });
 
