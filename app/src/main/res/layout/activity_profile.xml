@@ -10,23 +10,22 @@
     tools:context="com.cmpe277group4.ireport.ProfileActivity">
 
     <ImageView
+        android:id="@android:id/icon"
+        android:layout_weight="1"
+        android:onClick="selectImage"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView"
         android:background="@drawable/breakingbad"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/Email"
-        android:layout_alignParentEnd="true" />
-
-    <ImageView
-        android:id="@android:id/icon"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:onClick="selectImage"
-        android:layout_above="@+id/Email"
-        android:layout_alignParentEnd="true" />
+        android:layout_above="@+id/Email" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -36,7 +35,28 @@
         android:layout_above="@+id/Register"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="136dp"
-        android:layout_alignParentEnd="true"/>
+        android:layout_alignParentEnd="true" />
+
+
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Address"
+        android:hint="Enter your Address(optional)"
+        android:layout_above="@+id/Register"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/ScreenName"
+        android:layout_above="@+id/Address"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:hint="Enter Screen Name"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -51,18 +71,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/name"
-        android:layout_alignTop="@+id/Email"
+        android:hint="Enter you name"
+        android:layout_above="@+id/ScreenName"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="43dp"
-        android:layout_alignParentEnd="true"
-        android:hint="Enter you name" />
+        android:layout_alignParentEnd="true" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/Address"
-        android:layout_below="@+id/name"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:hint="Enter your Address(optional)"/>
 </RelativeLayout>

@@ -31,12 +31,12 @@ import cz.msebera.android.httpclient.entity.StringEntity;
 
 import static android.R.attr.name;
 
-public class ProfileActivity extends AppCompatActivity {
+public class UpdateActivity extends AppCompatActivity {
 
     private static final String PROFILE_TAG = "PROFILE";
     TextView nameText, addressText, emailText, screenName;
     String email, name, address;
-    Button Register;
+    Button Update;
     private static final int SELECT_PICTURE = 0;
     private ImageView imageView;
     private static int RESULT_LOAD_IMAGE = 1;
@@ -62,7 +62,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
         Log.d(PROFILE_TAG, email);
         Log.d(PROFILE_TAG, name);
-        Register = (Button) findViewById(R.id.Register);
+        Update = (Button) findViewById(R.id.Register);
         imageView = (ImageView) findViewById(android.R.id.icon);
 
 
@@ -82,7 +82,7 @@ public class ProfileActivity extends AppCompatActivity {
             address = " ";
         }
 
-        Register.setOnClickListener(new View.OnClickListener() {
+        Update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d("mprofile ", nameText.getText().toString());
@@ -103,11 +103,11 @@ public class ProfileActivity extends AppCompatActivity {
                 }
 
                 AsyncHttpClient profileClient = new AsyncHttpClient();
-                profileClient.get(ProfileActivity.this, "http://ec2-54-187-196-140.us-west-2.compute.amazonaws.com/registerNewResident", entity, "application/json", new AsyncHttpResponseHandler() {
+                profileClient.get(UpdateActivity.this, "http://ec2-54-187-196-140.us-west-2.compute.amazonaws.com/updateResident", entity, "application/json", new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                        Log.d(PROFILE_TAG,"User profile posted");
-                        Intent reportActivity = new Intent(ProfileActivity.this,ReportActivity.class);
+                        Log.d(PROFILE_TAG,"User profile Updated");
+                        Intent reportActivity = new Intent(UpdateActivity.this,ReportActivity.class);
                         startActivity(reportActivity);
                     }
 
