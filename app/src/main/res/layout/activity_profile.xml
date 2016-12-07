@@ -9,15 +9,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.cmpe277group4.ireport.ProfileActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Name"
-        android:id="@+id/Name"
-        android:layout_centerVertical="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true" />
-
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,35 +16,54 @@
         android:background="@drawable/breakingbad"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/Name"
-        android:layout_alignEnd="@+id/Name" />
+        android:layout_above="@+id/Email"
+        android:layout_alignParentEnd="true" />
+
+    <ImageView
+        android:id="@android:id/icon"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:onClick="selectImage"
+        android:layout_above="@+id/Email"
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Email"
         android:id="@+id/Email"
-        android:layout_marginTop="27dp"
-        android:layout_below="@+id/Name"
-        android:layout_alignStart="@+id/Name"
-        android:layout_alignParentEnd="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Address"
-        android:id="@+id/Address"
-        android:layout_below="@+id/Email"
-        android:layout_alignStart="@+id/Email"
-        android:layout_marginTop="35dp"
-        android:layout_alignParentEnd="true" />
+        android:layout_above="@+id/Register"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="136dp"
+        android:layout_alignParentEnd="true"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sign Out"
-        android:id="@+id/Signout"
+        android:text="Register"
+        android:id="@+id/Register"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/name"
+        android:layout_alignTop="@+id/Email"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="43dp"
+        android:layout_alignParentEnd="true"
+        android:hint="Enter you name" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Address"
+        android:layout_below="@+id/name"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:text="Address"
+        android:hint="Enter your Address(optional)"/>
 </RelativeLayout>
