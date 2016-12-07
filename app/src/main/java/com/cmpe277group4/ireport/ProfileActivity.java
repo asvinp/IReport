@@ -18,6 +18,16 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.entity.StringEntity;
 
 import static android.R.attr.name;
 
@@ -25,7 +35,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private static final String PROFILE_TAG = "PROFILE";
     TextView nameText, addressText, emailText;
-    String email, name;
+    String email, name, address;
     Button Register;
     private static final int SELECT_PICTURE = 0;
     private ImageView imageView;
@@ -66,12 +76,44 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+        address = addressText.getText().toString();
+        if(address == null){
+            address = " ";
+        }
+
         Register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d("mprofile ", nameText.getText().toString());
                 Log.d("mprofile ", addressText.getText().toString());
+                Log.d(PROFILE_TAG,address);
+                StringEntity entity = null;
+                JSONObject profileObj = new JSONObject();
+                try{
+                    profileObj.put("email",email);
+                    profileObj.put("name",name);
+                    profileObj.put("address",address);
+                    entity = new StringEntity(profileObj.toString());
+                }catch(JSONException e){
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
 
+                AsyncHttpClient profileClient = new AsyncHttpClient();
+                profileClient.get(ProfileActivity.this, "http://ec2-54-187-196-140.us-west-2.compute.amazonaws.com/registerNewResident", entity, "application/json", new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                        Log.d(PROFILE_TAG,"User profile posted");
+                        Intent reportActivity = new Intent(ProfileActivity.this,ReportActivity.class);
+                        startActivity(reportActivity);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                        Log.d(PROFILE_TAG,"Failure Status : " + Integer.toString(statusCode));
+                    }
+                });
 
             }
         });
