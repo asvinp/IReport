@@ -52,7 +52,7 @@ public class ProfileActivity extends AppCompatActivity {
 
 
         emailText.setText(email);
-        //name.setText("Enter Name");
+        nameText.setText(name);
         //address.setText("Current Location ");
 
 

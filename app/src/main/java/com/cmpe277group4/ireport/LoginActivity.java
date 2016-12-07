@@ -294,40 +294,44 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
-                        final String[] fbData = new String[2];
-                        GraphRequest request = GraphRequest.newMeRequest(token, new GraphRequest.GraphJSONObjectCallback() {
-                            @Override
-                            public void onCompleted(JSONObject object, GraphResponse response){
-                                Log.d("Facebook Response",response.toString());
-                                try {
-                                    Log.d("FBLogin",object.getString("email"));
-                                    Log.d("FBLogin",object.getString("name"));
-                                    fbData[0] = object.getString("email");
-                                    fbData[1] = object.getString("name");
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+                        if(task.isSuccessful()){
+                            Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
+                            final String[] fbData = new String[2];
+                            GraphRequest request = GraphRequest.newMeRequest(token, new GraphRequest.GraphJSONObjectCallback() {
+                                @Override
+                                public void onCompleted(JSONObject object, GraphResponse response){
+                                    Log.d("Facebook Response",response.toString());
+                                    try {
+                                        Log.d("FBLogin",object.getString("email"));
+                                        Log.d("FBLogin",object.getString("name"));
+                                        fbData[0] = object.getString("email");
+                                        fbData[1] = object.getString("name");
+                                        updateUI(fbData[0],fbData[1]);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
-                            }
-                        });
-                        Bundle parameters = new Bundle();
-                        parameters.putString("fields", "id, name, email");
-                        request.setParameters(parameters);
-                        request.executeAsync();
-                        if (!task.isSuccessful()) {
+                            });
+                            Bundle parameters = new Bundle();
+                            parameters.putString("fields", "id, name, email");
+                            request.setParameters(parameters);
+                            request.executeAsync();
+                        }else if(!task.isSuccessful()) {
                             Log.w(TAG, "signInWithCredential", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                        }else{
-//                            Log.d("FBLogin",fbData[0]);
-//                            Log.d("FBLogin",fbData[1]);
-                            Intent residentIntent = new Intent(LoginActivity.this, ProfileActivity.class);
-                            residentIntent.putExtra("email", fbData[0]);
-                            residentIntent.putExtra("name",fbData[1]);
-                            startActivity(residentIntent);
                         }
                     }
                 });
+    }
+
+    private void updateUI(String email, String name){
+        Log.d("UIUPDATE",email);
+        Log.d("UIUPPDATE",name);
+        Intent residentIntent = new Intent(LoginActivity.this, ProfileActivity.class);
+        residentIntent.putExtra("email", email);
+        residentIntent.putExtra("name",name);
+        startActivity(residentIntent);
     }
 
     @Override
