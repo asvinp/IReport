@@ -14,10 +14,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import static android.R.attr.name;
+
 public class ProfileActivity extends AppCompatActivity {
 
-    TextView name, address, email;
-    String emaill;
+    private static final String PROFILE_TAG = "PROFILE";
+    TextView nameText, addressText, emailText;
+    String email, name;
     Button Register;
     private static final int SELECT_PICTURE = 0;
     private ImageView imageView;
@@ -26,25 +29,30 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        address = (TextView) findViewById(R.id.Address);
-        name = (TextView) findViewById(R.id.name);
-        email = (TextView) findViewById(R.id.Email);
+        addressText = (TextView) findViewById(R.id.Address);
+        nameText = (TextView) findViewById(R.id.name);
+        emailText = (TextView) findViewById(R.id.Email);
         Intent intent = getIntent();
-        emaill = intent.getExtras().getString("email");
+        email = intent.getExtras().getString("email");
+        name = intent.getExtras().getString("name");
+        if(name == null){
+            name = "";
+        }
+        Log.d(PROFILE_TAG,email);
+        Log.d(PROFILE_TAG,name);
         Register = (Button) findViewById(R.id.Register);
         imageView = (ImageView) findViewById(android.R.id.icon);
         Register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("mprofile ", name.getText().toString());
-                Log.d("mprofile ", address.getText().toString());
-
+                Log.d("mprofile ", nameText.getText().toString());
+                Log.d("mprofile ", addressText.getText().toString());
             }
         });
 
 
-        email.setText(emaill);
-        //name.setText("Enter Name");
+        emailText.setText(email);
+        nameText.setText(name);
         //address.setText("Current Location ");
 
 

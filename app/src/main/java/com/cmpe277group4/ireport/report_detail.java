@@ -172,8 +172,6 @@ public class report_detail extends AppCompatActivity implements LocationListener
     @Override
     public void onLocationChanged(Location location) {
 
-        txtLat.setText("Latitude:" + location.getLatitude() + ", Longitude:" + location.getLongitude());
-
     }
 
     @Override
