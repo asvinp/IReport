@@ -27,11 +27,10 @@ public class ReportActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.add:
-                return true;
             case R.id.signout:
                 FirebaseAuth.getInstance().signOut();
-                
+                Intent goBackLogin = new Intent(ReportActivity.this,LoginActivity.class);
+                startActivity(goBackLogin);
                 return true;
             case R.id.about:
                 return true;

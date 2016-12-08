@@ -414,4 +414,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         Log.d("CONNECTION","Connection Failed");
         Toast.makeText(LoginActivity.this,"Unable to connect",Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
 }
