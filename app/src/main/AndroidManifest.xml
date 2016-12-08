@@ -55,6 +55,10 @@
             android:label="@string/title_activity_maps"></activity>
         <activity android:name=".report_detail" />
         <activity android:name=".ReportActivity"></activity>
+        <activity android:name=".ResidentDetail"></activity>
+        <activity android:name=".ResidentActivity"></activity>
+
+
         <activity android:name=".UpdateActivity"></activity>
     </application>
 

@@ -18,9 +18,9 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class OfficialActivity extends AppCompatActivity {
+public class ResidentActivity extends AppCompatActivity {
 
-    private static final String OFFICIAL_TAG = "OFFICIAL";
+    private static final String RESIDENT_TAG = "RESIDENT";
 
     private ListView mListView;
 
@@ -28,11 +28,11 @@ public class OfficialActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_official);
-        Intent officialIntent = getIntent();
-        String emailTest = officialIntent.getExtras().getString("emailId");
+        Intent residentIntent = getIntent();
+        String resid = residentIntent.getExtras().getString("id");
         mListView = (ListView) findViewById(R.id.report_list_view);
 // 1
-        final ArrayList<Report> reportList = Report.getReportsFromFile("reports.json", this, "");
+        final ArrayList<Report> reportList = Report.getReportsFromFile("reports.json", this, resid);
 
         ReportAdapter adapter = new ReportAdapter(this, reportList);
         mListView.setAdapter(adapter);
@@ -103,7 +103,7 @@ public class OfficialActivity extends AppCompatActivity {
     }
         return(super.onOptionsItemSelected(item));
     }
-    }
+}
 
 
 

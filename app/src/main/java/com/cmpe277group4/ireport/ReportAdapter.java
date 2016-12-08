@@ -89,11 +89,11 @@ public class ReportAdapter extends BaseAdapter {
 
 // 2
         titleTextView.setText(report.id);
-        subtitleTextView.setText(report.time);
+//        subtitleTextView.setText(report.time);
         detailTextView.setText(report.status);
 
 // 3
-        Picasso.with(mContext).load(report.imageUrl).placeholder(R.mipmap.ic_launcher).into(thumbnailImageView);
+//        Picasso.with(mContext).load(report.imageUrl).placeholder(R.mipmap.ic_launcher).into(thumbnailImageView);
 
         return rowView;
     }

@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-public class report_detail extends AppCompatActivity {
+public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, LocationListener {
 
     Spinner statusSpinner;
     protected LocationManager locationManager;
@@ -55,7 +55,7 @@ public class report_detail extends AppCompatActivity {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 10, this);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 10, this);
 
         // get data from previous activity (MainActivity/MapsActivity)
         String id = this.getIntent().getExtras().getString("id");
@@ -141,28 +141,28 @@ public class report_detail extends AppCompatActivity {
                 alertDialogBuilder.setTitle("You Chose " + (String)parent.getItemAtPosition(position));
                 // set dialog message
                 alertDialogBuilder
-                            .setMessage("Click OK to confirm!")
-                            .setCancelable(false)
-                            .setPositiveButton("OK",new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog,int id) {
-                                    // if this button is clicked, close
-                                    // current activity
-                                    dialog.cancel();
-                                }
-                            })
-                            .setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog,int id) {
-                                    // if this button is clicked, just close
-                                    // the dialog box and do nothing
-                                    dialog.cancel();
-                                }
-                            });
+                        .setMessage("Click OK to confirm!")
+                        .setCancelable(false)
+                        .setPositiveButton("OK",new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                // if this button is clicked, close
+                                // current activity
+                                dialog.cancel();
+                            }
+                        })
+                        .setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                // if this button is clicked, just close
+                                // the dialog box and do nothing
+                                dialog.cancel();
+                            }
+                        });
 
-                    // create alert dialog
-                    AlertDialog alertDialog = alertDialogBuilder.create();
+                // create alert dialog
+                AlertDialog alertDialog = alertDialogBuilder.create();
 
-                    // show it
-                    alertDialog.show();
+                // show it
+                alertDialog.show();
             }
 
             @Override
@@ -173,41 +173,41 @@ public class report_detail extends AppCompatActivity {
     }
 
 
-//    @Override
-//    public void onLocationChanged(Location location) {
-//        currentLoc= "" + location.getLatitude() + "," + location.getLongitude();
-//        trashLoc = trashLoc.replace(" ", "");
-//
-//        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=" + currentLoc + "&destinations=" + trashLoc + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyAP8hnEOoMqRMpvQ7glzj6phn7Z1M45g4M";
-//        new GeoTask(report_detail.this).execute(url);
-//    }
-//
-//    @Override
-//    public void onStatusChanged(String provider, int status, Bundle extras) {
-//
-//    }
-//
-//    @Override
-//    public void onProviderEnabled(String provider) {
-//
-//    }
-//
-//    @Override
-//    public void onProviderDisabled(String provider) {
-//
-//    }
-//
-//    @Override
-//    public void setDouble(String result) {
-//        Double dist=Double.parseDouble(result)/0.3048;
-//        Log.d("dist in feet", String.valueOf(dist));
-//        if (dist <= 30){
-//            //enable spinner
-//            statusSpinner.setEnabled(true);
-//        }
-//        else {
-//            //disable spinner
-//            statusSpinner.setEnabled(false);
-//        }
-//    }
+    @Override
+    public void onLocationChanged(Location location) {
+        currentLoc= "" + location.getLatitude() + "," + location.getLongitude();
+        trashLoc = trashLoc.replace(" ", "");
+
+        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=" + currentLoc + "&destinations=" + trashLoc + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyAP8hnEOoMqRMpvQ7glzj6phn7Z1M45g4M";
+        new GeoTask(ResidentDetail.this).execute(url);
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
+
+    @Override
+    public void setDouble(String result) {
+        Double dist=Double.parseDouble(result)/0.3048;
+        Log.d("dist in feet", String.valueOf(dist));
+        if (dist <= 30){
+            //enable spinner
+            statusSpinner.setEnabled(true);
+        }
+        else {
+            //disable spinner
+            statusSpinner.setEnabled(false);
+        }
+    }
 }
