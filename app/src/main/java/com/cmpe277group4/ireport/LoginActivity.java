@@ -35,6 +35,7 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.UserInfo;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -95,6 +96,22 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 if (user != null) {
                     Log.d("Auth"," " + user.getEmail());
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    for(UserInfo userInfo: mAuth.getCurrentUser().getProviderData()){
+                        Log.d("AUTH",userInfo.getProviderId());
+                        if(userInfo.getProviderId() == "google.com"){
+                            Log.d("AUTH","Official Signed In");
+                            updateUIToOfficial(userInfo.getEmail());
+                        }else {
+                            Log.d("AUTH","Resident Signed In");
+                            try {
+                                fetchResidentData(userInfo.getEmail());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
@@ -371,6 +388,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         }
                     }
                 });
+    }
+
+    private void updateUIToOfficial(String email){
+        Intent officialIntent = new Intent(LoginActivity.this, ProfileActivity.class);
+        officialIntent.putExtra("id",email);
+        startActivity(officialIntent);
     }
 
     private void updateUI(String email, String name){

@@ -98,5 +98,3 @@ public class ReportAdapter extends BaseAdapter {
         return rowView;
     }
 }
-
-

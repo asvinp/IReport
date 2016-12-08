@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +21,8 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -53,6 +56,7 @@ public class ProfileActivity extends AppCompatActivity {
             case R.id.add:
                 return true;
             case R.id.signout:
+                FirebaseAuth.getInstance().signOut();
                 return true;
             case R.id.about:
                 return true;
@@ -78,6 +82,18 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        mAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if(user == null){
+                    Log.d("AUTH","Logged out");
+                }
+            }
+        });
+
         addressText = (TextView) findViewById(R.id.Address);
         nameText = (TextView) findViewById(R.id.name);
         emailText = (TextView) findViewById(R.id.Email);

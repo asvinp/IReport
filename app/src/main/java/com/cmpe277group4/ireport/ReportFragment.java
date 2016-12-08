@@ -282,7 +282,6 @@ public class ReportFragment extends Fragment {
                 String description = descriptiontext.getText().toString();
 
                 try {
-                    serverDataJSON.put("_id", "abcd");
                     serverDataJSON.put("resident_id",resident_id);
 //                    serverDataJSON.put("image_litter",encB);
                     serverDataJSON.put("lat_loc",lat);
