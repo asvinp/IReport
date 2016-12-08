@@ -16,13 +16,29 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.entity.StringEntity;
 
 public class OfficialActivity extends AppCompatActivity {
 
     private static final String OFFICIAL_TAG = "OFFICIAL";
 
     private ListView mListView;
+
+    private static AsyncHttpClient reportclient = new AsyncHttpClient();
+    private static JSONObject serverdataJSON = new JSONObject();
+    private static StringEntity serverdataentity;
+    private static JSONObject reportdataobject;
+    private static JSONArray reports = new JSONArray();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +48,46 @@ public class OfficialActivity extends AppCompatActivity {
         String emailTest = officialIntent.getExtras().getString("emailId");
         mListView = (ListView) findViewById(R.id.report_list_view);
 // 1
-        final ArrayList<Report> reportList = Report.getReportsFromFile("reports.json", this, "");
+        final ArrayList<Report> reportList = new ArrayList<Report>();
+
+        try {
+            reportclient.get(OfficialActivity.this, getString(R.string.server_url) + "getAllReports", new AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                    Log.d(" Official Reports", "Got All Data");
+                    try {
+                        reportdataobject = new JSONObject(new String(responseBody));
+                        reports = reportdataobject.getJSONArray("data");
+                        Log.d("reports",reports.toString());
+                        // Get Report objects from data
+                        for (int i = 0; i < reports.length(); i++) {
+                            Report report = new Report();
+
+                            report.resident_id = reports.getJSONObject(i).getString("resident_id");
+                            report.date = reports.getJSONObject(i).getString("date");
+                            report.desc_litter = reports.getJSONObject(i).getString("desc_report");
+                            report.image_litter = reports.getJSONObject(i).getString("image_litter");
+                            //                report.instructionUrl = reports.getJSONObject(i).getString("url");
+                            report.status_litter = reports.getJSONObject(i).getString("status_litter");
+                            report.severity_litter = reports.getJSONObject(i).getString("severity_litter");
+                            report.size_litter = reports.getJSONObject(i).getString("size_litter");
+                            report.lat_loc = reports.getJSONObject(i).getString("lat_loc");
+                            report.lon_loc = reports.getJSONObject(i).getString("lon_loc");
+                            reportList.add(report);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                    Log.d("reports", "FAILED status code " + statusCode);
+                }
+            });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         ReportAdapter adapter = new ReportAdapter(this, reportList);
         mListView.setAdapter(adapter);
