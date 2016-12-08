@@ -167,4 +167,13 @@
 
     </LinearLayout>
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/cast_mini_controller_gradient_light"
+        android:layout_alignBottom="@+id/imageView2"
+        android:layout_toEndOf="@+id/sendButton"
+        android:layout_marginStart="10dp"
+        android:id="@+id/imageView3" />
+
 </RelativeLayout>

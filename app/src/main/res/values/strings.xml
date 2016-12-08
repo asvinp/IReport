@@ -39,5 +39,7 @@
         <item>Medium</item>
         <item>Urgent</item>
     </string-array>
+    <string name="album_name">iReport</string>
+
 
 </resources>
