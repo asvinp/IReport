@@ -4,6 +4,7 @@ package com.cmpe277group4.ireport;
  * Created by Vinay on 12/6/2016.
  */
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,6 +16,9 @@ public class ReportActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_littering);
+
+        Intent reportIntent = getIntent();
+        String email = reportIntent.getExtras().getString("id");
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.litteringFragmentContainer);
 
@@ -23,8 +27,6 @@ public class ReportActivity extends AppCompatActivity {
             fm.beginTransaction()
                     .add(R.id.litteringFragmentContainer, fragment)
                     .commit();
-
         }
-
     }
 }

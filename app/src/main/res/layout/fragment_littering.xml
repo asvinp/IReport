@@ -12,6 +12,15 @@
     tools:context="com.cmpe277group4.ireport.ReportActivity"
 >
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/cast_mini_controller_gradient_light"
+        android:layout_alignBottom="@+id/imageView2"
+        android:layout_toEndOf="@+id/sendButton"
+        android:layout_marginStart="10dp"
+        android:id="@+id/imageView3" />
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -158,7 +167,7 @@
                 android:text="Send"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/button2"
+                android:id="@+id/mSendButton"
                 android:layout_below="@+id/spinnerSeverity"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp" />
@@ -166,14 +175,5 @@
         </LinearLayout>
 
     </LinearLayout>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/cast_mini_controller_gradient_light"
-        android:layout_alignBottom="@+id/imageView2"
-        android:layout_toEndOf="@+id/sendButton"
-        android:layout_marginStart="10dp"
-        android:id="@+id/imageView3" />
 
 </RelativeLayout>

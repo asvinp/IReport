@@ -58,7 +58,7 @@ public class ProfileActivity extends AppCompatActivity {
                 return true;
             case R.id.update:
                 Intent updateActivity = new Intent(ProfileActivity.this,UpdateActivity.class);
-                updateActivity.putExtra("email",email);
+                updateActivity.putExtra("id",email);
                 startActivity(updateActivity);
                 return true;
             case R.id.exit:

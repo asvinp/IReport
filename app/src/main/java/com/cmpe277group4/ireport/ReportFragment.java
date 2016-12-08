@@ -25,17 +25,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.entity.StringEntity;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -44,6 +55,7 @@ import static android.app.Activity.RESULT_OK;
  */
 public class ReportFragment extends Fragment {
 
+    private EditText descriptiontext;
     private ImageView mImageView;
     private ImageButton mImageButton;
     private Spinner mSizeSpinner;
@@ -62,6 +74,10 @@ public class ReportFragment extends Fragment {
     private static final String JPEG_FILE_SUFFIX = ".jpg";
     private String FILE_PATH;
     private String mCurrentPhotoPath;
+
+    private AsyncHttpClient reportClient = new AsyncHttpClient();
+    private JSONObject serverDataJSON = new JSONObject();
+    private StringEntity serverDataEntity;
 
     private static final String[] INITIAL_PERMS={
             android.Manifest.permission.ACCESS_FINE_LOCATION
@@ -242,6 +258,8 @@ public class ReportFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        Intent fragmentIntent = getActivity().getIntent();
+        final String resident_id = fragmentIntent.getExtras().getString("id");
 
         View v = inflater.inflate(R.layout.fragment_littering, container, false);
         mImageView = (ImageView)v.findViewById(R.id.imageView2);
@@ -249,13 +267,50 @@ public class ReportFragment extends Fragment {
         mSizeSpinner = (Spinner)v.findViewById(R.id.spinnerSize);
         mSeveritySpinner = (Spinner)v.findViewById(R.id.spinnerSeverity);
         mLatLng = (TextView)v.findViewById(R.id.textViewLatLng);
-        mSendButton = (Button)v.findViewById(R.id.sendButton);
-        bitmapTest = (ImageView)v.findViewById(R.id.imageView3);
+        mSendButton = (Button)v.findViewById(R.id.mSendButton);
+        descriptiontext = (EditText) v.findViewById(R.id.editText);
+//        bitmapTest = (ImageView)v.findViewById(R.id.imageView3);
 
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String encB= encodeImagetoBase64();
+                String lat = Double.toString(ulatitude);
+                String longi = Double.toString(ulongitude);
+                String severity = mSeveritySpinner.getSelectedItem().toString();
+                String size = mSizeSpinner.getSelectedItem().toString();
+                String description = descriptiontext.getText().toString();
+
+                try {
+                    serverDataJSON.put("id",resident_id);
+                    serverDataJSON.put("image",encB);
+                    serverDataJSON.put("lat",lat);
+                    serverDataJSON.put("lon",longi);
+                    serverDataJSON.put("severity",severity);
+                    serverDataJSON.put("size",size);
+                    serverDataJSON.put("desc",description);
+                    serverDataJSON.put("status","Still_there");
+                    serverDataEntity = new StringEntity(serverDataJSON.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+
+                reportClient.get(getContext(), getString(R.string.server_url) + "registerNewResident", serverDataEntity, "application/json", new AsyncHttpResponseHandler() {
+
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                        Log.d(TAG,"report posted");
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                        Log.d(TAG,"Failure Status : " + Integer.toString(statusCode));
+                        Toast.makeText(getContext(), "Unable to post report ",Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 
