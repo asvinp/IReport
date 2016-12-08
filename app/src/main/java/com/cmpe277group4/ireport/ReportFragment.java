@@ -18,6 +18,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -52,13 +54,13 @@ public class ReportFragment extends Fragment {
     private static double ulatitude=0;
     private static double ulongitude=0;
     private String TAG = "ReportFraagment";
-    private String FILE_NAME;
+    private ImageView bitmapTest;
 
     private Bitmap mImageBitmap;
     private static final String CAMERA_DIR = "/dcim/";
     private static final String JPEG_FILE_PREFIX = "IMG_";
     private static final String JPEG_FILE_SUFFIX = ".jpg";
-    private static final String FILE_PATH = Environment.getExternalStorageDirectory()+CAMERA_DIR;
+    private String FILE_PATH;
     private String mCurrentPhotoPath;
 
     private static final String[] INITIAL_PERMS={
@@ -133,6 +135,7 @@ public class ReportFragment extends Fragment {
         File albumF = getAlbumDir();
         File imageF = File.createTempFile(filename, JPEG_FILE_SUFFIX, albumF);
         Log.d(TAG,"Printing absolute path of file stored"+imageF.getAbsolutePath());
+        FILE_PATH = imageF.getAbsolutePath();
         return imageF;
     }
 
@@ -145,6 +148,7 @@ public class ReportFragment extends Fragment {
         return f;
     }
 
+    Bitmap bitmap;
     private void setPic() {
 
 		/* There isn't enough memory to open up more than a couple camera photos */
@@ -174,11 +178,31 @@ public class ReportFragment extends Fragment {
         bmOptions.inPurgeable = true;
 
 		/* Decode the JPEG file into a Bitmap */
-        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
 
 		/* Associate the Bitmap to the ImageView */
         mImageView.setImageBitmap(bitmap);
         mImageView.setVisibility(View.VISIBLE);
+    }
+
+    //Method to convert Image to Base64 encoded string
+    private String encodeImagetoBase64(){
+        String encodedImage=null;
+        try {
+           // Bitmap bm = BitmapFactory.decodeFile(mCurrentPhotoPath);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            Log.d(TAG, bitmap.toString());
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
+            byte[] b = baos.toByteArray();
+            encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+
+        }catch(Exception e ){
+            e.printStackTrace();
+        }
+
+        return encodedImage;
+
+
     }
 
     private void galleryAddPic() {
@@ -195,9 +219,6 @@ public class ReportFragment extends Fragment {
         if (mCurrentPhotoPath != null) {
             setPic();
             galleryAddPic();
-//            Bundle extras = intent.getExtras();
-//            mImageBitmap = (Bitmap) extras.get("data");
-//            mImageView.setImageBitmap(mImageBitmap);
             mCurrentPhotoPath = null;
         }
 
@@ -229,13 +250,16 @@ public class ReportFragment extends Fragment {
         mSeveritySpinner = (Spinner)v.findViewById(R.id.spinnerSeverity);
         mLatLng = (TextView)v.findViewById(R.id.textViewLatLng);
         mSendButton = (Button)v.findViewById(R.id.sendButton);
+        bitmapTest = (ImageView)v.findViewById(R.id.imageView3);
 
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, FILE_NAME);
+                String encB= encodeImagetoBase64();
             }
         });
+
+
 
         if (!canAccessLocation()) {
             requestPermissions(INITIAL_PERMS, INITIAL_REQUEST);
