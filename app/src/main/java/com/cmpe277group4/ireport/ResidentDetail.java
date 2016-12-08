@@ -4,12 +4,15 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -37,6 +40,7 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
     protected String latitude, longitude;
     protected boolean gps_enabled, network_enabled;
 
+    String resident_id = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +62,7 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 10, this);
 
         // get data from previous activity (MainActivity/MapsActivity)
-        String id = this.getIntent().getExtras().getString("resident_id");
+        resident_id = this.getIntent().getExtras().getString("resident_id");
         String date = this.getIntent().getExtras().getString("date");
 //        String url = this.getIntent().getExtras().getString("url");
 //        String imageUrl = this.getIntent().getExtras().getString("image");
@@ -68,12 +72,13 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
         String size = this.getIntent().getExtras().getString("size_litter");
         String lat_loc = this.getIntent().getExtras().getString("lat_loc");
         String lon_loc = this.getIntent().getExtras().getString("lon_loc");
+        String image = this.getIntent().getExtras().getString("image");
 
         trashLoc = lat_loc + "," + lon_loc;
 
 
         //Set title of appscreen to id of report
-        setTitle(id);
+        setTitle(resident_id);
 
         // set imageview
         ImageView detailImageView = (ImageView) findViewById(R.id.imgDetail);
@@ -93,6 +98,7 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
 //                .into(detailImageView);
 
         //send strings to TextViews
+        detailImageView.setImageBitmap(decodeBase64Image(image));
         severityTextView.setText(severity);
         timeTextView.setText(date);
         sizeTextView.setText(size);
@@ -172,6 +178,15 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
         });
     }
 
+
+    //DECODE IMAGE
+    private Bitmap decodeBase64Image(String base64){
+        byte[] decodedString = Base64.decode(base64, Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        return decodedByte;
+//        Drawable d = new BitmapDrawable(getResources(), decodedByte);
+//        return d;
+    }
 
     @Override
     public void onLocationChanged(Location location) {
