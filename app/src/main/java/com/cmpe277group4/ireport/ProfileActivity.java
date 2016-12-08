@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,8 +20,6 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -44,24 +41,48 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView imageView;
     private static int RESULT_LOAD_IMAGE = 1;
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.resident_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.add:
+                return true;
+            case R.id.signout:
+                return true;
+            case R.id.about:
+                return true;
+            case R.id.update:
+                Intent updateActivity = new Intent(ProfileActivity.this,UpdateActivity.class);
+                updateActivity.putExtra("email",email);
+                startActivity(updateActivity);
+                return true;
+            case R.id.exit:
+                finish();
+                return true;
+            case R.id.settings:
+                Intent settingsActivity = new Intent(ProfileActivity.this,UserSettingsActivity.class);
+                //settingsActivity.putExtra("email",email);
+                startActivity(settingsActivity);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
     private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        mAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if(user == null){
-                    Log.d("AUTH","Logged out");
-                }
-            }
-        });
-
         addressText = (TextView) findViewById(R.id.Address);
         nameText = (TextView) findViewById(R.id.name);
         emailText = (TextView) findViewById(R.id.Email);
@@ -132,7 +153,6 @@ public class ProfileActivity extends AppCompatActivity {
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                         Log.d(PROFILE_TAG,"User profile posted");
                         Intent reportActivity = new Intent(ProfileActivity.this,ReportActivity.class);
-                        reportActivity.putExtra("id",email);
                         startActivity(reportActivity);
                     }
 

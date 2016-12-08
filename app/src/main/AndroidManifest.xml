@@ -6,7 +6,6 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-feature android:name="android.hardware.camera" />
 
     <permission
         android:name="com.cmpe277group4.ireport.permission.MAPS_RECEIVE"
@@ -52,14 +51,11 @@
         <activity android:name=".ProfileActivity" />
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
+            android:label="@string/title_activity_maps" />
         <activity android:name=".report_detail" />
-        <activity android:name=".ReportActivity"></activity>
-        <activity android:name=".ResidentDetail"></activity>
-        <activity android:name=".ResidentActivity"></activity>
-
-
-        <activity android:name=".UpdateActivity"></activity>
+        <activity android:name=".ReportActivity" />
+        <activity android:name=".UpdateActivity" />
+        <activity android:name=".UserSettingsActivity"></activity>
     </application>
 
 </manifest>
