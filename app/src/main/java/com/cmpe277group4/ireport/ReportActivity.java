@@ -27,6 +27,11 @@ public class ReportActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
+            case R.id.myReport:
+                Intent residentActivity = new Intent(ReportActivity.this,ResidentActivity.class);
+                residentActivity.putExtra("resident_id",resident_id);
+                startActivity(residentActivity);
+                return true;
             case R.id.signout:
                 FirebaseAuth.getInstance().signOut();
                 Intent goBackLogin = new Intent(ReportActivity.this,LoginActivity.class);

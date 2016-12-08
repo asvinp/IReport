@@ -7,7 +7,9 @@
     <item
         android:id="@+id/add" android:icon="@android:drawable/ic_menu_add" app:showAsAction="always"   android:title="Add"/>
     <item
-        android:id="@+id/setting" android:icon="@android:drawable/ic_menu_revert" app:showAsAction="never" android:title="SignOut"/>
+        android:id="@+id/myReport" android:icon="@android:drawable/ic_menu_revert" app:showAsAction="never" android:title="My Reports"/>
+    <item
+        android:id="@+id/setting" android:icon="@android:drawable/ic_menu_revert" app:showAsAction="never" android:title="Setting"/>
     <item
         android:id="@+id/signout" android:icon="@android:drawable/ic_menu_revert" app:showAsAction="never" android:title="SignOut"/>
     <item

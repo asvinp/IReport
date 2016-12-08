@@ -111,6 +111,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static JSONObject reportdataobject;
     private static JSONArray reports = new JSONArray();
 
+    String resident_id = null;
     //hashmap
     public HashMap<String, Integer> markerhash = new HashMap<>();
 
@@ -122,19 +123,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             Toast.makeText(this, "Gplay services are working", Toast.LENGTH_LONG).show();
             setContentView(R.layout.activity_maps);
             initMap();
-
-
         } else {
 
         }
         Intent residentIntent = getIntent();
-        String resid = residentIntent.getExtras().getString("id");
-
-
+        resident_id = residentIntent.getExtras().getString("resident_id");
         final ArrayList<Report> reportList = new ArrayList<Report>();
-
         try {
-            serverdataJSON.put("id", resid);
+            serverdataJSON.put("resident_id", resident_id);
             serverdataentity = new StringEntity(serverdataJSON.toString());
             reportclient.get(MapsActivity.this, getString(R.string.server_url) + "getReport", serverdataentity, "application/json", new AsyncHttpResponseHandler() {
                 @Override
@@ -160,6 +156,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             report.lon_loc = reports.getJSONObject(i).getString("lon_loc");
                             report.imageBm = decodeBase64Image(report.image_litter);
                             reportList.add(report);
+                            drawMarker(new LatLng(Double.parseDouble(report.lat_loc),Double.parseDouble(report.lon_loc)),report.resident_id,report.date);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -174,98 +171,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }catch (Exception e){
             e.printStackTrace();
         }
-
-        //JSON
-        List<String> locationarr = new ArrayList();
-        List<String> idarr = new ArrayList();
-        List<String> timearr = new ArrayList();
-        List<String> imagearr = new ArrayList();
-        List<String> descriptionarr = new ArrayList();
-        List<String> severityarr = new ArrayList();
-        List<String> sizearr = new ArrayList();
-        List<String> statusarr = new ArrayList();
-
-
-        // Reading json file from assets folder
-        StringBuffer sb = new StringBuffer();
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new InputStreamReader(getAssets().open(
-                    "reports.json")));
-            String temp;
-            while ((temp = br.readLine()) != null)
-                sb.append(temp);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                br.close(); // stop reading
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        String myjsonstring = sb.toString();
-        // Try to parse JSON
-        try {
-            // Creating JSONObject from String
-            JSONObject jsonObjMain = new JSONObject(myjsonstring);
-
-            // Creating JSONArray from JSONObject
-            JSONArray jsonArray = jsonObjMain.getJSONArray("reports");
-
-//            // JSONArray has x JSONObject
-//            for (int i = 0; i < jsonArray.length(); i++) {
-//
-//                // Creating JSONObject from JSONArray
-//                JSONObject jsonObj = jsonArray.getJSONObject(i);
-//
-//                // Getting data from individual JSONObject
-//                id = jsonObj.getString("id");
-//                location = jsonObj.getString("location");
-//                time = jsonObj.getString("time");
-//                image = jsonObj.getString("image");
-//                description = jsonObj.getString("description");
-//                severity = jsonObj.getString("severity");
-//                size = jsonObj.getString("size");
-//                status = jsonObj.getString("status");
-//
-//
-//                locationarr.add(jsonObj.getString("location"));
-//                stringlocations = locationarr.toArray(new String[locationarr.size()]);
-//
-//                idarr.add(jsonObj.getString("id"));
-//                stringid = idarr.toArray(new String[idarr.size()]);
-//
-//                timearr.add(jsonObj.getString("time"));
-//                stringtime = timearr.toArray(new String[timearr.size()]);
-//
-//                imagearr.add(jsonObj.getString("image"));
-//                stringimage = imagearr.toArray(new String[imagearr.size()]);
-//
-//                descriptionarr.add(jsonObj.getString("description"));
-//                stringdescription = descriptionarr.toArray(new String[descriptionarr.size()]);
-//
-//                severityarr.add(jsonObj.getString("severity"));
-//                stringseverity = severityarr.toArray(new String[severityarr.size()]);
-//
-//                sizearr.add(jsonObj.getString("size"));
-//                stringsize = sizearr.toArray(new String[sizearr.size()]);
-//
-//                statusarr.add(jsonObj.getString("status"));
-//                stringstatus = statusarr.toArray(new String[statusarr.size()]);
-//
-//
-//            }
-
-
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-
-
-
     }
 
 
@@ -278,8 +183,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
-
-
 
         //San Jose initial location
         goToLocationZoom(37.3382, -121.8863, 13);
@@ -309,14 +212,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         //Set the markers on map with relevant JSON data
-        for (int i = 0; i < stringlocations.length; i++) {
-
-//            splitlatlng(stringlocations[i]);
-            drawMarker(markerlocation, stringid[i], stringtime[i]);
-            markerhash.put(stringid[i], i);
-
-        }
-
+//        for (int i = 0; i < stringlocations.length; i++) {
+//
+////            splitlatlng(stringlocations[i]);
+//            drawMarker(markerlocation, stringid[i], stringtime[i]);
+//            markerhash.put(stringid[i], i);
+//
+//        }
         mGoogleMap.setOnInfoWindowClickListener(this);
 
 
@@ -325,6 +227,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onInfoWindowClick(Marker marker) {
 
+        Log.d("MAP","Marker clicked");
         String markertitle = marker.getTitle();
         if(markertitle.equals("Target Location")){
             Toast.makeText(this, "You searched for this place", Toast.LENGTH_LONG).show();
@@ -350,9 +253,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 detailIntent.putExtra("lat_loc", stringlat_loc[m]);
                 detailIntent.putExtra("lon_loc", stringlon_loc[m]);
 
-
-
-                // 4
                 startActivity(detailIntent);
 
             }
@@ -377,8 +277,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-
-
     private void splitlatlng(String x) {
         String[] latlong =  x.split(",");
         double latitude = Double.parseDouble(latlong[0]);
@@ -391,20 +289,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         LatLng ll = new LatLng(lat, lng);
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, zoom);
         mGoogleMap.moveCamera(update);
-
-
-
     }
 
     private void goToLocation(double lat, double lng) {
         LatLng ll = new LatLng(lat, lng);
         CameraUpdate update = CameraUpdateFactory.newLatLng(ll);
         mGoogleMap.moveCamera(update);
-
     }
 
     public void geoLocate (View view) throws IOException{
-
         EditText et = (EditText) findViewById(R.id.editText);
         String location = et.getText().toString();
 
@@ -426,8 +319,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .position(new LatLng(lat, lng))
                 .snippet(locality);
         mGoogleMap.addMarker(options);
-
-
     }
 
     public boolean googleServicesAvailable() {
@@ -497,6 +388,87 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //        Drawable d = new BitmapDrawable(getResources(), decodedByte);
 //        return d;
     }
-
-
 }
+
+
+
+//        List<String> locationarr = new ArrayList();
+//        List<String> idarr = new ArrayList();
+//        List<String> timearr = new ArrayList();
+//        List<String> imagearr = new ArrayList();
+//        List<String> descriptionarr = new ArrayList();
+//        List<String> severityarr = new ArrayList();
+//        List<String> sizearr = new ArrayList();
+//        List<String> statusarr = new ArrayList();
+//
+//
+//        // Reading json file from assets folder
+//        StringBuffer sb = new StringBuffer();
+//        BufferedReader br = null;
+//        try {
+//            br = new BufferedReader(new InputStreamReader(getAssets().open(
+//                    "reports.json")));
+//            String temp;
+//            while ((temp = br.readLine()) != null)
+//                sb.append(temp);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } finally {
+//            try {
+//                br.close(); // stop reading
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        String myjsonstring = sb.toString();
+//        // Try to parse JSON
+//        try {
+//            // Creating JSONObject from String
+//            JSONObject jsonObjMain = new JSONObject(myjsonstring);
+//
+//            // Creating JSONArray from JSONObject
+//            JSONArray jsonArray = jsonObjMain.getJSONArray("reports");
+//
+////            // JSONArray has x JSONObject
+////            for (int i = 0; i < jsonArray.length(); i++) {
+////
+////                // Creating JSONObject from JSONArray
+////                JSONObject jsonObj = jsonArray.getJSONObject(i);
+////
+////                // Getting data from individual JSONObject
+////                id = jsonObj.getString("id");
+////                location = jsonObj.getString("location");
+////                time = jsonObj.getString("time");
+////                image = jsonObj.getString("image");
+////                description = jsonObj.getString("description");
+////                severity = jsonObj.getString("severity");
+////                size = jsonObj.getString("size");
+////                status = jsonObj.getString("status");
+////
+////
+////                locationarr.add(jsonObj.getString("location"));
+////                stringlocations = locationarr.toArray(new String[locationarr.size()]);
+////
+////                idarr.add(jsonObj.getString("id"));
+////                stringid = idarr.toArray(new String[idarr.size()]);
+////
+////                timearr.add(jsonObj.getString("time"));
+////                stringtime = timearr.toArray(new String[timearr.size()]);
+////
+////                imagearr.add(jsonObj.getString("image"));
+////                stringimage = imagearr.toArray(new String[imagearr.size()]);
+////
+////                descriptionarr.add(jsonObj.getString("description"));
+////                stringdescription = descriptionarr.toArray(new String[descriptionarr.size()]);
+////
+////                severityarr.add(jsonObj.getString("severity"));
+////                stringseverity = severityarr.toArray(new String[severityarr.size()]);
+////
+////                sizearr.add(jsonObj.getString("size"));
+////                stringsize = sizearr.toArray(new String[sizearr.size()]);
+////
+////                statusarr.add(jsonObj.getString("status"));
+////                stringstatus = statusarr.toArray(new String[statusarr.size()]);
+////
+////
+////            }
