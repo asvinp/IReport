@@ -17,8 +17,8 @@ public class ReportActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_littering);
 
-        Intent reportIntent = getIntent();
-        String email = reportIntent.getExtras().getString("id");
+//        Intent reportIntent = getIntent();
+//        String email = reportIntent.getExtras().getString("id");
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.litteringFragmentContainer);
 
