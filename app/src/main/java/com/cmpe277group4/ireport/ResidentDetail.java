@@ -40,6 +40,7 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
     protected String latitude, longitude;
     protected boolean gps_enabled, network_enabled;
 
+    String resident_id = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +62,7 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 10, this);
 
         // get data from previous activity (MainActivity/MapsActivity)
-        String id = this.getIntent().getExtras().getString("resident_id");
+        resident_id = this.getIntent().getExtras().getString("resident_id");
         String date = this.getIntent().getExtras().getString("date");
 //        String url = this.getIntent().getExtras().getString("url");
 //        String imageUrl = this.getIntent().getExtras().getString("image");
@@ -78,7 +79,7 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
 
 
         //Set title of appscreen to id of report
-        setTitle(id);
+        setTitle(resident_id);
 
         // set imageview
         ImageView detailImageView = (ImageView) findViewById(R.id.imgDetail);
