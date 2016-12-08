@@ -2,7 +2,6 @@ package com.cmpe277group4.ireport;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -29,8 +28,6 @@ import java.io.UnsupportedEncodingException;
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
 
-import static android.R.attr.name;
-
 public class UpdateActivity extends AppCompatActivity {
 
     private static final String PROFILE_TAG = "PROFILE";
@@ -49,7 +46,7 @@ public class UpdateActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_update);
         addressText = (TextView) findViewById(R.id.Address);
         nameText = (TextView) findViewById(R.id.name);
         emailText = (TextView) findViewById(R.id.Email);
@@ -62,7 +59,7 @@ public class UpdateActivity extends AppCompatActivity {
         }
         Log.d(PROFILE_TAG, email);
         Log.d(PROFILE_TAG, name);
-        Update = (Button) findViewById(R.id.Register);
+        Update = (Button) findViewById(R.id.Update);
         imageView = (ImageView) findViewById(android.R.id.icon);
 
 
