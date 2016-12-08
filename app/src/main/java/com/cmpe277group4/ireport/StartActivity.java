@@ -44,7 +44,7 @@ public class StartActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                if(user != null){
+                if(user == null){
                     Log.d("START_AUTH","signed_out");
                     Intent fireBaseIntent = new Intent(StartActivity.this, LoginActivity.class);
                     startActivity(fireBaseIntent);

@@ -135,11 +135,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             reportclient.get(MapsActivity.this, getString(R.string.server_url) + "getReport", serverdataentity, "application/json", new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                    Log.d("reports", "got Data");
+                    Log.d("MAP", "got Data");
                     try {
                         reportdataobject = new JSONObject(new String(responseBody));
                         reports = reportdataobject.getJSONArray("data");
-                        Log.d("reports",reports.toString());
+                        Log.d("MAPS",reports.toString());
                         // Get Report objects from data
                         for (int i = 0; i < reports.length(); i++) {
                             Report report = new Report();
@@ -267,6 +267,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //                .position(point)
 //                .snippet(time);
 //        mGoogleMap.addMarker(multioptions);
+        Log.d("MARKER",id);
 
         MarkerOptions marker = new MarkerOptions()
                 .position(point)
