@@ -349,7 +349,7 @@ public class ReportFragment extends Fragment {
                 System.out.println("**********VINAY OnLocationChanged  "+location.getLatitude()+" , "+location.getLongitude());
                 ulatitude = location.getLatitude();
                 ulongitude = location.getLongitude();
-                mLatLng.setText(ulatitude+"\n"+ulongitude);
+                //mLatLng.setText(ulatitude+"\n"+ulongitude);
                 try {
                     Geocoder geocoder;
                     List<Address> addresses;
@@ -357,7 +357,7 @@ public class ReportFragment extends Fragment {
                     addresses = geocoder.getFromLocation(ulatitude, ulongitude, 1);
                     String address = addresses.get(0).getAddressLine(0);
                     System.out.println("Lat and Lon " + address);
-                    mLatLng.setText(ulatitude+"\n"+ulongitude+"\n"+address);
+                    mLatLng.setText(/*ulatitude+"\n"+ulongitude+"\n"+*/address);
                 }catch (Exception e){
                     e.printStackTrace();
                 }
