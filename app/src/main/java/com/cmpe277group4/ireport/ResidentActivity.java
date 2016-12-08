@@ -66,7 +66,7 @@ public class ResidentActivity extends AppCompatActivity {
 
                             report.resident_id = reports.getJSONObject(i).getString("resident_id");
                             report.date = reports.getJSONObject(i).getString("date");
-                            report.desc_litter = reports.getJSONObject(i).getString("desc_litter");
+                            report.desc_litter = reports.getJSONObject(i).getString("desc_report");
                             report.image_litter = reports.getJSONObject(i).getString("image_litter");
                             //                report.instructionUrl = reports.getJSONObject(i).getString("url");
                             report.status_litter = reports.getJSONObject(i).getString("status_litter");

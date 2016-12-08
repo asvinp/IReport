@@ -417,6 +417,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     @Override
     public void onBackPressed() {
-        finish();
+        System.exit(0);
     }
 }
