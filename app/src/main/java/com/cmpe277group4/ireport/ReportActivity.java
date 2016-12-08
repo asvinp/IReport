@@ -37,12 +37,15 @@ public class ReportActivity extends AppCompatActivity {
                 Intent goBackLogin = new Intent(ReportActivity.this,LoginActivity.class);
                 startActivity(goBackLogin);
                 return true;
-            case R.id.about:
-                return true;
             case R.id.update:
                 Intent updateActivity = new Intent(ReportActivity.this,UpdateActivity.class);
                 updateActivity.putExtra("resident_id",resident_id);
                 startActivity(updateActivity);
+                return true;
+            case R.id.setting:
+                Intent settingIntent = new Intent(ReportActivity.this, UserSettingsActivity.class);
+                settingIntent.putExtra("resident_id",resident_id);
+                startActivity(settingIntent);
                 return true;
             case R.id.exit:
                 finish();

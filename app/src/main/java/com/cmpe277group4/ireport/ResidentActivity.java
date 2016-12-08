@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -161,17 +162,23 @@ public class ResidentActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) { switch(item.getItemId()) {
         case R.id.add:
             Intent reportActivity = new Intent(ResidentActivity.this,ReportActivity.class);
+            reportActivity.putExtra("resident_id",resident_id);
+            startActivity(reportActivity);
             return true;
         case R.id.setting:
-//            Intent settingIntent = new Intent(ResidentActivity.this, Settings.class);
-//            settingIntent.putExtras("resident_id",resident_id);
-//            startActivity(settingIntent);
+            Intent settingIntent = new Intent(ResidentActivity.this, UserSettingsActivity.class);
+            settingIntent.putExtra("resident_id",resident_id);
+            startActivity(settingIntent);
+            return true;
+        case R.id.update:
+            Intent updateActivity = new Intent(ResidentActivity.this,UpdateActivity.class);
+            updateActivity.putExtra("resident_id",resident_id);
+            startActivity(updateActivity);
             return true;
         case R.id.signout:
-            //add the function to perform here
-            return(true);
-        case R.id.about:
-            Toast.makeText(this, "Made by Group 4", Toast.LENGTH_SHORT).show();
+            FirebaseAuth.getInstance().signOut();
+            Intent goBackLogin = new Intent(ResidentActivity.this,LoginActivity.class);
+            startActivity(goBackLogin);
             return(true);
         case R.id.exit:
             finish();
