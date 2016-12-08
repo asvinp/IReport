@@ -297,7 +297,7 @@ public class ReportFragment extends Fragment {
                     e.printStackTrace();
                 }
 
-                reportClient.get(getContext(), getString(R.string.server_url) + "registerNewResident", serverDataEntity, "application/json", new AsyncHttpResponseHandler() {
+                reportClient.get(getContext(), getString(R.string.server_url) + "fileReport", serverDataEntity, "application/json", new AsyncHttpResponseHandler() {
 
 
                     @Override
