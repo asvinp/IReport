@@ -68,6 +68,7 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
         String size = this.getIntent().getExtras().getString("size_litter");
         String lat_loc = this.getIntent().getExtras().getString("lat_loc");
         String lon_loc = this.getIntent().getExtras().getString("lon_loc");
+        String address = this.getIntent().getExtras().getString("address");
 
         trashLoc = lat_loc + "," + lon_loc;
 
@@ -96,7 +97,7 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
         severityTextView.setText(severity);
         timeTextView.setText(date);
         sizeTextView.setText(size);
-        locationTextView.setText(lat_loc + ", " + lon_loc);
+        locationTextView.setText(address);
         descriptionTextView.setText(description);
 
 

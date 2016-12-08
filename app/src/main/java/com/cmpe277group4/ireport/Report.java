@@ -42,6 +42,7 @@ public class Report {
     public String lat_loc, lon_loc;
     public String date;
     public Bitmap imageBm;
+    public String address;
 
     private static AsyncHttpClient reportclient = new AsyncHttpClient();
     private static JSONObject serverdataJSON = new JSONObject();

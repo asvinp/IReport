@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Address;
+import android.location.Geocoder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
@@ -28,6 +30,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
@@ -114,6 +118,7 @@ public class ResidentActivity extends AppCompatActivity {
         });
 
         final Context context = this;
+
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -123,6 +128,7 @@ public class ResidentActivity extends AppCompatActivity {
 
                 // 2
                 Intent detailIntent = new Intent(context, ResidentDetail.class);
+                String address;
 
                 // 3
                 detailIntent.putExtra("resident_id", selectedReport.resident_id);
@@ -136,6 +142,17 @@ public class ResidentActivity extends AppCompatActivity {
                 detailIntent.putExtra("lat_loc", selectedReport.lat_loc);
                 detailIntent.putExtra("lon_loc", selectedReport.lon_loc);
 
+                try {
+                    Geocoder geocoder;
+                    List<Address> addresses;
+                    geocoder = new Geocoder(context, Locale.getDefault());
+                    addresses = geocoder.getFromLocation(Double.parseDouble(selectedReport.lat_loc), Double.parseDouble(selectedReport.lon_loc), 1);
+                    address = addresses.get(0).getAddressLine(0);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+                detailIntent.putExtra("address", selectedReport.address);
 
 
                 // 4
