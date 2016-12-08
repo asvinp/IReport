@@ -43,17 +43,19 @@ public class ResidentActivity extends AppCompatActivity {
     private static JSONObject reportdataobject;
     private static JSONArray reports = new JSONArray();
 
+    public String resident_id = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_official);
         Intent residentIntent = getIntent();
-        String resid = residentIntent.getExtras().getString("id");
+        resident_id = residentIntent.getExtras().getString("resident_id");
         mListView = (ListView) findViewById(R.id.report_list_view);
         final ArrayList<Report> reportList = new ArrayList<Report>();
 
         try {
-            serverdataJSON.put("id", resid);
+            serverdataJSON.put("id", resident_id);
             serverdataentity = new StringEntity(serverdataJSON.toString());
             reportclient.get(ResidentActivity.this, getString(R.string.server_url) + "getReport", serverdataentity, "application/json", new AsyncHttpResponseHandler() {
                 @Override
@@ -104,9 +106,7 @@ public class ResidentActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Perform action on click
                 Intent mapIntent = new Intent(btncontext, MapsActivity.class);
-
-//                mapIntent.putExtra("location", selectedReport.location);
-
+                mapIntent.putExtra("resident_id",resident_id);
                 startActivity(mapIntent);
             }
         });
@@ -160,8 +160,13 @@ public class ResidentActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) { switch(item.getItemId()) {
         case R.id.add:
-            //add the function to perform here
-            return(true);
+            Intent reportActivity = new Intent(ResidentActivity.this,ReportActivity.class);
+            return true;
+        case R.id.setting:
+//            Intent settingIntent = new Intent(ResidentActivity.this, Settings.class);
+//            settingIntent.putExtras("resident_id",resident_id);
+//            startActivity(settingIntent);
+            return true;
         case R.id.signout:
             //add the function to perform here
             return(true);
