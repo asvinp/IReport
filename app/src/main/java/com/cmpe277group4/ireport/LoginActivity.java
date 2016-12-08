@@ -93,7 +93,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    Log.d("Auth",user.getDisplayName());
+                    Log.d("Auth"," " + user.getEmail());
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
                     // User is signed out
@@ -101,6 +101,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 }
             }
         };
+        mAuth.addAuthStateListener(mAuthListener);
 
         emailText = (EditText) findViewById(R.id.residentemail);
         passText = (EditText) findViewById(R.id.residentpassword);
@@ -232,7 +233,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private void fetchResidentData(String email) throws JSONException, UnsupportedEncodingException {
         serverDataJSON.put("id",email);
         serverDataEntity = new StringEntity(serverDataJSON.toString());
-        loginClient.get(LoginActivity.this, getString(R.string.server_url) + "", serverDataEntity, "application/json", new AsyncHttpResponseHandler() {
+        loginClient.get(LoginActivity.this, getString(R.string.server_url) + "/getResidentData", serverDataEntity, "application/json", new AsyncHttpResponseHandler() {
 
             private final String TAG = "SERVER_LOGIN";
 

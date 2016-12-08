@@ -1,5 +1,6 @@
 package com.cmpe277group4.ireport;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
@@ -31,12 +32,18 @@ import cz.msebera.android.httpclient.entity.StringEntity;
 public class UpdateActivity extends AppCompatActivity {
 
     private static final String PROFILE_TAG = "PROFILE";
-    TextView nameText, addressText, emailText, screenName;
-    String email, name, address;
-    Button Update;
+    TextView nameText, addressText, emailText, screenNameText;
+    String email, name, address, screenName;
+    Button update;
     private static final int SELECT_PICTURE = 0;
     private ImageView imageView;
     private static int RESULT_LOAD_IMAGE = 1;
+
+    private ProgressDialog progressDialog;
+    private AsyncHttpClient updateClient = new AsyncHttpClient();
+    private JSONObject serverDataJSON = new JSONObject();
+    private StringEntity serverDataEntity;
+    private JSONObject residentDataJSON;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -50,18 +57,16 @@ public class UpdateActivity extends AppCompatActivity {
         addressText = (TextView) findViewById(R.id.Address);
         nameText = (TextView) findViewById(R.id.name);
         emailText = (TextView) findViewById(R.id.Email);
-        screenName = (TextView) findViewById(R.id.ScreenName);
+        screenNameText = (TextView) findViewById(R.id.ScreenName);
         Intent intent = getIntent();
         email = intent.getExtras().getString("email");
-        name = intent.getExtras().getString("name");
-        if (name == null) {
-            name = "";
-        }
-        Log.d(PROFILE_TAG, email);
-        Log.d(PROFILE_TAG, name);
-        Update = (Button) findViewById(R.id.Update);
-        imageView = (ImageView) findViewById(android.R.id.icon);
 
+        Log.d(PROFILE_TAG, email);
+        update = (Button) findViewById(R.id.Update);
+        imageView = (ImageView) findViewById(android.R.id.icon);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Getting Profile data");
+        progressDialog.show();
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,33 +79,74 @@ public class UpdateActivity extends AppCompatActivity {
             }
         });
 
-        address = addressText.getText().toString();
-        if(address == null){
-            address = " ";
+        try {
+            serverDataJSON.put("id",email);
+            serverDataEntity = new StringEntity(serverDataJSON.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
 
-        Update.setOnClickListener(new View.OnClickListener() {
+        updateClient.get(UpdateActivity.this, getString(R.string.server_url) + "/getResidentData", serverDataEntity, "application/json", new AsyncHttpResponseHandler() {
+
+            private final String TAG = "SERVER_UPDATE";
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                progressDialog.hide();
+                Log.d(TAG,"Got User Data");
+                String residentData = new String(responseBody);
+                try {
+                    residentDataJSON = new JSONObject(residentData);
+                    JSONObject dataResidentJSON = residentDataJSON.getJSONObject("data");
+                    emailText.setText(dataResidentJSON.getString("email"));
+                    nameText.setText(dataResidentJSON.getString("name"));
+                    addressText.setText(dataResidentJSON.getString("address"));
+                    screenNameText.setText(dataResidentJSON.getString("screenName"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.d(TAG,residentData);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                progressDialog.hide();
+                Log.d(TAG,"Failed to get User data : Status Code : " + statusCode );
+            }
+        });
+
+        update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("mprofile ", nameText.getText().toString());
-                Log.d("mprofile ", addressText.getText().toString());
-                Log.d(PROFILE_TAG,address);
-                StringEntity entity = null;
-                JSONObject profileObj = new JSONObject();
-                try{
-                    profileObj.put("email",email);
-                    profileObj.put("name",name);
-                    profileObj.put("address",address);
-                    profileObj.put("screenName",screenName);
-                    entity = new StringEntity(profileObj.toString());
-                }catch(JSONException e){
+                email = emailText.getText().toString();
+                name = nameText.getText().toString();
+                address = addressText.getText().toString();
+                screenName = screenNameText.getText().toString();
+                if(name == null){
+                    name = "";
+                }
+                if(address == null){
+                    address = "";
+                }
+                if(screenName == null){
+                    screenName = email;
+                }
+                try {
+                    serverDataJSON.put("id",email);
+                    serverDataJSON.put("email",email);
+                    serverDataJSON.put("name",name);
+                    serverDataJSON.put("address",address);
+                    serverDataJSON.put("screenName",screenName);
+                    serverDataEntity = new StringEntity(serverDataJSON.toString());
+                } catch (JSONException e) {
                     e.printStackTrace();
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
 
-                AsyncHttpClient profileClient = new AsyncHttpClient();
-                profileClient.get(UpdateActivity.this, "http://ec2-54-187-196-140.us-west-2.compute.amazonaws.com/updateResident", entity, "application/json", new AsyncHttpResponseHandler() {
+                updateClient.get(UpdateActivity.this, getString(R.string.server_url) + "updateResident", serverDataEntity, "application/json", new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                         Log.d(PROFILE_TAG,"User profile Updated");
@@ -110,27 +156,17 @@ public class UpdateActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                        Log.d(PROFILE_TAG,"Failure Status : " + Integer.toString(statusCode));
+                        Log.d(PROFILE_TAG,  " Failure Status : " + Integer.toString(statusCode));
                     }
                 });
 
             }
         });
 
-
-        emailText.setText(email);
-        nameText.setText(name);
-        //address.setText("Current Location ");
-
-
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
-
-
-
-
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -166,10 +202,7 @@ public class UpdateActivity extends AppCompatActivity {
 
             ImageView imageView = (ImageView) findViewById(R.id.imageView);
             imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-
         }
-
-
     }
 
     @Override
@@ -192,7 +225,3 @@ public class UpdateActivity extends AppCompatActivity {
         client.disconnect();
     }
 }
-
-
-
-
