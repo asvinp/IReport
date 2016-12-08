@@ -101,7 +101,7 @@ public class ReportFragment extends Fragment {
                 System.out.println("**********VINAY OnLocationChanged  "+location.getLatitude()+" , "+location.getLongitude());
                 ulatitude = location.getLatitude();
                 ulongitude = location.getLongitude();
-                mLatLng.setText(ulatitude+" "+ulongitude);
+                mLatLng.setText(ulatitude+"\n"+ulongitude);
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {}
