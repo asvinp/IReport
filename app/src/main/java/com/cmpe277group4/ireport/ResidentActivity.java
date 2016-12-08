@@ -52,11 +52,12 @@ public class ResidentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_official);
         Intent residentIntent = getIntent();
         resident_id = residentIntent.getExtras().getString("resident_id");
+        Log.d("RESIDENTACTIVITY",resident_id);
         mListView = (ListView) findViewById(R.id.report_list_view);
         final ArrayList<Report> reportList = new ArrayList<Report>();
 
         try {
-            serverdataJSON.put("id", resident_id);
+            serverdataJSON.put("resident_id", resident_id);
             serverdataentity = new StringEntity(serverdataJSON.toString());
             reportclient.get(ResidentActivity.this, getString(R.string.server_url) + "getReport", serverdataentity, "application/json", new AsyncHttpResponseHandler() {
                 @Override

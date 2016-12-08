@@ -272,7 +272,7 @@ public class ReportFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         Intent fragmentIntent = getActivity().getIntent();
-        final String resident_id = fragmentIntent.getExtras().getString("id");
+        final String resident_id = fragmentIntent.getExtras().getString("resident_id");
 
         View v = inflater.inflate(R.layout.fragment_littering, container, false);
         mImageView = (ImageView)v.findViewById(R.id.imageView2);
@@ -320,7 +320,8 @@ public class ReportFragment extends Fragment {
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                         Log.d(TAG,"report posted");
                         Intent reportIntent = new Intent (getContext(), ResidentActivity.class);
-                        reportIntent.putExtra("id", resident_id);
+                        Log.d("REPOORT_FRAG",resident_id);
+                        reportIntent.putExtra("resident_id", resident_id);
                         startActivity(reportIntent);
                     }
 
