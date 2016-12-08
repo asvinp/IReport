@@ -39,5 +39,14 @@
             android:id="@+id/switchAnonymous"
             android:layout_weight="0.08"
             android:checked="false"/>
+
+        <Button
+            android:text="Save"
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonSave"
+            android:elevation="23dp"
+            android:layout_marginRight="60dp"
+            android:layout_marginLeft="60dp" />
     </LinearLayout>
 </RelativeLayout>
