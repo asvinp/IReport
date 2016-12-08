@@ -104,6 +104,7 @@ public class ResidentActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Perform action on click
                 Intent mapIntent = new Intent(btncontext, MapsActivity.class);
+                
 
 //                mapIntent.putExtra("location", selectedReport.location);
 
