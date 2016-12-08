@@ -86,6 +86,7 @@ public class ReportAdapter extends BaseAdapter {
 
         Report report = (Report) getItem(position);
 
+        thumbnailImageView.setImageBitmap(report.imageBm);
 // 2
         titleTextView.setText(report.date);
 //        subtitleTextView.setText(report.time);

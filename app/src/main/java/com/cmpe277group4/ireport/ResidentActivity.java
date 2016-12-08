@@ -3,8 +3,11 @@ package com.cmpe277group4.ireport;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -74,6 +77,7 @@ public class ResidentActivity extends AppCompatActivity {
                             report.size_litter = reports.getJSONObject(i).getString("size_litter");
                             report.lat_loc = reports.getJSONObject(i).getString("lat_loc");
                             report.lon_loc = reports.getJSONObject(i).getString("lon_loc");
+                            report.imageBm = decodeBase64Image(report.image_litter);
                             reportList.add(report);
                         }
                     } catch (JSONException e) {
@@ -135,6 +139,15 @@ public class ResidentActivity extends AppCompatActivity {
                 // 4
                 startActivity(detailIntent);
             }});
+    }
+
+    //DECODE IMAGE
+    private Bitmap decodeBase64Image(String base64){
+        byte[] decodedString = Base64.decode(base64, Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        return decodedByte;
+//        Drawable d = new BitmapDrawable(getResources(), decodedByte);
+//        return d;
     }
 
     @Override

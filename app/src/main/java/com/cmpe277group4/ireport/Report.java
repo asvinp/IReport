@@ -11,6 +11,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -40,6 +41,7 @@ public class Report {
     public String size_litter;
     public String lat_loc, lon_loc;
     public String date;
+    public Bitmap imageBm;
 
     private static AsyncHttpClient reportclient = new AsyncHttpClient();
     private static JSONObject serverdataJSON = new JSONObject();
