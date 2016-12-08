@@ -116,18 +116,20 @@ public class ResidentActivity extends AppCompatActivity {
                 Report selectedReport = reportList.get(position);
 
                 // 2
-                Intent detailIntent = new Intent(context, report_detail.class);
+                Intent detailIntent = new Intent(context, ResidentDetail.class);
 
                 // 3
-                detailIntent.putExtra("id", selectedReport.resident_id);
-//                detailIntent.putExtra("time", selectedReport.time);
+                detailIntent.putExtra("resident_id", selectedReport.resident_id);
+                detailIntent.putExtra("date", selectedReport.date);
 //                detailIntent.putExtra("url", selectedReport.instructionUrl);
 //                detailIntent.putExtra("image", selectedReport.imageUrl);
                 detailIntent.putExtra("desc_litter", selectedReport.desc_litter);
                 detailIntent.putExtra("status_litter", selectedReport.status_litter);
                 detailIntent.putExtra("severity_litter", selectedReport.severity_litter);
                 detailIntent.putExtra("size_litter", selectedReport.size_litter);
-//                detailIntent.putExtra("location", selectedReport.location);
+                detailIntent.putExtra("lat_loc", selectedReport.lat_loc);
+                detailIntent.putExtra("lon_loc", selectedReport.lon_loc);
+
 
 
                 // 4

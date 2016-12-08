@@ -58,16 +58,18 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 10, this);
 
         // get data from previous activity (MainActivity/MapsActivity)
-        String id = this.getIntent().getExtras().getString("id");
-        String time = this.getIntent().getExtras().getString("time");
+        String id = this.getIntent().getExtras().getString("resident_id");
+        String date = this.getIntent().getExtras().getString("date");
 //        String url = this.getIntent().getExtras().getString("url");
-        String imageUrl = this.getIntent().getExtras().getString("image");
-        String description = this.getIntent().getExtras().getString("description");
-        String status = this.getIntent().getExtras().getString("status");
-        String severity = this.getIntent().getExtras().getString("severity");
-        String size = this.getIntent().getExtras().getString("size");
-        String location = this.getIntent().getExtras().getString("location");
-        trashLoc = location;
+//        String imageUrl = this.getIntent().getExtras().getString("image");
+        String description = this.getIntent().getExtras().getString("desc_litter");
+        String status = this.getIntent().getExtras().getString("status_litter");
+        String severity = this.getIntent().getExtras().getString("severity_litter");
+        String size = this.getIntent().getExtras().getString("size_litter");
+        String lat_loc = this.getIntent().getExtras().getString("lat_loc");
+        String lon_loc = this.getIntent().getExtras().getString("lon_loc");
+
+        trashLoc = lat_loc + "," + lon_loc;
 
 
         //Set title of appscreen to id of report
@@ -86,15 +88,15 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
 
         //Loading image from below url into imageView
 
-        Picasso.with(this)
-                .load(imageUrl)
-                .into(detailImageView);
+//        Picasso.with(this)
+//                .load(imageUrl)
+//                .into(detailImageView);
 
         //send strings to TextViews
         severityTextView.setText(severity);
-        timeTextView.setText(time);
+        timeTextView.setText(date);
         sizeTextView.setText(size);
-        locationTextView.setText(location);
+        locationTextView.setText(lat_loc + ", " + lon_loc);
         descriptionTextView.setText(description);
 
 
