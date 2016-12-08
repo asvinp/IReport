@@ -2,17 +2,19 @@ package com.cmpe277group4.ireport;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -29,17 +31,43 @@ import java.io.UnsupportedEncodingException;
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
 
-import static android.R.attr.name;
-
 public class ProfileActivity extends AppCompatActivity {
 
     private static final String PROFILE_TAG = "PROFILE";
-    TextView nameText, addressText, emailText, screenName;
-    String email, name, address;
+    TextView nameText, addressText, emailText, screenNameText;
+    String email, name, address, screenName;
     Button Register;
     private static final int SELECT_PICTURE = 0;
     private ImageView imageView;
     private static int RESULT_LOAD_IMAGE = 1;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.resident_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.add:
+                return true;
+            case R.id.signout:
+                return true;
+            case R.id.about:
+                return true;
+            case R.id.update:
+                Intent updateActivity = new Intent(ProfileActivity.this,UpdateActivity.class);
+                updateActivity.putExtra("email",email);
+                startActivity(updateActivity);
+                return true;
+            case R.id.exit:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -53,15 +81,19 @@ public class ProfileActivity extends AppCompatActivity {
         addressText = (TextView) findViewById(R.id.Address);
         nameText = (TextView) findViewById(R.id.name);
         emailText = (TextView) findViewById(R.id.Email);
-        screenName = (TextView) findViewById(R.id.ScreenName);
+        screenNameText = (TextView) findViewById(R.id.ScreenName);
         Intent intent = getIntent();
         email = intent.getExtras().getString("email");
         name = intent.getExtras().getString("name");
         if (name == null) {
             name = "";
         }
+        emailText.setText(email);
+        nameText.setText(name);
+
         Log.d(PROFILE_TAG, email);
         Log.d(PROFILE_TAG, name);
+
         Register = (Button) findViewById(R.id.Register);
         imageView = (ImageView) findViewById(android.R.id.icon);
 
@@ -77,24 +109,32 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        address = addressText.getText().toString();
-        if(address == null){
-            address = " ";
-        }
-
         Register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("mprofile ", nameText.getText().toString());
-                Log.d("mprofile ", addressText.getText().toString());
-                Log.d(PROFILE_TAG,address);
+                email = emailText.getText().toString();
+                name = nameText.getText().toString();
+                address = addressText.getText().toString();
+                screenName = screenNameText.getText().toString();
+                if(name == null){
+                    name = "";
+                }
+                if(address == null){
+                    address = "";
+                }
+                if(screenName == null){
+                    screenName = email;
+                }
+                Log.d("mprofile ", name);
+                Log.d("mprofile ", address);
+                Log.d("mprofile", screenName);
                 StringEntity entity = null;
                 JSONObject profileObj = new JSONObject();
                 try{
                     profileObj.put("email",email);
                     profileObj.put("name",name);
                     profileObj.put("address",address);
-                    profileObj.put("ScreenName",screenName);
+                    profileObj.put("screenName",screenName);
                     entity = new StringEntity(profileObj.toString());
                 }catch(JSONException e){
                     e.printStackTrace();
@@ -114,15 +154,13 @@ public class ProfileActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                         Log.d(PROFILE_TAG,"Failure Status : " + Integer.toString(statusCode));
+                        Toast.makeText(ProfileActivity.this, "unable to poast data ",Toast.LENGTH_SHORT).show();
+
                     }
                 });
 
             }
         });
-
-
-        emailText.setText(email);
-        nameText.setText(name);
         //address.setText("Current Location ");
 
 
