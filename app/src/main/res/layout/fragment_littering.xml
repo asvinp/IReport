@@ -10,7 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.cmpe277group4.ireport.ReportActivity"
-    tools:showIn="@layout/activity_littering">
+    >
 
     <ImageView
         android:layout_width="wrap_content"
@@ -108,7 +108,7 @@
         android:text="Send"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/button2"
+        android:id="@+id/sendButton"
         android:layout_below="@+id/spinnerSeverity"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="14dp" />
