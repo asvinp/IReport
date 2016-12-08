@@ -9,12 +9,17 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -44,6 +49,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
@@ -217,8 +224,14 @@ public class ReportFragment extends Fragment {
         }
 
         return encodedImage;
+    }
 
-
+    private Bitmap decodeBase64Image(String base64){
+        byte[] decodedString = Base64.decode(base64, Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        return decodedByte;
+//        Drawable d = new BitmapDrawable(getResources(), decodedByte);
+//        return d;
     }
 
     private void galleryAddPic() {
@@ -330,13 +343,25 @@ public class ReportFragment extends Fragment {
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
         // Define a listener that responds to location updates
-        LocationListener locationListener = new LocationListener() {
+        final LocationListener locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
                 System.out.println("**********VINAY OnLocationChanged  "+location.getLatitude()+" , "+location.getLongitude());
                 ulatitude = location.getLatitude();
                 ulongitude = location.getLongitude();
                 mLatLng.setText(ulatitude+"\n"+ulongitude);
+                try {
+                    Geocoder geocoder;
+                    List<Address> addresses;
+                    geocoder = new Geocoder(getContext(), Locale.getDefault());
+                    addresses = geocoder.getFromLocation(ulatitude, ulongitude, 1);
+                    String address = addresses.get(0).getAddressLine(0);
+                    System.out.println("Lat and Lon " + address);
+                    mLatLng.setText(ulatitude+"\n"+ulongitude+"\n"+address);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {}

@@ -67,7 +67,7 @@
                 android:paddingTop="10dp" />
 
             <TextView
-                android:text="LatLng"
+                android:text="Location not available"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignTop="@+id/textView2"
