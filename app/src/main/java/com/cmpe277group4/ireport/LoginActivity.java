@@ -37,20 +37,14 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.ResponseHandlerInterface;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
-import java.net.HttpURLConnection;
-import java.net.URI;
 import java.util.Arrays;
 
 import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.HttpResponse;
 import cz.msebera.android.httpclient.entity.StringEntity;
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
@@ -79,6 +73,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private GoogleApiClient apiClient;
     private boolean officialReg = false;
+    private Button normalLoginButton;
+
+    private FirebaseActivity firebase = new FirebaseActivity();
+    private AsyncHttpClient loginClient = new AsyncHttpClient();
+    private JSONObject serverDataJSON = new JSONObject();
+    private StringEntity serverDataEntity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,8 +86,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
         setContentView(R.layout.activity_login);
-
-
 
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -107,7 +105,36 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         emailText = (EditText) findViewById(R.id.residentemail);
         passText = (EditText) findViewById(R.id.residentpassword);
         registerButton = (Button) findViewById(R.id.residentregister);
+        normalLoginButton = (Button) findViewById(R.id.normalLoginButton);
         progressDialog = new ProgressDialog(this);
+
+        normalLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                progressDialog.setMessage("Signing In");
+                progressDialog.show();
+                final String email = emailText.getText().toString().trim();
+                String password = passText.getText().toString().trim();
+                firebase.signInResidentUser(email, password).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            Log.d("LOGIN", "Resident sign in");
+                            try {
+                                fetchResidentData(email);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            }
+                        }else{
+                            Log.d("LOGIN", "Unable to sign in");
+                            Toast.makeText(LoginActivity.this,"Unable to sign in",Toast.LENGTH_SHORT);
+                        }
+                    }
+                });
+            }
+        });
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,7 +160,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 progressDialog.setMessage("Registering resident");
 
                 progressDialog.show();
-                FirebaseActivity firebase = new FirebaseActivity();
                 firebase.registerResidentUser(email, password)
                         .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
@@ -203,6 +229,29 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         });
     }
 
+    private void fetchResidentData(String email) throws JSONException, UnsupportedEncodingException {
+        serverDataJSON.put("id",email);
+        serverDataEntity = new StringEntity(serverDataJSON.toString());
+        loginClient.get(LoginActivity.this, getString(R.string.server_url) + "", serverDataEntity, "application/json", new AsyncHttpResponseHandler() {
+
+            private final String TAG = "SERVER_LOGIN";
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                progressDialog.hide();
+                Log.d(TAG,"Got User Data");
+                String residentData = new String(responseBody);
+                Log.d(TAG,residentData);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                progressDialog.hide();
+                Log.d(TAG,"Failed to get User data : Status Code : " + statusCode );
+            }
+        });
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -217,6 +266,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         // Pass the activity result back to the Facebook SDK
         if(officialReg){
+            Log.d("LOGIN","Official Reg");
             if(requestCode == 9001){
                 GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
                 Log.d("Google Status",Integer.toString(result.getStatus().getStatusCode()));
@@ -230,54 +280,49 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
             officialReg = false;
         }else{
+            Log.d("LOGIN","Resident FB Reg");
             callBackManager.onActivityResult(requestCode, resultCode, data);
         }
     }
 
     private void firebaseAuthWithGoogle(final GoogleSignInAccount account) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
-
+        progressDialog.setMessage("Registering official");
+        progressDialog.show();
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(),null);
         mAuth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-//                SaveSharedPreference.setUserName(LoginActivity.this,account.getId());
-//                SaveSharedPreference.setUserType(LoginActivity.this,OFFICIAL);
                 Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
-                AsyncHttpClient officialClient = new AsyncHttpClient();
-                JSONObject officialParams = new JSONObject();
-                StringEntity entity = null;
-                try {
-                    officialParams.put("email",account.getEmail());
-                    officialParams.put("name",account.getDisplayName());
-//                    officialParams.put("address",Address);
-                    entity = new StringEntity(officialParams.toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
+                if(task.isSuccessful()){
+                    AsyncHttpClient officialClient = new AsyncHttpClient();
+                    JSONObject officialParams = new JSONObject();
+                    StringEntity entity = null;
+                    try {
+                        officialParams.put("email",account.getEmail());
+                        officialParams.put("name",account.getDisplayName());
+                        entity = new StringEntity(officialParams.toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                    Log.d("Server",account.getEmail());
+                    officialClient.get(LoginActivity.this, getString(R.string.server_url) + "officialNewRegister",entity,"application/json", new AsyncHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                            progressDialog.hide();
+                            Intent officialActivity = new Intent(LoginActivity.this, OfficialActivity.class);
+                            officialActivity.putExtra("emailId",account.getEmail());
+                            startActivity(officialActivity);
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                            Log.d("Server",Integer.toString(statusCode));
+                        }
+                    });
                 }
-                Log.d("Server",account.getEmail());
-                officialClient.get(LoginActivity.this,"http://ec2-54-187-196-140.us-west-2.compute.amazonaws.com/officialNewRegister",entity,"application/json", new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-//                        SaveSharedPreference.setUserType(LoginActivity.this,OFFICIAL);
-//                        SaveSharedPreference.setUserName(LoginActivity.this,account.getDisplayName());
-
-//                        SaveSharedPreference.setUserId(LoginActivity.this, account.getEmail());
-                        Intent officialActivity = new Intent(LoginActivity.this, OfficialActivity.class);
-                        officialActivity.putExtra("emailId",account.getEmail());
-                        startActivity(officialActivity);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                        Log.d("Server",Integer.toString(statusCode));
-                    }
-                });
-                // If sign in fails, display a message to the user. If sign in succeeds
-                // the auth state listener will be notified and logic to handle the
-                // signed in user can be handled in the listener.
                 if (!task.isSuccessful()) {
                     Log.w(TAG, "signInWithCredential", task.getException());
                     Toast.makeText(LoginActivity.this, "Authentication failed.",Toast.LENGTH_SHORT).show();
@@ -288,7 +333,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private void handleFacebookAccessToken(final AccessToken token) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
-
+        progressDialog.setMessage("Registering resident");
+        progressDialog.show();
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -306,6 +352,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                         Log.d("FBLogin",object.getString("name"));
                                         fbData[0] = object.getString("email");
                                         fbData[1] = object.getString("name");
+                                        progressDialog.hide();
                                         updateUI(fbData[0],fbData[1]);
                                     } catch (JSONException e) {
                                         e.printStackTrace();
@@ -326,8 +373,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     private void updateUI(String email, String name){
-        Log.d("UIUPDATE",email);
-        Log.d("UIUPPDATE",name);
+//        Log.d("UIUPDATE",email);
+//        Log.d("UIUPPDATE",name);
         Intent residentIntent = new Intent(LoginActivity.this, ProfileActivity.class);
         residentIntent.putExtra("email", email);
         residentIntent.putExtra("name",name);
@@ -336,6 +383,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        Log.d("CONNECTION","Connection Failed");
+        Toast.makeText(LoginActivity.this,"Unable to connect",Toast.LENGTH_SHORT).show();
     }
 }

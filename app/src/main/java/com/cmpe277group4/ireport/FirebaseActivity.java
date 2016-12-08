@@ -45,7 +45,9 @@ public class FirebaseActivity extends AppCompatActivity implements GoogleApiClie
 
     }
 
-
+    public Task<AuthResult> signInResidentUser(String email, String password){
+        return getFireBaseInstance().signInWithEmailAndPassword(email,password);
+    }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
 

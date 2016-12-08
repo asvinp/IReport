@@ -26,6 +26,8 @@
     <string name="facebook_app_id">703321546499147</string>
     <string name="fb_login_protocol_scheme">fb703321546499147</string>
 
+    <string name="server_url">http://ec2-54-187-196-140.us-west-2.compute.amazonaws.com/</string>
+
     <string-array name="Size">
         <item>Small</item>
         <item>Medium</item>

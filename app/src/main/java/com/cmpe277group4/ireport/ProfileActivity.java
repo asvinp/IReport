@@ -1,5 +1,6 @@
 package com.cmpe277group4.ireport;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -41,6 +42,8 @@ public class ProfileActivity extends AppCompatActivity {
     private static final int SELECT_PICTURE = 0;
     private ImageView imageView;
     private static int RESULT_LOAD_IMAGE = 1;
+    private ProgressDialog progressDialog;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -55,6 +58,8 @@ public class ProfileActivity extends AppCompatActivity {
         nameText = (TextView) findViewById(R.id.name);
         emailText = (TextView) findViewById(R.id.Email);
         screenName = (TextView) findViewById(R.id.ScreenName);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Storing Profile");
         Intent intent = getIntent();
         email = intent.getExtras().getString("email");
         name = intent.getExtras().getString("name");
@@ -86,6 +91,7 @@ public class ProfileActivity extends AppCompatActivity {
         Register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressDialog.show();
                 Log.d("mprofile ", nameText.getText().toString());
                 Log.d("mprofile ", addressText.getText().toString());
                 Log.d(PROFILE_TAG,address);
@@ -108,6 +114,7 @@ public class ProfileActivity extends AppCompatActivity {
                 profileClient.get(ProfileActivity.this, "http://ec2-54-187-196-140.us-west-2.compute.amazonaws.com/registerNewResident", entity, "application/json", new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                        progressDialog.hide();
                         Log.d(PROFILE_TAG,"User profile posted");
                         Intent reportActivity = new Intent(ProfileActivity.this,ReportActivity.class);
                         startActivity(reportActivity);
@@ -115,8 +122,9 @@ public class ProfileActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                        progressDialog.hide();
                         Log.d(PROFILE_TAG,"Failure Status : " + Integer.toString(statusCode));
-                        Toast.makeText(ProfileActivity.this, "unable to poast data ",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProfileActivity.this, "Unable to Post Data ",Toast.LENGTH_SHORT).show();
 
                     }
                 });
