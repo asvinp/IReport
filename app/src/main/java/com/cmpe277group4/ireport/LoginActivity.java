@@ -252,7 +252,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private void fetchResidentData(String email) throws JSONException, UnsupportedEncodingException {
         final String resident_id = email;
         Log.d("RESIDNET",resident_id);
-        serverDataJSON.put("id",email);
+        serverDataJSON.put("resident_id",email);
         serverDataEntity = new StringEntity(serverDataJSON.toString());
         loginClient.get(LoginActivity.this, getString(R.string.server_url) + "/getResidentData", serverDataEntity, "application/json", new AsyncHttpResponseHandler() {
 

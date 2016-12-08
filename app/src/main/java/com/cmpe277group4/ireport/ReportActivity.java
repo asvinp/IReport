@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -29,6 +30,7 @@ public class ReportActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.myReport:
                 Intent residentActivity = new Intent(ReportActivity.this,ResidentActivity.class);
+                Log.d("MY_REPORT",resident_id);
                 residentActivity.putExtra("resident_id",resident_id);
                 startActivity(residentActivity);
                 return true;
@@ -61,6 +63,7 @@ public class ReportActivity extends AppCompatActivity {
 
         Intent reportIntent = getIntent();
         resident_id = reportIntent.getExtras().getString("resident_id");
+        Log.d("REPORTACTIVITY",resident_id);
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.litteringFragmentContainer);
 
