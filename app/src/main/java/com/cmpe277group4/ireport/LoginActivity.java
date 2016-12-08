@@ -111,6 +111,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                 e.printStackTrace();
                             }
                         }
+                        break;
                     }
                 } else {
                     // User is signed out
@@ -417,6 +418,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     @Override
     public void onBackPressed() {
-        System.exit(0);
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }

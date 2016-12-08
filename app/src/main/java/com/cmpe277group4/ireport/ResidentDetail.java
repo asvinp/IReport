@@ -113,8 +113,6 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
 
         statusSpinner.setAdapter(adapter);
 
-
-
         //preset spinner according to JSON file
         if (status.equalsIgnoreCase("still there")) {
             //set spinner initial value

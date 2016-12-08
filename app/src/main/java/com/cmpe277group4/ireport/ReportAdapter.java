@@ -84,7 +84,6 @@ public class ReportAdapter extends BaseAdapter {
         ImageView thumbnailImageView =
                 (ImageView) rowView.findViewById(R.id.report_list_thumbnail);
 
-// 1
         Report report = (Report) getItem(position);
 
 // 2

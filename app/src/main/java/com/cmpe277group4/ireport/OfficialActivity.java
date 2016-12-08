@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -143,22 +144,32 @@ public class OfficialActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) { switch(item.getItemId()) {
-        case R.id.add:
-            //add the function to perform here
-            return(true);
         case R.id.signout:
-            //add the function to perform here
+            FirebaseAuth.getInstance().signOut();
+            Intent goBackLogin = new Intent(OfficialActivity.this,LoginActivity.class);
+            startActivity(goBackLogin);
             return(true);
         case R.id.about:
             Toast.makeText(this, "Made by Group 4", Toast.LENGTH_SHORT).show();
             return(true);
         case R.id.exit:
-            finish();
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
             return(true);
     }
         return(super.onOptionsItemSelected(item));
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
+}
 
 
 
