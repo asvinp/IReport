@@ -64,16 +64,16 @@ public class ResidentActivity extends AppCompatActivity {
                         for (int i = 0; i < reports.length(); i++) {
                             Report report = new Report();
 
-                            report.id = reports.getJSONObject(i).getString("user_resident");
-                            //                report.time = reports.getJSONObject(i).getString("time");
-                            report.description = reports.getJSONObject(i).getString("description_report");
-                            //                report.imageUrl = reports.getJSONObject(i).getString("image");
+                            report.resident_id = reports.getJSONObject(i).getString("resident_id");
+                            report.date = reports.getJSONObject(i).getString("date");
+                            report.desc_litter = reports.getJSONObject(i).getString("desc_litter");
+                            report.image_litter = reports.getJSONObject(i).getString("image_litter");
                             //                report.instructionUrl = reports.getJSONObject(i).getString("url");
-                            report.status = reports.getJSONObject(i).getString("status_litter");
-                            report.severity = reports.getJSONObject(i).getString("severity_litter");
-                            report.size = reports.getJSONObject(i).getString("size_litter");
-                            report.lat = reports.getJSONObject(i).getString("latitude_loc");
-                            report.lon = reports.getJSONObject(i).getString("longitude_loc");
+                            report.status_litter = reports.getJSONObject(i).getString("status_litter");
+                            report.severity_litter = reports.getJSONObject(i).getString("severity_litter");
+                            report.size_litter = reports.getJSONObject(i).getString("size_litter");
+                            report.lat_loc = reports.getJSONObject(i).getString("lat_loc");
+                            report.lon_loc = reports.getJSONObject(i).getString("lon_loc");
                             reportList.add(report);
                         }
                     } catch (JSONException e) {
@@ -119,14 +119,14 @@ public class ResidentActivity extends AppCompatActivity {
                 Intent detailIntent = new Intent(context, report_detail.class);
 
                 // 3
-                detailIntent.putExtra("id", selectedReport.id);
+                detailIntent.putExtra("id", selectedReport.resident_id);
 //                detailIntent.putExtra("time", selectedReport.time);
 //                detailIntent.putExtra("url", selectedReport.instructionUrl);
 //                detailIntent.putExtra("image", selectedReport.imageUrl);
-                detailIntent.putExtra("description", selectedReport.description);
-                detailIntent.putExtra("status", selectedReport.status);
-                detailIntent.putExtra("severity", selectedReport.severity);
-                detailIntent.putExtra("size", selectedReport.size);
+                detailIntent.putExtra("desc_litter", selectedReport.desc_litter);
+                detailIntent.putExtra("status_litter", selectedReport.status_litter);
+                detailIntent.putExtra("severity_litter", selectedReport.severity_litter);
+                detailIntent.putExtra("size_litter", selectedReport.size_litter);
 //                detailIntent.putExtra("location", selectedReport.location);
 
 

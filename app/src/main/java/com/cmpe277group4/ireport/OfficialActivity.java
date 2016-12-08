@@ -63,15 +63,15 @@ public class OfficialActivity extends AppCompatActivity {
                 Intent detailIntent = new Intent(context, report_detail.class);
 
                 // 3
-                detailIntent.putExtra("id", selectedReport.id);
-//                detailIntent.putExtra("time", selectedReport.time);
-//                detailIntent.putExtra("url", selectedReport.instructionUrl);
-//                detailIntent.putExtra("image", selectedReport.imageUrl);
-                detailIntent.putExtra("description", selectedReport.description);
-                detailIntent.putExtra("status", selectedReport.status);
-                detailIntent.putExtra("severity", selectedReport.severity);
-                detailIntent.putExtra("size", selectedReport.size);
-//                detailIntent.putExtra("location", selectedReport.location);
+//                detailIntent.putExtra("id", selectedReport.id);
+////                detailIntent.putExtra("time", selectedReport.time);
+////                detailIntent.putExtra("url", selectedReport.instructionUrl);
+////                detailIntent.putExtra("image", selectedReport.imageUrl);
+//                detailIntent.putExtra("description", selectedReport.description);
+//                detailIntent.putExtra("status", selectedReport.status);
+//                detailIntent.putExtra("severity", selectedReport.severity);
+//                detailIntent.putExtra("size", selectedReport.size);
+////                detailIntent.putExtra("location", selectedReport.location);
 
 
                 // 4

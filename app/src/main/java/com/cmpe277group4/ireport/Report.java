@@ -22,6 +22,7 @@ import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Handler;
 
 import cz.msebera.android.httpclient.Header;
@@ -29,15 +30,17 @@ import cz.msebera.android.httpclient.entity.StringEntity;
 
 public class Report {
 
-    public String id;
-    public String time;
-    public String description;
-    public String imageUrl;
+    public String resident_id;
+//    public String time;
+    public String desc_litter;
+    public String image_litter;
     public String instructionUrl;
-    public String status;
-    public String severity;
-    public String size;
-    public String lat, lon;
+    public String status_litter;
+    public String severity_litter;
+    public String size_litter;
+    public String lat_loc, lon_loc;
+    public String date;
+
     private static AsyncHttpClient reportclient = new AsyncHttpClient();
     private static JSONObject serverdataJSON = new JSONObject();
     private static StringEntity serverdataentity;
@@ -54,32 +57,32 @@ public class Report {
             reportclient.get(context, context.getString(R.string.server_url) + "getReport", serverdataentity, "application/json", new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                    Log.d("reports", "got Data");
-                    try {
-                        reportdataobject = new JSONObject(new String(responseBody));
-                        reports = reportdataobject.getJSONArray("data");
-                        // Get Report objects from data
-                        for(int i = 0; i < reports.length(); i++){
-                            Report report = new Report();
-
-                            report.id = reports.getJSONObject(i).getString("user_resident");
-//                report.time = reports.getJSONObject(i).getString("time");
-                            report.description = reports.getJSONObject(i).getString("desc_litter");
-//                report.imageUrl = reports.getJSONObject(i).getString("image");
-//                report.instructionUrl = reports.getJSONObject(i).getString("url");
-                            report.status = reports.getJSONObject(i).getString("status_litter");
-                            report.severity = reports.getJSONObject(i).getString("severity_litter");
-                            report.size = reports.getJSONObject(i).getString("size_litter");
-                            report.lat = reports.getJSONObject(i).getString("lat_loc");
-                            report.lon = reports.getJSONObject(i).getString("lon_loc");
-
-                            reportList.add(report);
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
+//                    Log.d("reports", "got Data");
+//                    try {
+//                        reportdataobject = new JSONObject(new String(responseBody));
+//                        reports = reportdataobject.getJSONArray("data");
+//                        // Get Report objects from data
+//                        for(int i = 0; i < reports.length(); i++){
+//                            Report report = new Report();
+//
+//                            report.id = reports.getJSONObject(i).getString("user_resident");
+////                report.time = reports.getJSONObject(i).getString("time");
+//                            report.description = reports.getJSONObject(i).getString("desc_litter");
+////                report.imageUrl = reports.getJSONObject(i).getString("image");
+////                report.instructionUrl = reports.getJSONObject(i).getString("url");
+//                            report.status = reports.getJSONObject(i).getString("status_litter");
+//                            report.severity = reports.getJSONObject(i).getString("severity_litter");
+//                            report.size = reports.getJSONObject(i).getString("size_litter");
+//                            report.lat = reports.getJSONObject(i).getString("lat_loc");
+//                            report.lon = reports.getJSONObject(i).getString("lon_loc");
+//
+//                            reportList.add(report);
+//                        }
+//
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//
 
                 }
 

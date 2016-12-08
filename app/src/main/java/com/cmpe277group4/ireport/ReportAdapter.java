@@ -88,9 +88,9 @@ public class ReportAdapter extends BaseAdapter {
         Report report = (Report) getItem(position);
 
 // 2
-        titleTextView.setText(report.id);
+        titleTextView.setText(report.date);
 //        subtitleTextView.setText(report.time);
-        detailTextView.setText(report.status);
+        detailTextView.setText(report.severity_litter);
 
 // 3
 //        Picasso.with(mContext).load(report.imageUrl).placeholder(R.mipmap.ic_launcher).into(thumbnailImageView);

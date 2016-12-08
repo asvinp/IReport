@@ -44,38 +44,6 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView imageView;
     private static int RESULT_LOAD_IMAGE = 1;
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.resident_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.add:
-                return true;
-            case R.id.signout:
-                FirebaseAuth.getInstance().signOut();
-                return true;
-            case R.id.about:
-                return true;
-            case R.id.update:
-                Intent updateActivity = new Intent(ProfileActivity.this,UpdateActivity.class);
-                updateActivity.putExtra("id",email);
-                startActivity(updateActivity);
-                return true;
-            case R.id.exit:
-                finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
     private GoogleApiClient client;
 
     @Override

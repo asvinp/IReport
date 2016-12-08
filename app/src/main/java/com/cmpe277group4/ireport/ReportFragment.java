@@ -283,13 +283,16 @@ public class ReportFragment extends Fragment {
 
                 try {
                     serverDataJSON.put("resident_id",resident_id);
-//                    serverDataJSON.put("image_litter",encB);
+                    serverDataJSON.put("image_litter",encB);
                     serverDataJSON.put("lat_loc",lat);
                     serverDataJSON.put("lon_loc",longi);
                     serverDataJSON.put("severity_litter",severity);
                     serverDataJSON.put("size_litter",size);
                     serverDataJSON.put("desc_litter",description);
                     serverDataJSON.put("status_litter","Still_there");
+                    serverDataJSON.put("date",new Date(System.currentTimeMillis()));
+                    serverDataJSON.put("anonymous_setting","0");
+//                    Log.d("REPORT",new Date(System.currentTimeMillis()));
                     serverDataEntity = new StringEntity(serverDataJSON.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
