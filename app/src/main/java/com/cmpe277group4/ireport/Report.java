@@ -43,6 +43,7 @@ public class Report {
     public String date;
     public Bitmap imageBm;
     public String address;
+    public String report_id;
 
     private static AsyncHttpClient reportclient = new AsyncHttpClient();
     private static JSONObject serverdataJSON = new JSONObject();

@@ -83,6 +83,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
@@ -115,6 +116,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     //hashmap
     public HashMap<String, Integer> markerhash = new HashMap<>();
 
+    final ArrayList<Report> reportList = new ArrayList<Report>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,7 +130,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         Intent residentIntent = getIntent();
         resident_id = residentIntent.getExtras().getString("resident_id");
-        final ArrayList<Report> reportList = new ArrayList<Report>();
+
         try {
             serverdataJSON.put("resident_id", resident_id);
             serverdataentity = new StringEntity(serverdataJSON.toString());
@@ -226,37 +228,56 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-
         Log.d("MAP","Marker clicked");
-        String markertitle = marker.getTitle();
-        if(markertitle.equals("Target Location")){
-            Toast.makeText(this, "You searched for this place", Toast.LENGTH_LONG).show();
-        }
+        int count = 0;
+        for(Report report: reportList){
+            Log.d("MARKER COUNT",Integer.toString(count++));
+            if(marker.getSnippet().contentEquals(report.date)){
+                Log.d("MARKER","found report");
+                Intent detailIntent = new Intent(MapsActivity.this, ResidentDetail.class);
 
-        else{
-            int m = markerhash.get(marker.getTitle());
-
-            if (m==m)
-            {
-                // 2
-                Intent detailIntent = new Intent(this, ResidentActivity.class);
-
-                // 3
-                detailIntent.putExtra("resident_id", stringid[m]);
-                detailIntent.putExtra("date", stringtime[m]);
-//            detailIntent.putExtra("url", stringurl.instructionUrl);
-                detailIntent.putExtra("image", stringimage[m]);
-                detailIntent.putExtra("desc_litter", stringdescription[m]);
-                detailIntent.putExtra("status_litter", stringstatus[m]);
-                detailIntent.putExtra("severity_litter", stringseverity[m]);
-                detailIntent.putExtra("size_litter", stringsize[m]);
-                detailIntent.putExtra("lat_loc", stringlat_loc[m]);
-                detailIntent.putExtra("lon_loc", stringlon_loc[m]);
-
+                detailIntent.putExtra("report_id",report.report_id);
+//                detailIntent.putExtra("image", decodeBase64Image(report.image_litter));
+//                // 3
+//                detailIntent.putExtra("resident_id", report.resident_id);
+//                detailIntent.putExtra("date", report.date);
+////            detailIntent.putExtra("url", stringurl.instructionUrl);
+//                detailIntent.putExtra("image", report.image_litter);
+//                detailIntent.putExtra("desc_litter", report.desc_litter);
+//                detailIntent.putExtra("status_litter", report.status_litter);
+//                detailIntent.putExtra("severity_litter", report.severity_litter);
+//                detailIntent.putExtra("size_litter", report.size_litter);
+//                detailIntent.putExtra("lat_loc", report.lat_loc);
+//                detailIntent.putExtra("lon_loc", report.lon_loc);
+//                try {
+//                    Geocoder geocoder;
+//                    List<android.location.Address> addresses;
+//                    geocoder = new Geocoder(MapsActivity.this, Locale.getDefault());
+//                    addresses = geocoder.getFromLocation(Double.parseDouble(report.lat_loc), Double.parseDouble(report.lon_loc), 1);
+//                    report.address = addresses.get(0).getAddressLine(0);
+//                }catch (Exception e){
+//                    e.printStackTrace();
+//                }
+//
+//                detailIntent.putExtra("address", report.address);
                 startActivity(detailIntent);
-
             }
         }
+//        String markertitle = marker.getTitle();
+//        if(markertitle.equals("Target Location")){
+//            Toast.makeText(this, "You searched for this place", Toast.LENGTH_LONG).show();
+//        }
+//
+//        else{
+//            int m = markerhash.get(marker.getTitle());
+//
+//            if (m==m)
+//            {
+//                // 2
+//
+//
+//            }
+//        }
 
     }
 

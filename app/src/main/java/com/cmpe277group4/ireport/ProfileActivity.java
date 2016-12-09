@@ -121,6 +121,7 @@ public class ProfileActivity extends AppCompatActivity {
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                         Log.d(PROFILE_TAG,"User profile posted");
                         Intent reportActivity = new Intent(ProfileActivity.this,ReportActivity.class);
+                        reportActivity.putExtra("resident_id",email);
                         startActivity(reportActivity);
                     }
 

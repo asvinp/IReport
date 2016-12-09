@@ -59,7 +59,7 @@ public class UpdateActivity extends AppCompatActivity {
         emailText = (TextView) findViewById(R.id.Email);
         screenNameText = (TextView) findViewById(R.id.ScreenName);
         Intent intent = getIntent();
-        email = intent.getExtras().getString("email");
+        email = intent.getExtras().getString("resident_id");
 
         Log.d(PROFILE_TAG, email);
         update = (Button) findViewById(R.id.Update);
@@ -80,7 +80,7 @@ public class UpdateActivity extends AppCompatActivity {
         });
 
         try {
-            serverDataJSON.put("id",email);
+            serverDataJSON.put("resident_id",email);
             serverDataEntity = new StringEntity(serverDataJSON.toString());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -151,6 +151,7 @@ public class UpdateActivity extends AppCompatActivity {
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                         Log.d(PROFILE_TAG,"User profile Updated");
                         Intent reportActivity = new Intent(UpdateActivity.this,ReportActivity.class);
+                        reportActivity.putExtra("resident_id",email);
                         startActivity(reportActivity);
                     }
 
