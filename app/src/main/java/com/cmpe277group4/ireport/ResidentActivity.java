@@ -129,32 +129,32 @@ public class ResidentActivity extends AppCompatActivity {
                 // 2
                 Intent detailIntent = new Intent(context, ResidentDetail.class);
                 String address;
-                detailIntent.putExtra("report_id",selectedReport.report_id);
+//                detailIntent.putExtra("report_id",selectedReport.report_id);
                 Log.d("ACTIVITY",selectedReport.report_id);
 //
 //                // 3
-//                detailIntent.putExtra("resident_id", selectedReport.resident_id);
-//                detailIntent.putExtra("date", selectedReport.date);
-////                detailIntent.putExtra("url", selectedReport.instructionUrl);
+                detailIntent.putExtra("resident_id", selectedReport.resident_id);
+                detailIntent.putExtra("date", selectedReport.date);
+//                detailIntent.putExtra("url", selectedReport.instructionUrl);
 //                detailIntent.putExtra("image", decodeBase64Image(selectedReport.image_litter));
-//                detailIntent.putExtra("desc_litter", selectedReport.desc_litter);
-//                detailIntent.putExtra("status_litter", selectedReport.status_litter);
-//                detailIntent.putExtra("severity_litter", selectedReport.severity_litter);
-//                detailIntent.putExtra("size_litter", selectedReport.size_litter);
-//                detailIntent.putExtra("lat_loc", selectedReport.lat_loc);
-//                detailIntent.putExtra("lon_loc", selectedReport.lon_loc);
-//
-//                try {
-//                    Geocoder geocoder;
-//                    List<Address> addresses;
-//                    geocoder = new Geocoder(context, Locale.getDefault());
-//                    addresses = geocoder.getFromLocation(Double.parseDouble(selectedReport.lat_loc), Double.parseDouble(selectedReport.lon_loc), 1);
-//                    selectedReport.address = addresses.get(0).getAddressLine(0);
-//                }catch (Exception e){
-//                    e.printStackTrace();
-//                }
-//
-//                detailIntent.putExtra("address", selectedReport.address);
+                detailIntent.putExtra("desc_litter", selectedReport.desc_litter);
+                detailIntent.putExtra("status_litter", selectedReport.status_litter);
+                detailIntent.putExtra("severity_litter", selectedReport.severity_litter);
+                detailIntent.putExtra("size_litter", selectedReport.size_litter);
+                detailIntent.putExtra("lat_loc", selectedReport.lat_loc);
+                detailIntent.putExtra("lon_loc", selectedReport.lon_loc);
+
+                try {
+                    Geocoder geocoder;
+                    List<Address> addresses;
+                    geocoder = new Geocoder(context, Locale.getDefault());
+                    addresses = geocoder.getFromLocation(Double.parseDouble(selectedReport.lat_loc), Double.parseDouble(selectedReport.lon_loc), 1);
+                    selectedReport.address = addresses.get(0).getAddressLine(0);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+                detailIntent.putExtra("address", selectedReport.address);
 
 
                 // 4

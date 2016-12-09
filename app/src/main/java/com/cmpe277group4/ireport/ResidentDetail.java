@@ -91,35 +91,35 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
 
         AsyncHttpClient reportClient = new AsyncHttpClient();
         Log.d("DETAILSREQ", serverdataentity.toString());
-        reportClient.get(ResidentDetail.this, getString(R.string.server_url) + "getReportRid", serverdataentity, "application/json", new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                Log.d("SERVERDEATILS"," " +statusCode);
-                try {
-                    JSONObject dataServer = new JSONObject(new String(responseBody));
-                    JSONObject data = dataServer.getJSONObject("data");
-                    Log.d("DETAILSREQ", data.toString());
-                    resident_id = data.getString("resident_id");
-                    date = data.getString("date");
-                    description = data.getString("desc_report");
-                    status = data.getString("status_litter");
-                    severity = data.getString("severity_litter");
-                    size = data.getString("size_litter");
-                    lat_loc = data.getString("lat_loc");
-                    lon_loc = data.getString("lon_loc");
-//                    String address = data.getString("address");
-                    image = data.getString("image_litter");
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Log.d("DETAILSREQ","FAILURE STATUS " + statusCode);
-            }
-        });
+//        reportClient.get(ResidentDetail.this, getString(R.string.server_url) + "getReportRid", serverdataentity, "application/json", new AsyncHttpResponseHandler() {
+//            @Override
+//            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+//                Log.d("SERVERDEATILS"," " +statusCode);
+//                try {
+//                    JSONObject dataServer = new JSONObject(new String(responseBody));
+//                    JSONObject data = dataServer.getJSONObject("data");
+//                    Log.d("DETAILSREQ", data.toString());
+//                    resident_id = data.getString("resident_id");
+//                    date = data.getString("date");
+//                    description = data.getString("desc_report");
+//                    status = data.getString("status_litter");
+//                    severity = data.getString("severity_litter");
+//                    size = data.getString("size_litter");
+//                    lat_loc = data.getString("lat_loc");
+//                    lon_loc = data.getString("lon_loc");
+////                    String address = data.getString("address");
+//                    image = data.getString("image_litter");
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+//                Log.d("DETAILSREQ","FAILURE STATUS " + statusCode);
+//            }
+//        });
 
         //getLocation
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -134,6 +134,16 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
             return;
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 10, this);
+
+        resident_id = this.getIntent().getExtras().getString("resident_id");
+                    date = this.getIntent().getExtras().getString("date");
+                    description = this.getIntent().getExtras().getString("desc_report");
+                    status = this.getIntent().getExtras().getString("status_litter");
+                    severity = this.getIntent().getExtras().getString("severity_litter");
+                    size = this.getIntent().getExtras().getString("size_litter");
+                    lat_loc = this.getIntent().getExtras().getString("lat_loc");
+                    lon_loc = this.getIntent().getExtras().getString("lon_loc");
+                    String address = this.getIntent().getExtras().getString("address");
 
         trashLoc = lat_loc + "," + lon_loc;
 
@@ -161,100 +171,100 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
         //send strings to TextViews
 //        if(image != null)
 //            detailImageView.setImageBitmap(decodeBase64Image(image));
-//        severityTextView.setText(severity);
-//        timeTextView.setText(date);
-//        sizeTextView.setText(size);
-//
-//        try {
-//            Geocoder geocoder;
-//            List<Address> addresses;
-//            geocoder = new Geocoder(context, Locale.getDefault());
-//            addresses = geocoder.getFromLocation(Double.parseDouble(lat_loc), Double.parseDouble(lon_loc), 1);
-//            address = addresses.get(0).getAddressLine(0);
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
-//
-//        if(address != null) {
-//            locationTextView.setText(address);
-//            Log.d("DETAILS", address);
-//        }
-//        descriptionTextView.setText(description);
-//
-//
-//
-//
-//
-//        //Spinner
-//
-//        //Set spinner view
-//        statusSpinner = (Spinner) findViewById(R.id.statusSpinner);
-//
-//
-//        //items for spinner
-//        String[] items = new String[]{"Still There", "Removal Confirmed", "Removal Claimed"};
-//
-//        //set adapter to spinner
-//        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-//                android.R.layout.simple_spinner_item, items);
-//
-//        statusSpinner.setAdapter(adapter);
-//
-//        //preset spinner according to JSON file
-//        if (status.equalsIgnoreCase("still there")) {
-//            //set spinner initial value
-//            statusSpinner.setSelection(0,false);
-//
-//        } else if (status.equalsIgnoreCase("removal confirmed")) {
-//            //set spinner initial value
-//            statusSpinner.setSelection(1,false);
-//
-//        } else if (status.equalsIgnoreCase("removal claimed")) {
-//            //set spinner initial value
-//            statusSpinner.setSelection(2,false);
-//
-//        }
-//
-//        //set spinner listener
-//        statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                Log.v("statusspinner item", (String) parent.getItemAtPosition(position));
-//
-//                String selected = statusSpinner.getSelectedItem().toString();
-//                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(alertcontext);
-//                alertDialogBuilder.setTitle("You Chose " + (String)parent.getItemAtPosition(position));
-//                // set dialog message
-//                alertDialogBuilder
-//                        .setMessage("Click OK to confirm!")
-//                        .setCancelable(false)
-//                        .setPositiveButton("OK",new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog,int id) {
-//                                // if this button is clicked, close
-//                                // current activity
-//                                dialog.cancel();
-//                            }
-//                        })
-//                        .setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog,int id) {
-//                                // if this button is clicked, just close
-//                                // the dialog box and do nothing
-//                                dialog.cancel();
-//                            }
-//                        });
-//
-//                // create alert dialog
-//                AlertDialog alertDialog = alertDialogBuilder.create();
-//
-//                // show it
-//                alertDialog.show();
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//                // TODO Auto-generated method stub
-//            }
-//        });
+        severityTextView.setText(severity);
+        timeTextView.setText(date);
+        sizeTextView.setText(size);
+
+        try {
+            Geocoder geocoder;
+            List<Address> addresses;
+            geocoder = new Geocoder(context, Locale.getDefault());
+            addresses = geocoder.getFromLocation(Double.parseDouble(lat_loc), Double.parseDouble(lon_loc), 1);
+            address = addresses.get(0).getAddressLine(0);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        if(address != null) {
+            locationTextView.setText(address);
+            Log.d("DETAILS", address);
+        }
+        descriptionTextView.setText(description);
+
+
+
+
+
+        //Spinner
+
+        //Set spinner view
+        statusSpinner = (Spinner) findViewById(R.id.statusSpinner);
+
+
+        //items for spinner
+        String[] items = new String[]{"Still There", "Removal Confirmed", "Removal Claimed"};
+
+        //set adapter to spinner
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, items);
+
+        statusSpinner.setAdapter(adapter);
+
+        //preset spinner according to JSON file
+        if (status.equalsIgnoreCase("still there")) {
+            //set spinner initial value
+            statusSpinner.setSelection(0,false);
+
+        } else if (status.equalsIgnoreCase("removal confirmed")) {
+            //set spinner initial value
+            statusSpinner.setSelection(1,false);
+
+        } else if (status.equalsIgnoreCase("removal claimed")) {
+            //set spinner initial value
+            statusSpinner.setSelection(2,false);
+
+        }
+
+        //set spinner listener
+        statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.v("statusspinner item", (String) parent.getItemAtPosition(position));
+
+                String selected = statusSpinner.getSelectedItem().toString();
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(alertcontext);
+                alertDialogBuilder.setTitle("You Chose " + (String)parent.getItemAtPosition(position));
+                // set dialog message
+                alertDialogBuilder
+                        .setMessage("Click OK to confirm!")
+                        .setCancelable(false)
+                        .setPositiveButton("OK",new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                // if this button is clicked, close
+                                // current activity
+                                dialog.cancel();
+                            }
+                        })
+                        .setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                // if this button is clicked, just close
+                                // the dialog box and do nothing
+                                dialog.cancel();
+                            }
+                        });
+
+                // create alert dialog
+                AlertDialog alertDialog = alertDialogBuilder.create();
+
+                // show it
+                alertDialog.show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // TODO Auto-generated method stub
+            }
+        });
     }
 
 

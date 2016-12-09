@@ -239,27 +239,27 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 detailIntent.putExtra("report_id",report.report_id);
 //                detailIntent.putExtra("image", decodeBase64Image(report.image_litter));
 //                // 3
-//                detailIntent.putExtra("resident_id", report.resident_id);
-//                detailIntent.putExtra("date", report.date);
-////            detailIntent.putExtra("url", stringurl.instructionUrl);
-//                detailIntent.putExtra("image", report.image_litter);
-//                detailIntent.putExtra("desc_litter", report.desc_litter);
-//                detailIntent.putExtra("status_litter", report.status_litter);
-//                detailIntent.putExtra("severity_litter", report.severity_litter);
-//                detailIntent.putExtra("size_litter", report.size_litter);
-//                detailIntent.putExtra("lat_loc", report.lat_loc);
-//                detailIntent.putExtra("lon_loc", report.lon_loc);
-//                try {
-//                    Geocoder geocoder;
-//                    List<android.location.Address> addresses;
-//                    geocoder = new Geocoder(MapsActivity.this, Locale.getDefault());
-//                    addresses = geocoder.getFromLocation(Double.parseDouble(report.lat_loc), Double.parseDouble(report.lon_loc), 1);
-//                    report.address = addresses.get(0).getAddressLine(0);
-//                }catch (Exception e){
-//                    e.printStackTrace();
-//                }
-//
-//                detailIntent.putExtra("address", report.address);
+                detailIntent.putExtra("resident_id", report.resident_id);
+                detailIntent.putExtra("date", report.date);
+//            detailIntent.putExtra("url", stringurl.instructionUrl);
+                detailIntent.putExtra("image", report.image_litter);
+                detailIntent.putExtra("desc_litter", report.desc_litter);
+                detailIntent.putExtra("status_litter", report.status_litter);
+                detailIntent.putExtra("severity_litter", report.severity_litter);
+                detailIntent.putExtra("size_litter", report.size_litter);
+                detailIntent.putExtra("lat_loc", report.lat_loc);
+                detailIntent.putExtra("lon_loc", report.lon_loc);
+                try {
+                    Geocoder geocoder;
+                    List<android.location.Address> addresses;
+                    geocoder = new Geocoder(MapsActivity.this, Locale.getDefault());
+                    addresses = geocoder.getFromLocation(Double.parseDouble(report.lat_loc), Double.parseDouble(report.lon_loc), 1);
+                    report.address = addresses.get(0).getAddressLine(0);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+                detailIntent.putExtra("address", report.address);
                 startActivity(detailIntent);
             }
         }
