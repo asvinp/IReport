@@ -159,6 +159,7 @@ public class UserSettingsActivity extends AppCompatActivity {
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                         Log.d(PROFILE_TAG,"User profile Updated");
                         Intent reportActivity = new Intent(UserSettingsActivity.this,ReportActivity.class);
+                        reportActivity.putExtra("resident_id",resident_id);
                         startActivity(reportActivity);
                     }
 
