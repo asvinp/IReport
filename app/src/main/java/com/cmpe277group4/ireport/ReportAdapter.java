@@ -1,6 +1,7 @@
 package com.cmpe277group4.ireport;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,6 +86,8 @@ public class ReportAdapter extends BaseAdapter {
                 (ImageView) rowView.findViewById(R.id.report_list_thumbnail);
 
         Report report = (Report) getItem(position);
+
+        Log.d("ADAPTER_REPORT",report.date);
 
         thumbnailImageView.setImageBitmap(report.imageBm);
 // 2

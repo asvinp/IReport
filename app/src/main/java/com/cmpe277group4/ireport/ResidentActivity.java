@@ -147,7 +147,7 @@ public class ResidentActivity extends AppCompatActivity {
                     List<Address> addresses;
                     geocoder = new Geocoder(context, Locale.getDefault());
                     addresses = geocoder.getFromLocation(Double.parseDouble(selectedReport.lat_loc), Double.parseDouble(selectedReport.lon_loc), 1);
-                    address = addresses.get(0).getAddressLine(0);
+                    selectedReport.address = addresses.get(0).getAddressLine(0);
                 }catch (Exception e){
                     e.printStackTrace();
                 }

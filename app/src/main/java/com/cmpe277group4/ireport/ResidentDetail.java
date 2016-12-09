@@ -103,8 +103,11 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
         severityTextView.setText(severity);
         timeTextView.setText(date);
         sizeTextView.setText(size);
-        locationTextView.setText(address);
+        if(address != null)
+            locationTextView.setText(address);
         descriptionTextView.setText(description);
+
+        Log.d("DETAILS",address);
 
 
         //Spinner
