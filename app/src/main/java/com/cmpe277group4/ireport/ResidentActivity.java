@@ -117,6 +117,18 @@ public class ResidentActivity extends AppCompatActivity {
             }
         });
 
+        //HeatMapbutton
+        final Button heatbutton = (Button) findViewById(R.id.heatmapbtn);
+        final Context heatbtncontext = this;
+        heatbutton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Perform action on click
+                Intent heatmapIntent = new Intent(heatbtncontext, HeatMapActivity.class);
+                heatmapIntent.putExtra("resident_id",resident_id);
+                startActivity(heatmapIntent);
+            }
+        });
+
         final Context context = this;
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
