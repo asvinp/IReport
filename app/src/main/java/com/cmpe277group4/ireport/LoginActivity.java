@@ -338,7 +338,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                             progressDialog.hide();
                             Intent officialActivity = new Intent(LoginActivity.this, OfficialActivity.class);
-                            officialActivity.putExtra("emailId",account.getEmail());
+                            officialActivity.putExtra("resident_id",account.getEmail());
                             startActivity(officialActivity);
                         }
 
