@@ -41,7 +41,7 @@ public class Report {
     public String size_litter;
     public String lat_loc, lon_loc;
     public String date;
-    public Bitmap imageBm;
+    public String imageBm;
     public String address;
     public String report_id;
 

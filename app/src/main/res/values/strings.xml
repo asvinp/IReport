@@ -40,6 +40,7 @@
         <item>Urgent</item>
     </string-array>
     <string name="album_name">iReport</string>
+    <string name="title_activity_cloudinary">CloudinaryActivity</string>
 
 
 </resources>
