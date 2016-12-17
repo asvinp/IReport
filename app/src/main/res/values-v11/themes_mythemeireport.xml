@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Generated with http://android-holo-colors.com -->
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <style name="MyThemeIreport" parent="@style/_MyThemeIreport"/>
+
+  <style name="_MyThemeIreport" parent="Theme.AppCompat.Light.DarkActionBar">
+
+    <item name="android:editTextBackground">@drawable/mythemeireport_edit_text_holo_light</item>
+
+    <item name="android:textColorHighlight">#9980aa2c</item>
+    <item name="android:textSelectHandleLeft">@drawable/mythemeireport_text_select_handle_left</item>
+    <item name="android:textSelectHandleRight">@drawable/mythemeireport_text_select_handle_right</item>
+    <item name="android:textSelectHandle">@drawable/mythemeireport_text_select_handle_middle</item>
+
+    <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewMyThemeIreport</item>
+
+    <item name="android:listChoiceIndicatorMultiple">@drawable/mythemeireport_btn_check_holo_light</item>
+
+    <item name="android:listChoiceIndicatorSingle">@drawable/mythemeireport_btn_radio_holo_light</item>
+
+    <item name="android:buttonStyle">@style/ButtonMyThemeIreport</item>
+
+    <item name="android:imageButtonStyle">@style/ImageButtonMyThemeIreport</item>
+
+    <item name="android:dropDownSpinnerStyle">@style/SpinnerMyThemeIreport</item>
+
+    <item name="android:progressBarStyleHorizontal">@style/ProgressBarMyThemeIreport</item>
+
+    <item name="android:seekBarStyle">@style/SeekBarMyThemeIreport</item>
+
+    <item name="android:ratingBarStyle">@style/RatingBarMyThemeIreport</item>
+
+    <item name="android:buttonStyleToggle">@style/ToggleMyThemeIreport</item>
+
+    <item name="android:listChoiceBackgroundIndicator">@drawable/mythemeireport_list_selector_holo_light</item>
+
+    <item name="android:activatedBackgroundIndicator">@drawable/mythemeireport_activated_background_holo_light</item>
+
+    <item name="android:fastScrollThumbDrawable">@drawable/mythemeireport_fastscroll_thumb_holo</item>
+
+  </style>
+
+</resources>

@@ -35,6 +35,7 @@ dependencies {
     compile 'com.android.support:design:25.0.0'
     compile 'com.facebook.android:facebook-android-sdk:4.0.1'
     compile 'com.loopj.android:android-async-http:1.4.9'
+    compile 'com.android.support:appcompat-v7:25.0.+'
 }
 
 apply plugin: 'com.google.gms.google-services'
