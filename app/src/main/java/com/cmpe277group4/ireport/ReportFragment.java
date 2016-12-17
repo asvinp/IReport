@@ -79,7 +79,7 @@ public class ReportFragment extends Fragment {
     private static final String CAMERA_DIR = "/dcim/";
     private static final String JPEG_FILE_PREFIX = "IMG_";
     private static final String JPEG_FILE_SUFFIX = ".jpg";
-    private String CLOUDINARY_PATH = "http://res.cloudinary.com/vinaysh/image/upload/q_40/";
+    private String CLOUDINARY_PATH = "http://res.cloudinary.com/vinaysh/image/upload/h_500,w_500,c_fit/";
     private String FILE_NAME;
     private String mCurrentPhotoPath;
     private String FILE_PATH;
