@@ -362,7 +362,7 @@ public class ReportFragment extends Fragment {
                 try {
                     Geocoder geocoder;
                     List<Address> addresses;
-                    geocoder = new Geocoder(getContext(), Locale.getDefault());
+                    geocoder = new Geocoder(getActivity(), Locale.getDefault());
                     addresses = geocoder.getFromLocation(ulatitude, ulongitude, 1);
                     String address = addresses.get(0).getAddressLine(0);
                     System.out.println("Lat and Lon " + address);
