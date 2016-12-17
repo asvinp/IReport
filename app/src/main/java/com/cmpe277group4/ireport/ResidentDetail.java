@@ -3,6 +3,7 @@ package com.cmpe277group4.ireport;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,6 +17,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.squareup.picasso.Picasso;
@@ -54,8 +58,7 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
     String provider;
     protected String latitude, longitude;
     protected boolean gps_enabled, network_enabled;
-
-    String resident_id = null;
+    public String resident_id = null;
 
     String date;
     //        String url = this.getIntent().getExtras().getString("url");
@@ -78,6 +81,9 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_detail);
 
+        Intent residentIntent = getIntent();
+        resident_id = residentIntent.getExtras().getString("resident_id");
+
         try {
             serverdataJSON.put("report_id",this.getIntent().getExtras().getString("report_id"));
             Log.d("DETAILSREQ",serverdataJSON.toString());
@@ -91,35 +97,6 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
 
         AsyncHttpClient reportClient = new AsyncHttpClient();
         Log.d("DETAILSREQ", serverdataentity.toString());
-//        reportClient.get(ResidentDetail.this, getString(R.string.server_url) + "getReportRid", serverdataentity, "application/json", new AsyncHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-//                Log.d("SERVERDEATILS"," " +statusCode);
-//                try {
-//                    JSONObject dataServer = new JSONObject(new String(responseBody));
-//                    JSONObject data = dataServer.getJSONObject("data");
-//                    Log.d("DETAILSREQ", data.toString());
-//                    resident_id = data.getString("resident_id");
-//                    date = data.getString("date");
-//                    description = data.getString("desc_report");
-//                    status = data.getString("status_litter");
-//                    severity = data.getString("severity_litter");
-//                    size = data.getString("size_litter");
-//                    lat_loc = data.getString("lat_loc");
-//                    lon_loc = data.getString("lon_loc");
-////                    String address = data.getString("address");
-//                    image = data.getString("image_litter");
-//
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-//                Log.d("DETAILSREQ","FAILURE STATUS " + statusCode);
-//            }
-//        });
 
         //getLocation
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -181,7 +158,7 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
         try {
             Geocoder geocoder;
             List<Address> addresses;
-            geocoder = new Geocoder(context, Locale.getDefault());
+            geocoder = new Geocoder(ResidentDetail.this, Locale.getDefault());
             addresses = geocoder.getFromLocation(Double.parseDouble(lat_loc), Double.parseDouble(lon_loc), 1);
             address = addresses.get(0).getAddressLine(0);
         }catch (Exception e){
@@ -316,5 +293,46 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
             //disable spinner
             statusSpinner.setEnabled(false);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) { switch(item.getItemId()) {
+        case R.id.add:
+            Intent reportActivity = new Intent(ResidentDetail.this,ReportActivity.class);
+            reportActivity.putExtra("resident_id",resident_id);
+            startActivity(reportActivity);
+            return true;
+        case R.id.myReport:
+            Intent residentActivity = new Intent(ResidentDetail.this,ResidentActivity.class);
+            residentActivity.putExtra("resident_id",resident_id);
+            startActivity(residentActivity);
+            return true;
+        case R.id.setting:
+            Intent settingIntent = new Intent(ResidentDetail.this, UserSettingsActivity.class);
+            settingIntent.putExtra("resident_id",resident_id);
+            startActivity(settingIntent);
+            return true;
+        case R.id.update:
+            Intent updateActivity = new Intent(ResidentDetail.this,UpdateActivity.class);
+            updateActivity.putExtra("resident_id",resident_id);
+            startActivity(updateActivity);
+            return true;
+        case R.id.signout:
+            FirebaseAuth.getInstance().signOut();
+            Intent goBackLogin = new Intent(ResidentDetail.this,LoginActivity.class);
+            startActivity(goBackLogin);
+            return(true);
+        case R.id.exit:
+            finish();
+            return(true);
+    }
+        return(super.onOptionsItemSelected(item));
     }
 }

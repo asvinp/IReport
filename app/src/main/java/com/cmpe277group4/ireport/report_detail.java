@@ -3,6 +3,7 @@ package com.cmpe277group4.ireport;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -11,6 +12,8 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
 public class report_detail extends AppCompatActivity {
@@ -36,12 +40,16 @@ public class report_detail extends AppCompatActivity {
     String provider;
     protected String latitude, longitude;
     protected boolean gps_enabled, network_enabled;
+    public String official_id = null;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_detail);
+
+        Intent residentIntent = getIntent();
+        official_id = residentIntent.getExtras().getString("official_id");
 
         //getLocation
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -60,7 +68,6 @@ public class report_detail extends AppCompatActivity {
         // get data from previous activity (MainActivity/MapsActivity)
         String id = this.getIntent().getExtras().getString("id");
         String time = this.getIntent().getExtras().getString("time");
-//        String url = this.getIntent().getExtras().getString("url");
         String imageUrl = this.getIntent().getExtras().getString("image");
         String description = this.getIntent().getExtras().getString("description");
         String status = this.getIntent().getExtras().getString("status");
@@ -173,41 +180,24 @@ public class report_detail extends AppCompatActivity {
     }
 
 
-//    @Override
-//    public void onLocationChanged(Location location) {
-//        currentLoc= "" + location.getLatitude() + "," + location.getLongitude();
-//        trashLoc = trashLoc.replace(" ", "");
-//
-//        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=" + currentLoc + "&destinations=" + trashLoc + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyAP8hnEOoMqRMpvQ7glzj6phn7Z1M45g4M";
-//        new GeoTask(report_detail.this).execute(url);
-//    }
-//
-//    @Override
-//    public void onStatusChanged(String provider, int status, Bundle extras) {
-//
-//    }
-//
-//    @Override
-//    public void onProviderEnabled(String provider) {
-//
-//    }
-//
-//    @Override
-//    public void onProviderDisabled(String provider) {
-//
-//    }
-//
-//    @Override
-//    public void setDouble(String result) {
-//        Double dist=Double.parseDouble(result)/0.3048;
-//        Log.d("dist in feet", String.valueOf(dist));
-//        if (dist <= 30){
-//            //enable spinner
-//            statusSpinner.setEnabled(true);
-//        }
-//        else {
-//            //disable spinner
-//            statusSpinner.setEnabled(false);
-//        }
-//    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main_official, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) { switch(item.getItemId()) {
+        case R.id.signout:
+            FirebaseAuth.getInstance().signOut();
+            Intent goBackLogin = new Intent(report_detail.this,LoginActivity.class);
+            startActivity(goBackLogin);
+            return(true);
+        case R.id.exit:
+            finish();
+            return(true);
+    }
+        return(super.onOptionsItemSelected(item));
+    }
 }

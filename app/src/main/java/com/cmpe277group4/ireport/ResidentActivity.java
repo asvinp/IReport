@@ -147,7 +147,6 @@ public class ResidentActivity extends AppCompatActivity {
 //                // 3
                 detailIntent.putExtra("resident_id", selectedReport.resident_id);
                 detailIntent.putExtra("date", selectedReport.date);
-//                detailIntent.putExtra("url", selectedReport.instructionUrl);
                 detailIntent.putExtra("image_litter", selectedReport.image_litter);
                 detailIntent.putExtra("desc_litter", selectedReport.desc_litter);
                 detailIntent.putExtra("status_litter", selectedReport.status_litter);

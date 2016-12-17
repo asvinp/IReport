@@ -14,6 +14,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -68,6 +70,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -112,7 +115,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static JSONObject reportdataobject;
     private static JSONArray reports = new JSONArray();
 
-    String resident_id = null;
+    public String resident_id = null;
     //hashmap
     public HashMap<String, Integer> markerhash = new HashMap<>();
 
@@ -122,7 +125,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (googleServicesAvailable()) {
-            Toast.makeText(this, "Gplay services are working", Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "Gplay services are working", Toast.LENGTH_LONG).show();
             setContentView(R.layout.activity_maps);
             initMap();
         } else {
@@ -150,13 +153,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             report.date = reports.getJSONObject(i).getString("date");
                             report.desc_litter = reports.getJSONObject(i).getString("desc_report");
                             report.image_litter = reports.getJSONObject(i).getString("image_litter");
-                            //                report.instructionUrl = reports.getJSONObject(i).getString("url");
                             report.status_litter = reports.getJSONObject(i).getString("status_litter");
                             report.severity_litter = reports.getJSONObject(i).getString("severity_litter");
                             report.size_litter = reports.getJSONObject(i).getString("size_litter");
                             report.lat_loc = reports.getJSONObject(i).getString("lat_loc");
                             report.lon_loc = reports.getJSONObject(i).getString("lon_loc");
-                            //report.imageBm = decodeBase64Image(report.image_litter);
                             reportList.add(report);
                             drawMarker(new LatLng(Double.parseDouble(report.lat_loc),Double.parseDouble(report.lon_loc)),report.resident_id,report.date);
                         }
@@ -402,6 +403,47 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) { switch(item.getItemId()) {
+        case R.id.add:
+            Intent reportActivity = new Intent(MapsActivity.this,ReportActivity.class);
+            reportActivity.putExtra("resident_id",resident_id);
+            startActivity(reportActivity);
+            return true;
+        case R.id.myReport:
+            Intent residentActivity = new Intent(MapsActivity.this,ResidentActivity.class);
+            residentActivity.putExtra("resident_id",resident_id);
+            startActivity(residentActivity);
+            return true;
+        case R.id.setting:
+            Intent settingIntent = new Intent(MapsActivity.this, UserSettingsActivity.class);
+            settingIntent.putExtra("resident_id",resident_id);
+            startActivity(settingIntent);
+            return true;
+        case R.id.update:
+            Intent updateActivity = new Intent(MapsActivity.this,UpdateActivity.class);
+            updateActivity.putExtra("resident_id",resident_id);
+            startActivity(updateActivity);
+            return true;
+        case R.id.signout:
+            FirebaseAuth.getInstance().signOut();
+            Intent goBackLogin = new Intent(MapsActivity.this,LoginActivity.class);
+            startActivity(goBackLogin);
+            return(true);
+        case R.id.exit:
+            finish();
+            return(true);
+    }
+        return(super.onOptionsItemSelected(item));
+    }
+
     //DECODE IMAGE
     private Bitmap decodeBase64Image(String base64){
         byte[] decodedString = Base64.decode(base64, Base64.DEFAULT);
@@ -411,86 +453,3 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //        return d;
     }
 }
-
-
-
-//        List<String> locationarr = new ArrayList();
-//        List<String> idarr = new ArrayList();
-//        List<String> timearr = new ArrayList();
-//        List<String> imagearr = new ArrayList();
-//        List<String> descriptionarr = new ArrayList();
-//        List<String> severityarr = new ArrayList();
-//        List<String> sizearr = new ArrayList();
-//        List<String> statusarr = new ArrayList();
-//
-//
-//        // Reading json file from assets folder
-//        StringBuffer sb = new StringBuffer();
-//        BufferedReader br = null;
-//        try {
-//            br = new BufferedReader(new InputStreamReader(getAssets().open(
-//                    "reports.json")));
-//            String temp;
-//            while ((temp = br.readLine()) != null)
-//                sb.append(temp);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } finally {
-//            try {
-//                br.close(); // stop reading
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//        String myjsonstring = sb.toString();
-//        // Try to parse JSON
-//        try {
-//            // Creating JSONObject from String
-//            JSONObject jsonObjMain = new JSONObject(myjsonstring);
-//
-//            // Creating JSONArray from JSONObject
-//            JSONArray jsonArray = jsonObjMain.getJSONArray("reports");
-//
-////            // JSONArray has x JSONObject
-////            for (int i = 0; i < jsonArray.length(); i++) {
-////
-////                // Creating JSONObject from JSONArray
-////                JSONObject jsonObj = jsonArray.getJSONObject(i);
-////
-////                // Getting data from individual JSONObject
-////                id = jsonObj.getString("id");
-////                location = jsonObj.getString("location");
-////                time = jsonObj.getString("time");
-////                image = jsonObj.getString("image");
-////                description = jsonObj.getString("description");
-////                severity = jsonObj.getString("severity");
-////                size = jsonObj.getString("size");
-////                status = jsonObj.getString("status");
-////
-////
-////                locationarr.add(jsonObj.getString("location"));
-////                stringlocations = locationarr.toArray(new String[locationarr.size()]);
-////
-////                idarr.add(jsonObj.getString("id"));
-////                stringid = idarr.toArray(new String[idarr.size()]);
-////
-////                timearr.add(jsonObj.getString("time"));
-////                stringtime = timearr.toArray(new String[timearr.size()]);
-////
-////                imagearr.add(jsonObj.getString("image"));
-////                stringimage = imagearr.toArray(new String[imagearr.size()]);
-////
-////                descriptionarr.add(jsonObj.getString("description"));
-////                stringdescription = descriptionarr.toArray(new String[descriptionarr.size()]);
-////
-////                severityarr.add(jsonObj.getString("severity"));
-////                stringseverity = severityarr.toArray(new String[severityarr.size()]);
-////
-////                sizearr.add(jsonObj.getString("size"));
-////                stringsize = sizearr.toArray(new String[sizearr.size()]);
-////
-////                statusarr.add(jsonObj.getString("status"));
-////                stringstatus = statusarr.toArray(new String[statusarr.size()]);
-////
-////
-////            }

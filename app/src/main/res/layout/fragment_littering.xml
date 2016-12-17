@@ -52,7 +52,7 @@
                 android:layout_weight="0.47" />
 
             <ImageButton
-                android:layout_width="wrap_content"
+                android:layout_width="29sp"
                 android:layout_height="99dp"
                 app:srcCompat="@android:drawable/ic_menu_camera"
                 android:id="@+id/imageButton2"
@@ -86,7 +86,8 @@
                 android:layout_toEndOf="@+id/imageButton2"
                 android:id="@+id/textViewLatLng"
                 android:layout_weight="1"
-                android:paddingTop="10dp" />
+                android:paddingTop="10dp"
+                android:textSize="14sp" />
 
             <ImageButton
                 android:layout_height="match_parent"

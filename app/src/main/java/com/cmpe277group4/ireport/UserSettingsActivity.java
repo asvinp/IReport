@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -172,6 +175,42 @@ public class UserSettingsActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) { switch(item.getItemId()) {
+        case R.id.add:
+            Intent reportActivity = new Intent(UserSettingsActivity.this,ReportActivity.class);
+            reportActivity.putExtra("resident_id",resident_id);
+            startActivity(reportActivity);
+            return true;
+        case R.id.myReport:
+            Intent residentActivity = new Intent(UserSettingsActivity.this,ResidentActivity.class);
+            residentActivity.putExtra("resident_id",resident_id);
+            startActivity(residentActivity);
+            return true;
+        case R.id.update:
+            Intent updateActivity = new Intent(UserSettingsActivity.this,UpdateActivity.class);
+            updateActivity.putExtra("resident_id",resident_id);
+            startActivity(updateActivity);
+            return true;
+        case R.id.signout:
+            FirebaseAuth.getInstance().signOut();
+            Intent goBackLogin = new Intent(UserSettingsActivity.this,LoginActivity.class);
+            startActivity(goBackLogin);
+            return(true);
+        case R.id.exit:
+            finish();
+            return(true);
+    }
+        return(super.onOptionsItemSelected(item));
     }
 
 }

@@ -21,6 +21,8 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.Window;
 import android.widget.Toast;
 
@@ -34,6 +36,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.maps.android.heatmaps.HeatmapTileProvider;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -64,12 +67,15 @@ public class HeatMapActivity extends FragmentActivity implements OnMapReadyCallb
 
 
 
-    String resident_id = null;
+    public String resident_id = null;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent residentIntent = getIntent();
+        resident_id = residentIntent.getExtras().getString("resident_id");
 
         if (googleServicesAvailable()) {
             Toast.makeText(this, "Gplay services are working", Toast.LENGTH_LONG).show();
@@ -81,6 +87,47 @@ public class HeatMapActivity extends FragmentActivity implements OnMapReadyCallb
         }
 
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) { switch(item.getItemId()) {
+        case R.id.add:
+            Intent reportActivity = new Intent(HeatMapActivity.this,ReportActivity.class);
+            reportActivity.putExtra("resident_id",resident_id);
+            startActivity(reportActivity);
+            return true;
+        case R.id.myReport:
+            Intent residentActivity = new Intent(HeatMapActivity.this,ResidentActivity.class);
+            residentActivity.putExtra("resident_id",resident_id);
+            startActivity(residentActivity);
+            return true;
+        case R.id.setting:
+            Intent settingIntent = new Intent(HeatMapActivity.this, UserSettingsActivity.class);
+            settingIntent.putExtra("resident_id",resident_id);
+            startActivity(settingIntent);
+            return true;
+        case R.id.update:
+            Intent updateActivity = new Intent(HeatMapActivity.this,UpdateActivity.class);
+            updateActivity.putExtra("resident_id",resident_id);
+            startActivity(updateActivity);
+            return true;
+        case R.id.signout:
+            FirebaseAuth.getInstance().signOut();
+            Intent goBackLogin = new Intent(HeatMapActivity.this,LoginActivity.class);
+            startActivity(goBackLogin);
+            return(true);
+        case R.id.exit:
+            finish();
+            return(true);
+    }
+        return(super.onOptionsItemSelected(item));
     }
 
 
