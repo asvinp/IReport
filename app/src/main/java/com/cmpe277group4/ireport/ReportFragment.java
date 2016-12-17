@@ -79,7 +79,7 @@ public class ReportFragment extends Fragment {
     private static final String CAMERA_DIR = "/dcim/";
     private static final String JPEG_FILE_PREFIX = "IMG_";
     private static final String JPEG_FILE_SUFFIX = ".jpg";
-    private String CLOUDINARY_PATH = "http://res.cloudinary.com/vinaysh/image/upload/q_40/";
+    private String CLOUDINARY_PATH = "http://res.cloudinary.com/vinaysh/image/upload/h_500,w_500,c_fit/";
     private String FILE_NAME;
     private String mCurrentPhotoPath;
     private String FILE_PATH;
@@ -362,7 +362,7 @@ public class ReportFragment extends Fragment {
                 try {
                     Geocoder geocoder;
                     List<Address> addresses;
-                    geocoder = new Geocoder(getContext(), Locale.getDefault());
+                    geocoder = new Geocoder(getActivity(), Locale.getDefault());
                     addresses = geocoder.getFromLocation(ulatitude, ulongitude, 1);
                     String address = addresses.get(0).getAddressLine(0);
                     System.out.println("Lat and Lon " + address);

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Generated with http://android-holo-colors.com -->
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <style name="MyThemeIreport" parent="@style/_MyThemeIreport"/>
+
+  <style name="_MyThemeIreport" parent="Theme.AppCompat.Light.DarkActionBar">
+
+    <item name="android:editTextStyle">@style/EditTextMyThemeIreport</item>
+
+    <item name="android:textColorHighlight">#9980aa2c</item>
+
+    <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewMyThemeIreport</item>
+
+    <item name="android:checkboxStyle">@style/CheckBoxMyThemeIreport</item>
+
+    <item name="android:radioButtonStyle">@style/RadioButtonMyThemeIreport</item>
+
+    <item name="android:buttonStyle">@style/ButtonMyThemeIreport</item>
+
+    <item name="android:imageButtonStyle">@style/ImageButtonMyThemeIreport</item>
+
+    <item name="android:spinnerStyle">@style/SpinnerMyThemeIreport</item>
+
+    <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemMyThemeIreport</item>
+
+    <item name="android:progressBarStyleHorizontal">@style/ProgressBarMyThemeIreport</item>
+
+    <item name="android:seekBarStyle">@style/SeekBarMyThemeIreport</item>
+
+    <item name="android:ratingBarStyle">@style/RatingBarMyThemeIreport</item>
+
+    <item name="android:buttonStyleToggle">@style/ToggleMyThemeIreport</item>
+
+    <item name="android:listViewStyle">@style/ListViewMyThemeIreport</item>
+
+    <item name="android:listViewWhiteStyle">@style/ListViewMyThemeIreport.White</item>
+
+    <item name="android:spinnerItemStyle">@style/SpinnerItemMyThemeIreport</item>
+
+  </style>
+
+</resources>
