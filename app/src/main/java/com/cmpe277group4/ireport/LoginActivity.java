@@ -27,6 +27,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -51,15 +52,9 @@ import cz.msebera.android.httpclient.entity.StringEntity;
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
-
-    //User type
-    public static final int RESIDENT = 0;
-    public static final int OFFICIAL = 1;
-
     private static final String TAG = "Auth";
-    private static final String SERVER_TAG = "Server";
     private LoginButton loginButton;
-    private Button gmailLogin;
+    private SignInButton gmailLogin;
 
     private EditText emailText;
     private EditText passText;
@@ -97,23 +92,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 if (user != null) {
                     Log.d("Auth"," " + user.getEmail());
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    for(UserInfo userInfo: mAuth.getCurrentUser().getProviderData()){
-                        Log.d("AUTH",userInfo.getProviderId());
-                        if(userInfo.getProviderId() == "google.com"){
-                            Log.d("AUTH","Official Signed In");
-                            updateUIToOfficial(userInfo.getEmail());
-                        }else {
-                            Log.d("AUTH","Resident Signed In");
-                            try {
-                                fetchResidentData(userInfo.getEmail());
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            } catch (UnsupportedEncodingException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        break;
-                    }
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
@@ -151,6 +129,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             Log.d("LOGIN", "Unable to sign in");
                             Toast.makeText(LoginActivity.this,"Unable to sign in",Toast.LENGTH_SHORT);
                         }
+                        progressDialog.hide();
                     }
                 });
             }
@@ -159,7 +138,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 final String email = emailText.getText().toString().trim();
                 String password = passText.getText().toString().trim();
 
@@ -186,11 +164,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isComplete()){
                                     if(task.isSuccessful()){
-                                        Toast.makeText(LoginActivity.this,"User registered",Toast.LENGTH_SHORT).show();
-
                                         // intent for profile activity ( pass email )
                                         Intent intent= new Intent(LoginActivity.this, ProfileActivity.class);
-                                        intent.putExtra("email",email);
+                                        intent.putExtra("resident_id",email);
                                         startActivity(intent);
                                         emailText.setText("");
                                         passText.setText("");
@@ -237,7 +213,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
                 .build();
 
-        gmailLogin = (Button)findViewById(R.id.gmailOfficialLogin);
+        gmailLogin = (SignInButton) findViewById(R.id.sign_in_button);
         gmailLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -338,7 +314,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                             progressDialog.hide();
                             Intent officialActivity = new Intent(LoginActivity.this, OfficialActivity.class);
-                            officialActivity.putExtra("emailId",account.getEmail());
+                            officialActivity.putExtra("resident_id",account.getEmail());
                             startActivity(officialActivity);
                         }
 
