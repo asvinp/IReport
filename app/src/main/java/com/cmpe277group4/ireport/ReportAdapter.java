@@ -95,6 +95,7 @@ public class ReportAdapter extends BaseAdapter {
         titleTextView.setText(report.date);
 //        subtitleTextView.setText(report.time);
         detailTextView.setText(report.severity_litter);
+        new AsyncTaskLoadImage(report.image_litter, thumbnailImageView).execute();
 
 // 3
 //        Picasso.with(mContext).load(report.imageUrl).placeholder(R.mipmap.ic_launcher).into(thumbnailImageView);
