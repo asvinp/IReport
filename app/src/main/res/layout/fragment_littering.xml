@@ -39,24 +39,27 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="200dp">
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@android:drawable/ic_menu_camera"
-                android:id="@+id/imageButton2"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true" />
+            android:layout_height="156dp"
+            android:weightSum="1">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                app:srcCompat="@mipmap/ic_launcher"
+                android:layout_width="264dp"
+                android:layout_height="143dp"
+                app:srcCompat="@drawable/cast_mini_controller_img_placeholder"
                 android:id="@+id/imageView2"
                 android:layout_alignBottom="@+id/imageButton2"
                 android:layout_alignStart="@+id/textViewLatLng"
-                android:layout_weight="1" />
+                android:layout_weight="0.47" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="99dp"
+                app:srcCompat="@android:drawable/ic_menu_camera"
+                android:id="@+id/imageButton2"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_weight="0.45"
+                style="@android:style/Widget.DeviceDefault.ImageButton" />
 
         </LinearLayout>
 
@@ -72,7 +75,8 @@
                 android:layout_below="@+id/imageView2"
                 android:id="@+id/textView2"
                 android:layout_weight="1"
-                android:paddingTop="10dp" />
+                android:paddingTop="10dp"
+                android:textSize="18sp" />
 
             <TextView
                 android:text="Location not available"
@@ -101,12 +105,6 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
 
-            <TextView
-                android:text="TextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView7"
-                android:layout_weight="1" />
         </LinearLayout>
 
         <LinearLayout
@@ -122,7 +120,8 @@
                 android:layout_toStartOf="@+id/textViewLatLng"
                 android:id="@+id/descriptionTextView"
                 android:layout_alignEnd="@+id/textViewLatLng"
-                android:paddingTop="20dp" />
+                android:paddingTop="20dp"
+                android:textSize="18sp" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -135,7 +134,8 @@
                 android:layout_alignStart="@+id/imageButton2"
                 android:maxLines = "3"
                 android:scrollbars = "vertical"
-                android:paddingTop="10dp" />
+                android:paddingTop="10dp"
+                android:longClickable="true" />
 
             <TextView
                 android:text="Size"
@@ -144,7 +144,8 @@
                 android:layout_below="@+id/editText"
                 android:layout_alignParentStart="true"
                 android:id="@+id/textView6"
-                android:paddingTop="20dp" />
+                android:paddingTop="20dp"
+                android:textSize="18sp" />
 
             <Spinner
                 android:layout_width="match_parent"
@@ -161,7 +162,8 @@
                 android:layout_below="@+id/spinnerSize"
                 android:layout_alignParentStart="true"
                 android:id="@+id/textView4"
-                android:paddingTop="20dp" />
+                android:paddingTop="20dp"
+                android:textSize="18sp" />
 
             <Spinner
                 android:layout_width="match_parent"
@@ -178,7 +180,8 @@
                 android:id="@+id/mSendButton"
                 android:layout_below="@+id/spinnerSeverity"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp" />
+                android:layout_marginTop="20dp"
+                android:elevation="24dp" />
 
             </LinearLayout>
         </LinearLayout>
