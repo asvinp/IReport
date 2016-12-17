@@ -92,23 +92,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 if (user != null) {
                     Log.d("Auth"," " + user.getEmail());
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    for(UserInfo userInfo: mAuth.getCurrentUser().getProviderData()){
-                        Log.d("AUTH",userInfo.getProviderId());
-                        if(userInfo.getProviderId() == "google.com"){
-                            Log.d("AUTH","Official Signed In");
-                            updateUIToOfficial(userInfo.getEmail());
-                        }else {
-                            Log.d("AUTH","Resident Signed In");
-                            try {
-                                fetchResidentData(userInfo.getEmail());
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            } catch (UnsupportedEncodingException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        break;
-                    }
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
@@ -146,6 +129,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             Log.d("LOGIN", "Unable to sign in");
                             Toast.makeText(LoginActivity.this,"Unable to sign in",Toast.LENGTH_SHORT);
                         }
+                        progressDialog.hide();
                     }
                 });
             }
@@ -154,7 +138,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 final String email = emailText.getText().toString().trim();
                 String password = passText.getText().toString().trim();
 
@@ -181,11 +164,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isComplete()){
                                     if(task.isSuccessful()){
-                                        Toast.makeText(LoginActivity.this,"User registered",Toast.LENGTH_SHORT).show();
-
                                         // intent for profile activity ( pass email )
                                         Intent intent= new Intent(LoginActivity.this, ProfileActivity.class);
-                                        intent.putExtra("email",email);
+                                        intent.putExtra("resident_id",email);
                                         startActivity(intent);
                                         emailText.setText("");
                                         passText.setText("");
