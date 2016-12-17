@@ -27,6 +27,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -51,15 +52,9 @@ import cz.msebera.android.httpclient.entity.StringEntity;
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
-
-    //User type
-    public static final int RESIDENT = 0;
-    public static final int OFFICIAL = 1;
-
     private static final String TAG = "Auth";
-    private static final String SERVER_TAG = "Server";
     private LoginButton loginButton;
-    private Button gmailLogin;
+    private SignInButton gmailLogin;
 
     private EditText emailText;
     private EditText passText;
@@ -237,7 +232,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
                 .build();
 
-        gmailLogin = (Button)findViewById(R.id.gmailOfficialLogin);
+        gmailLogin = (SignInButton) findViewById(R.id.sign_in_button);
         gmailLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

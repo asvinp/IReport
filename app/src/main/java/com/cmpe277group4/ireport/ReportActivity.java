@@ -63,7 +63,7 @@ public class ReportActivity extends AppCompatActivity {
 
         Intent reportIntent = getIntent();
         resident_id = reportIntent.getExtras().getString("resident_id");
-        Log.d("REPORTACTIVITY",resident_id);
+        Log.d("REPORTACTIVITY","" + resident_id);
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.litteringFragmentContainer);
 
