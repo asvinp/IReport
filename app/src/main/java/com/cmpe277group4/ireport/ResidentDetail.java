@@ -143,6 +143,7 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
                     size = this.getIntent().getExtras().getString("size_litter");
                     lat_loc = this.getIntent().getExtras().getString("lat_loc");
                     lon_loc = this.getIntent().getExtras().getString("lon_loc");
+                    image = this.getIntent().getExtras().getString("image_litter");
                     String address = this.getIntent().getExtras().getString("address");
 
         trashLoc = lat_loc + "," + lon_loc;
@@ -153,6 +154,8 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
 
         // set imageview
         ImageView detailImageView = (ImageView) findViewById(R.id.imgDetail);
+        System.out.println("ResidentDetail ireportvinay imageurl string"+image);
+        new AsyncTaskLoadImage(image, detailImageView).execute();
 
         // set textviews
         TextView severityTextView = (TextView) findViewById(R.id.severityDetail);

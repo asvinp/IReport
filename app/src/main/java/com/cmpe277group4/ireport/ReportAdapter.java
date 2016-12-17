@@ -89,7 +89,8 @@ public class ReportAdapter extends BaseAdapter {
 
         Log.d("ADAPTER_REPORT",report.date);
 
-        thumbnailImageView.setImageBitmap(report.imageBm);
+        //thumbnailImageView.setImageBitmap(report.imageBm);
+        //new AsyncTaskLoadImage(report.image_litter, thumbnailImageView).execute();
 // 2
         titleTextView.setText(report.date);
 //        subtitleTextView.setText(report.time);

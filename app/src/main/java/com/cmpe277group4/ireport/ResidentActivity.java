@@ -85,7 +85,7 @@ public class ResidentActivity extends AppCompatActivity {
                             report.size_litter = reports.getJSONObject(i).getString("size_litter");
                             report.lat_loc = reports.getJSONObject(i).getString("lat_loc");
                             report.lon_loc = reports.getJSONObject(i).getString("lon_loc");
-                            report.imageBm = decodeBase64Image(report.image_litter);
+                            //report.imageBm = reports.getJSONObject(i).getString("image_litter");
                             Log.d("RESIDENTACT",report.date);
                             reportList.add(report);
                         }
@@ -148,7 +148,7 @@ public class ResidentActivity extends AppCompatActivity {
                 detailIntent.putExtra("resident_id", selectedReport.resident_id);
                 detailIntent.putExtra("date", selectedReport.date);
 //                detailIntent.putExtra("url", selectedReport.instructionUrl);
-//                detailIntent.putExtra("image", decodeBase64Image(selectedReport.image_litter));
+                detailIntent.putExtra("image_litter", selectedReport.image_litter);
                 detailIntent.putExtra("desc_litter", selectedReport.desc_litter);
                 detailIntent.putExtra("status_litter", selectedReport.status_litter);
                 detailIntent.putExtra("severity_litter", selectedReport.severity_litter);

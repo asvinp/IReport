@@ -156,7 +156,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             report.size_litter = reports.getJSONObject(i).getString("size_litter");
                             report.lat_loc = reports.getJSONObject(i).getString("lat_loc");
                             report.lon_loc = reports.getJSONObject(i).getString("lon_loc");
-                            report.imageBm = decodeBase64Image(report.image_litter);
+                            //report.imageBm = decodeBase64Image(report.image_litter);
                             reportList.add(report);
                             drawMarker(new LatLng(Double.parseDouble(report.lat_loc),Double.parseDouble(report.lon_loc)),report.resident_id,report.date);
                         }

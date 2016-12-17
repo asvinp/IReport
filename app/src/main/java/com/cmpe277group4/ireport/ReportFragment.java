@@ -79,8 +79,11 @@ public class ReportFragment extends Fragment {
     private static final String CAMERA_DIR = "/dcim/";
     private static final String JPEG_FILE_PREFIX = "IMG_";
     private static final String JPEG_FILE_SUFFIX = ".jpg";
-    private String FILE_PATH;
+    private String CLOUDINARY_PATH = "http://res.cloudinary.com/vinaysh/image/upload/q_40/";
+    private String FILE_NAME;
     private String mCurrentPhotoPath;
+    private String FILE_PATH;
+    private AsyncTaskUploadImage asyncTask = new AsyncTaskUploadImage();
 
     private AsyncHttpClient reportClient = new AsyncHttpClient();
     private JSONObject serverDataJSON = new JSONObject();
@@ -154,11 +157,13 @@ public class ReportFragment extends Fragment {
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String filename = JPEG_FILE_PREFIX + timeStamp + "_";
+        FILE_NAME = JPEG_FILE_PREFIX + timeStamp;
+        Log.d(TAG,"ireportvinay FILE_NAME value is "+FILE_NAME);
         File albumF = getAlbumDir();
-        File imageF = File.createTempFile(filename, JPEG_FILE_SUFFIX, albumF);
-        Log.d(TAG,"Printing absolute path of file stored"+imageF.getAbsolutePath());
+        File imageF = File.createTempFile(FILE_NAME, JPEG_FILE_SUFFIX, albumF);
         FILE_PATH = imageF.getAbsolutePath();
+        Log.d(TAG,"ireportvinay Printing absolute path of file stored"+FILE_PATH);
+        //FILE_PATH = imageF.getAbsolutePath();
         return imageF;
     }
 
@@ -166,7 +171,7 @@ public class ReportFragment extends Fragment {
 
         File f = createImageFile();
         mCurrentPhotoPath = f.getAbsolutePath();
-        Log.d(TAG, mCurrentPhotoPath);
+        Log.d(TAG, "ireportvinay "+mCurrentPhotoPath);
 
         return f;
     }
@@ -287,7 +292,10 @@ public class ReportFragment extends Fragment {
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String encB= encodeImagetoBase64();
+                //String encB= encodeImagetoBase64();
+                Log.d(TAG, "ireportvinay Passing params to asynctask FILE_NAME "+FILE_NAME+" FILE_PATH"+FILE_PATH);
+                asyncTask.execute(FILE_NAME, FILE_PATH);
+                Log.d(TAG, "ireportvinay final cloudinary path "+CLOUDINARY_PATH+FILE_NAME+".jpg");
                 String lat = Double.toString(ulatitude);
                 String longi = Double.toString(ulongitude);
                 String severity = mSeveritySpinner.getSelectedItem().toString();
@@ -296,7 +304,7 @@ public class ReportFragment extends Fragment {
 
                 try {
                     serverDataJSON.put("resident_id",resident_id);
-                    serverDataJSON.put("image_litter",encB);
+                    serverDataJSON.put("image_litter",CLOUDINARY_PATH+FILE_NAME+".jpg");
                     serverDataJSON.put("lat_loc",lat);
                     serverDataJSON.put("lon_loc",longi);
                     serverDataJSON.put("severity_litter",severity);
