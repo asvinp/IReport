@@ -110,7 +110,7 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 10, this);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10, 0, this);
 
         resident_id = this.getIntent().getExtras().getString("resident_id");
                     date = this.getIntent().getExtras().getString("date");
