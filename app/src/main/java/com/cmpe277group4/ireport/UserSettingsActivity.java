@@ -287,9 +287,9 @@ public class UserSettingsActivity extends AppCompatActivity {
             Intent goBackLogin = new Intent(UserSettingsActivity.this,LoginActivity.class);
             startActivity(goBackLogin);
             return(true);
-        case R.id.exit:
-            finish();
-            return(true);
+//        case R.id.exit:
+//            finish();
+//            return(true);
     }
         return(super.onOptionsItemSelected(item));
     }

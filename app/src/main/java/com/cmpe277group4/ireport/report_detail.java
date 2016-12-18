@@ -194,9 +194,9 @@ public class report_detail extends AppCompatActivity {
             Intent goBackLogin = new Intent(report_detail.this,LoginActivity.class);
             startActivity(goBackLogin);
             return(true);
-        case R.id.exit:
-            finish();
-            return(true);
+//        case R.id.exit:
+//            finish();
+//            return(true);
     }
         return(super.onOptionsItemSelected(item));
     }

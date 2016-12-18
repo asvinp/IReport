@@ -9,7 +9,4 @@
         android:id="@+id/myReport" android:icon="@android:drawable/ic_menu_revert" app:showAsAction="never" android:title="View All Reports"/>
     <item
         android:id="@+id/signout" android:icon="@android:drawable/ic_menu_revert" app:showAsAction="never" android:title="SignOut"/>
-    <item
-        android:id="@+id/exit"  app:showAsAction="never" android:title="Exit">
-    </item>
 </menu>

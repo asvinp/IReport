@@ -329,9 +329,9 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
             Intent goBackLogin = new Intent(ResidentDetail.this,LoginActivity.class);
             startActivity(goBackLogin);
             return(true);
-        case R.id.exit:
-            finish();
-            return(true);
+//        case R.id.exit:
+//            finish();
+//            return(true);
     }
         return(super.onOptionsItemSelected(item));
     }
