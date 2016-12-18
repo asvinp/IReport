@@ -4,12 +4,17 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,15 +27,20 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
+import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
 
 public class report_detail extends AppCompatActivity {
+
+    private boolean isFirstFire = true;
 
     Spinner statusSpinner;
     protected LocationManager locationManager;
@@ -46,46 +56,68 @@ public class report_detail extends AppCompatActivity {
     String provider;
     protected String latitude, longitude;
     protected boolean gps_enabled, network_enabled;
-    private boolean isFirstFire = true;
+
+    String resident_id = null;
+
+    String date;
+    //        String url = this.getIntent().getExtras().getString("url");
+//        String imageUrl = this.getIntent().getExtras().getString("image");
+    String description;
+    String status;
+    String severity;
+    String size;
+    String lat_loc;
+    String lon_loc,address,image;
+
+    private static AsyncHttpClient reportclient = new AsyncHttpClient();
+    private static JSONObject serverdataJSON = new JSONObject();
+    private static StringEntity serverdataentity;
+    private static JSONObject reportdataobject;
+    private static JSONArray reports = new JSONArray();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_detail);
 
-        //getLocation
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
+
+        AsyncHttpClient reportClient = new AsyncHttpClient();
+
+//        //getLocation
+//        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            // TODO: Consider calling
+//            //    ActivityCompat#requestPermissions
+//            // here to request the missing permissions, and then overriding
+//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//            //                                          int[] grantResults)
+//            // to handle the case where the user grants the permission. See the documentation
+//            // for ActivityCompat#requestPermissions for more details.
+//            return;
+//        }
 //        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 10, this);
 
-        // get data from previous activity (MainActivity/MapsActivity)
+        resident_id = this.getIntent().getExtras().getString("resident_id");
+        date = this.getIntent().getExtras().getString("date");
+        description = this.getIntent().getExtras().getString("desc_litter");
+        status = this.getIntent().getExtras().getString("status_litter");
+        severity = this.getIntent().getExtras().getString("severity_litter");
+        size = this.getIntent().getExtras().getString("size_litter");
+        lat_loc = this.getIntent().getExtras().getString("lat_loc");
+        lon_loc = this.getIntent().getExtras().getString("lon_loc");
+        image = this.getIntent().getExtras().getString("image_litter");
+        String address = this.getIntent().getExtras().getString("address");
         final String report_id = this.getIntent().getExtras().getString("report_id");
-        String id = this.getIntent().getExtras().getString("resident_id");
-        String time = this.getIntent().getExtras().getString("time");
-//        String url = this.getIntent().getExtras().getString("url");
-        String imageUrl = this.getIntent().getExtras().getString("image");
-        String description = this.getIntent().getExtras().getString("description");
-        String status = this.getIntent().getExtras().getString("status");
-        String severity = this.getIntent().getExtras().getString("severity");
-        String size = this.getIntent().getExtras().getString("size");
-        String location = this.getIntent().getExtras().getString("location");
-        trashLoc = location;
+        trashLoc = lat_loc + "," + lon_loc;
 
 
         //Set title of appscreen to id of report
-        setTitle(id);
+        setTitle(resident_id);
 
         // set imageview
         ImageView detailImageView = (ImageView) findViewById(R.id.imgDetail);
+        System.out.println("ResidentDetail ireportvinay imageurl string"+image);
+        new AsyncTaskLoadImage(image, detailImageView).execute();
 
         // set textviews
         TextView severityTextView = (TextView) findViewById(R.id.severityDetail);
@@ -97,16 +129,35 @@ public class report_detail extends AppCompatActivity {
 
         //Loading image from below url into imageView
 
-        Picasso.with(this)
-                .load(imageUrl)
-                .into(detailImageView);
+//        Picasso.with(this)
+//                .load(imageUrl)
+//                .into(detailImageView);
 
         //send strings to TextViews
+//        if(image != null)
+//            detailImageView.setImageBitmap(decodeBase64Image(image));
         severityTextView.setText(severity);
-        timeTextView.setText(time);
+        timeTextView.setText(date);
         sizeTextView.setText(size);
-        locationTextView.setText(location);
+
+        try {
+            Geocoder geocoder;
+            List<Address> addresses;
+            geocoder = new Geocoder(context, Locale.getDefault());
+            addresses = geocoder.getFromLocation(Double.parseDouble(lat_loc), Double.parseDouble(lon_loc), 1);
+            address = addresses.get(0).getAddressLine(0);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        if(address != null) {
+            locationTextView.setText(address);
+            Log.d("DETAILS", address);
+        }
         descriptionTextView.setText(description);
+
+
+
 
 
         //Spinner
@@ -136,6 +187,7 @@ public class report_detail extends AppCompatActivity {
         } else if (status.equalsIgnoreCase("removal claimed")) {
             //set spinner initial value
             statusSpinner.setSelection(2,false);
+
         }
 
         //set spinner listener
@@ -207,6 +259,15 @@ public class report_detail extends AppCompatActivity {
     }
 
 
+    //DECODE IMAGE
+    private Bitmap decodeBase64Image(String base64){
+        byte[] decodedString = Base64.decode(base64, Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        return decodedByte;
+//        Drawable d = new BitmapDrawable(getResources(), decodedByte);
+//        return d;
+    }
+
 //    @Override
 //    public void onLocationChanged(Location location) {
 //        currentLoc= "" + location.getLatitude() + "," + location.getLongitude();
@@ -215,7 +276,7 @@ public class report_detail extends AppCompatActivity {
 //        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=" + currentLoc + "&destinations=" + trashLoc + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyAP8hnEOoMqRMpvQ7glzj6phn7Z1M45g4M";
 //        new GeoTask(report_detail.this).execute(url);
 //    }
-//
+
 //    @Override
 //    public void onStatusChanged(String provider, int status, Bundle extras) {
 //

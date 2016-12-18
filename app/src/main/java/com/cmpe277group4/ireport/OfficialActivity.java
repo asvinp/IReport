@@ -120,6 +120,22 @@ public class OfficialActivity extends AppCompatActivity {
 
                 // 2
                 Intent detailIntent = new Intent(context, report_detail.class);
+                String address;
+                detailIntent.putExtra("report_id",selectedReport.report_id);
+//                Log.d("ACTIVITY",selectedReport.report_id);
+//
+//                // 3
+                detailIntent.putExtra("resident_id", selectedReport.resident_id);
+                detailIntent.putExtra("date", selectedReport.date);
+                detailIntent.putExtra("image_litter", selectedReport.image_litter);
+                detailIntent.putExtra("desc_litter", selectedReport.desc_litter);
+                detailIntent.putExtra("status_litter", selectedReport.status_litter);
+                detailIntent.putExtra("severity_litter", selectedReport.severity_litter);
+                detailIntent.putExtra("size_litter", selectedReport.size_litter);
+                detailIntent.putExtra("lat_loc", selectedReport.lat_loc);
+                detailIntent.putExtra("lon_loc", selectedReport.lon_loc);
+                detailIntent.putExtra("address", selectedReport.address);
+
 
                 // 3
 //                detailIntent.putExtra("id", selectedReport.id);
