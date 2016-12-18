@@ -198,7 +198,7 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
                     Log.d("TAG",Boolean.toString(isFirstFire));
                     Log.v("statusspinner item", (String) parent.getItemAtPosition(position));
 
-                    String selected = statusSpinner.getSelectedItem().toString();
+                    final String selected = statusSpinner.getSelectedItem().toString();
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(alertcontext);
                     alertDialogBuilder.setTitle("You chose " + (String)parent.getItemAtPosition(position));
                     // set dialog message
@@ -212,6 +212,7 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
                                     StringEntity entity = null;
                                     try {
                                         data.put("report_id",report_id);
+                                        data.put("status_litter",selected);
                                         entity = new StringEntity(data.toString());
                                     } catch (JSONException e) {
                                         e.printStackTrace();
