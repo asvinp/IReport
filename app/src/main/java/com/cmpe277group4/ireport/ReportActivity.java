@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class ReportActivity extends AppCompatActivity {
@@ -35,6 +36,7 @@ public class ReportActivity extends AppCompatActivity {
                 startActivity(residentActivity);
                 return true;
             case R.id.signout:
+                LoginManager.getInstance().logOut();
                 FirebaseAuth.getInstance().signOut();
                 Intent goBackLogin = new Intent(ReportActivity.this,LoginActivity.class);
                 startActivity(goBackLogin);

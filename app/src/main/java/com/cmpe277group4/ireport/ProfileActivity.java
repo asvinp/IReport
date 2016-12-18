@@ -56,7 +56,7 @@ public class ProfileActivity extends AppCompatActivity {
         emailText = (TextView) findViewById(R.id.Email);
         screenNameText = (TextView) findViewById(R.id.ScreenName);
         Intent intent = getIntent();
-        email = intent.getExtras().getString("email");
+        email = intent.getExtras().getString("resident_id");
         name = intent.getExtras().getString("name");
         if (name == null) {
             name = "";

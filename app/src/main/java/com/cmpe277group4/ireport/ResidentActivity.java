@@ -141,7 +141,7 @@ public class ResidentActivity extends AppCompatActivity {
                 // 2
                 Intent detailIntent = new Intent(context, ResidentDetail.class);
                 String address;
-//                detailIntent.putExtra("report_id",selectedReport.report_id);
+                detailIntent.putExtra("report_id",selectedReport.report_id);
                 Log.d("ACTIVITY",selectedReport.report_id);
 //
 //                // 3

@@ -375,7 +375,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private void updateUIToOfficial(String email){
         Intent officialIntent = new Intent(LoginActivity.this, ProfileActivity.class);
-        officialIntent.putExtra("id",email);
+        officialIntent.putExtra("resident_id",email);
         startActivity(officialIntent);
     }
 

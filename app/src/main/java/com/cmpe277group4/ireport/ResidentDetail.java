@@ -40,6 +40,8 @@ import cz.msebera.android.httpclient.entity.StringEntity;
 
 public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, LocationListener {
 
+    private boolean isFirstFire = true;
+
     Spinner statusSpinner;
     protected LocationManager locationManager;
     protected LocationListener locationListener;
@@ -136,16 +138,16 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 10, this);
 
         resident_id = this.getIntent().getExtras().getString("resident_id");
-                    date = this.getIntent().getExtras().getString("date");
-                    description = this.getIntent().getExtras().getString("desc_report");
-                    status = this.getIntent().getExtras().getString("status_litter");
-                    severity = this.getIntent().getExtras().getString("severity_litter");
-                    size = this.getIntent().getExtras().getString("size_litter");
-                    lat_loc = this.getIntent().getExtras().getString("lat_loc");
-                    lon_loc = this.getIntent().getExtras().getString("lon_loc");
-                    image = this.getIntent().getExtras().getString("image_litter");
-                    String address = this.getIntent().getExtras().getString("address");
-
+        date = this.getIntent().getExtras().getString("date");
+        description = this.getIntent().getExtras().getString("desc_report");
+        status = this.getIntent().getExtras().getString("status_litter");
+        severity = this.getIntent().getExtras().getString("severity_litter");
+        size = this.getIntent().getExtras().getString("size_litter");
+        lat_loc = this.getIntent().getExtras().getString("lat_loc");
+        lon_loc = this.getIntent().getExtras().getString("lon_loc");
+        image = this.getIntent().getExtras().getString("image_litter");
+        String address = this.getIntent().getExtras().getString("address");
+        final String report_id = this.getIntent().getExtras().getString("report_id");
         trashLoc = lat_loc + "," + lon_loc;
 
 
@@ -232,35 +234,61 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
         statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.v("statusspinner item", (String) parent.getItemAtPosition(position));
+                if(!isFirstFire){
+                    Log.d("TAG",Boolean.toString(isFirstFire));
+                    Log.v("statusspinner item", (String) parent.getItemAtPosition(position));
 
-                String selected = statusSpinner.getSelectedItem().toString();
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(alertcontext);
-                alertDialogBuilder.setTitle("You Chose " + (String)parent.getItemAtPosition(position));
-                // set dialog message
-                alertDialogBuilder
-                        .setMessage("Click OK to confirm!")
-                        .setCancelable(false)
-                        .setPositiveButton("OK",new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
-                                // if this button is clicked, close
-                                // current activity
-                                dialog.cancel();
-                            }
-                        })
-                        .setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
-                                // if this button is clicked, just close
-                                // the dialog box and do nothing
-                                dialog.cancel();
-                            }
-                        });
+                    String selected = statusSpinner.getSelectedItem().toString();
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(alertcontext);
+                    alertDialogBuilder.setTitle("You chose " + (String)parent.getItemAtPosition(position));
+                    // set dialog message
+                    alertDialogBuilder
+                            .setMessage("Click OK to confirm!")
+                            .setCancelable(false)
+                            .setPositiveButton("OK",new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,int id) {
+                                    AsyncHttpClient client = new AsyncHttpClient();
+                                    JSONObject data = new JSONObject();
+                                    StringEntity entity = null;
+                                    try {
+                                        data.put("report_id",report_id);
+                                        entity = new StringEntity(data.toString());
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    } catch (UnsupportedEncodingException e) {
+                                        e.printStackTrace();
+                                    }
+                                    client.get(ResidentDetail.this, getString(R.string.server_url) + "officialNewRegister", entity, "application/json", new AsyncHttpResponseHandler() {
+                                        @Override
+                                        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                                            Log.d("Server","selection updated");
+                                        }
 
-                // create alert dialog
-                AlertDialog alertDialog = alertDialogBuilder.create();
+                                        @Override
+                                        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                                            Log.d("Server","unable  to update");
+                                        }
+                                    });
+                                    dialog.cancel();
+                                }
+                            })
+                            .setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,int id) {
+                                    // if this button is clicked, just close
+                                    // the dialog box and do nothing
+                                    dialog.cancel();
+                                }
+                            });
 
-                // show it
-                alertDialog.show();
+                    // create alert dialog
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+
+                    // show it
+                    alertDialog.show();
+                }else{
+                    Log.d("TAG",Boolean.toString(isFirstFire));
+                    isFirstFire = false;
+                }
             }
 
             @Override

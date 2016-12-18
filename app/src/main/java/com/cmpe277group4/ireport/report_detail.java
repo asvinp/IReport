@@ -18,7 +18,17 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.entity.StringEntity;
 
 public class report_detail extends AppCompatActivity {
 
@@ -36,7 +46,7 @@ public class report_detail extends AppCompatActivity {
     String provider;
     protected String latitude, longitude;
     protected boolean gps_enabled, network_enabled;
-
+    private boolean isFirstFire = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +68,8 @@ public class report_detail extends AppCompatActivity {
 //        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 10, this);
 
         // get data from previous activity (MainActivity/MapsActivity)
-        String id = this.getIntent().getExtras().getString("id");
+        final String report_id = this.getIntent().getExtras().getString("report_id");
+        String id = this.getIntent().getExtras().getString("resident_id");
         String time = this.getIntent().getExtras().getString("time");
 //        String url = this.getIntent().getExtras().getString("url");
         String imageUrl = this.getIntent().getExtras().getString("image");
@@ -113,8 +124,6 @@ public class report_detail extends AppCompatActivity {
 
         statusSpinner.setAdapter(adapter);
 
-
-
         //preset spinner according to JSON file
         if (status.equalsIgnoreCase("still there")) {
             //set spinner initial value
@@ -127,26 +136,47 @@ public class report_detail extends AppCompatActivity {
         } else if (status.equalsIgnoreCase("removal claimed")) {
             //set spinner initial value
             statusSpinner.setSelection(2,false);
-
         }
 
         //set spinner listener
         statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.v("statusspinner item", (String) parent.getItemAtPosition(position));
+                if(!isFirstFire){
+                    Log.d("TAG",Boolean.toString(isFirstFire));
+                    Log.v("statusspinner item", (String) parent.getItemAtPosition(position));
 
-                String selected = statusSpinner.getSelectedItem().toString();
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(alertcontext);
-                alertDialogBuilder.setTitle("You Chose " + (String)parent.getItemAtPosition(position));
-                // set dialog message
-                alertDialogBuilder
+                    String selected = statusSpinner.getSelectedItem().toString();
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(alertcontext);
+                    alertDialogBuilder.setTitle("You chose " + (String)parent.getItemAtPosition(position));
+                    // set dialog message
+                    alertDialogBuilder
                             .setMessage("Click OK to confirm!")
                             .setCancelable(false)
                             .setPositiveButton("OK",new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog,int id) {
-                                    // if this button is clicked, close
-                                    // current activity
+                                    AsyncHttpClient client = new AsyncHttpClient();
+                                    JSONObject data = new JSONObject();
+                                    StringEntity entity = null;
+                                    try {
+                                        data.put("report_id",report_id);
+                                        entity = new StringEntity(data.toString());
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    } catch (UnsupportedEncodingException e) {
+                                        e.printStackTrace();
+                                    }
+                                    client.get(report_detail.this, getString(R.string.server_url) + "officialNewRegister", entity, "application/json", new AsyncHttpResponseHandler() {
+                                        @Override
+                                        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                                            Log.d("Server","selection updated");
+                                        }
+
+                                        @Override
+                                        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                                            Log.d("Server","unable  to update");
+                                        }
+                                    });
                                     dialog.cancel();
                                 }
                             })
@@ -163,6 +193,10 @@ public class report_detail extends AppCompatActivity {
 
                     // show it
                     alertDialog.show();
+                }else{
+                    Log.d("TAG",Boolean.toString(isFirstFire));
+                    isFirstFire = false;
+                }
             }
 
             @Override
