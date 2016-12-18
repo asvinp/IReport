@@ -22,7 +22,7 @@ public class ReportActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.resident_menu, menu);
+        getMenuInflater().inflate(R.menu.menu_main_report, menu);
         return true;
     }
 
@@ -31,7 +31,6 @@ public class ReportActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.myReport:
                 Intent residentActivity = new Intent(ReportActivity.this,ResidentActivity.class);
-                Log.d("MY_REPORT",resident_id);
                 residentActivity.putExtra("resident_id",resident_id);
                 startActivity(residentActivity);
                 return true;
@@ -51,9 +50,9 @@ public class ReportActivity extends AppCompatActivity {
                 settingIntent.putExtra("resident_id",resident_id);
                 startActivity(settingIntent);
                 return true;
-            case R.id.exit:
-                finish();
-                return true;
+//            case R.id.exit:
+//                finish();
+//                return true;
         }
         return super.onOptionsItemSelected(item);
     }

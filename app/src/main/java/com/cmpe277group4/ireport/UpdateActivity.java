@@ -9,6 +9,8 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -18,6 +20,7 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.firebase.auth.FirebaseAuth;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -44,6 +47,7 @@ public class UpdateActivity extends AppCompatActivity {
     private JSONObject serverDataJSON = new JSONObject();
     private StringEntity serverDataEntity;
     private JSONObject residentDataJSON;
+    public String resident_id = null;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -59,9 +63,9 @@ public class UpdateActivity extends AppCompatActivity {
         emailText = (TextView) findViewById(R.id.Email);
         screenNameText = (TextView) findViewById(R.id.ScreenName);
         Intent intent = getIntent();
-        email = intent.getExtras().getString("resident_id");
+        resident_id = intent.getExtras().getString("resident_id");
 
-        Log.d(PROFILE_TAG, email);
+        //Log.d(PROFILE_TAG, email);
         update = (Button) findViewById(R.id.Update);
         imageView = (ImageView) findViewById(android.R.id.icon);
         progressDialog = new ProgressDialog(this);
@@ -80,7 +84,7 @@ public class UpdateActivity extends AppCompatActivity {
         });
 
         try {
-            serverDataJSON.put("resident_id",email);
+            serverDataJSON.put("resident_id",resident_id);
             serverDataEntity = new StringEntity(serverDataJSON.toString());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -224,5 +228,41 @@ public class UpdateActivity extends AppCompatActivity {
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         AppIndex.AppIndexApi.end(client, getIndexApiAction());
         client.disconnect();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) { switch(item.getItemId()) {
+        case R.id.add:
+            Intent reportActivity = new Intent(UpdateActivity.this,ReportActivity.class);
+            reportActivity.putExtra("resident_id",resident_id);
+            startActivity(reportActivity);
+            return true;
+        case R.id.myReport:
+            Intent residentActivity = new Intent(UpdateActivity.this,ResidentActivity.class);
+            residentActivity.putExtra("resident_id",resident_id);
+            startActivity(residentActivity);
+            return true;
+        case R.id.setting:
+            Intent settingIntent = new Intent(UpdateActivity.this, UserSettingsActivity.class);
+            settingIntent.putExtra("resident_id",resident_id);
+            startActivity(settingIntent);
+            return true;
+        case R.id.signout:
+            FirebaseAuth.getInstance().signOut();
+            Intent goBackLogin = new Intent(UpdateActivity.this,LoginActivity.class);
+            startActivity(goBackLogin);
+            return(true);
+//        case R.id.exit:
+//            finish();
+//            return(true);
+    }
+        return(super.onOptionsItemSelected(item));
     }
 }

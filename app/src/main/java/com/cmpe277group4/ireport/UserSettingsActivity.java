@@ -4,11 +4,15 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.app.ProgressDialog;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -23,16 +27,16 @@ import cz.msebera.android.httpclient.entity.StringEntity;
 public class UserSettingsActivity extends AppCompatActivity {
     private Switch emailNotification , statusChange , anonymous;
     //switchEmailNotification switchStatusChange switchAnonymous
-
+    private JSONObject residentDataJSON;
     private AsyncHttpClient updateClient = new AsyncHttpClient();
     private JSONObject serverDataJSON = new JSONObject();
     private StringEntity serverDataEntity;
-
+    private ProgressDialog progressDialog;
     private static final String PROFILE_TAG = "PROFILE";
     private Button saveButtonText;
-    private int eNot = 1;
-    private int sChange = 1;
-    private int  ana = 0;
+    private int eNot ;
+    private int sChange ;
+    private int  ana ;
     String email;
     public String resident_id = null;
 
@@ -47,7 +51,96 @@ public class UserSettingsActivity extends AppCompatActivity {
         anonymous = (Switch) findViewById(R.id.switchAnonymous);
         Intent intent = getIntent();
         resident_id = intent.getExtras().getString("resident_id");
+        Log.d("redident id ",resident_id);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Getting Profile data");
+        progressDialog.show();
+        try {
+            serverDataJSON.put("resident_id",resident_id);
+            serverDataEntity = new StringEntity(serverDataJSON.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
+
+        updateClient.get(UserSettingsActivity.this, getString(R.string.server_url) + "/getResidentSettingsData", serverDataEntity, "application/json", new AsyncHttpResponseHandler() {
+
+            private final String TAG = "SERVER_UPDATE";
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                progressDialog.hide();
+                Log.d("ServerData Entity" , String.valueOf(serverDataEntity));
+                Log.d(TAG,"Got User Settings Data");
+                String residentData = new String(responseBody);
+                try {
+                    residentDataJSON = new JSONObject(residentData);
+                    JSONObject dataResidentJSON = residentDataJSON.getJSONObject("data");
+//                    emailText.setText(dataResidentJSON.getString("email"));
+//                    nameText.setText(dataResidentJSON.getString("name"));
+//                    addressText.setText(dataResidentJSON.getString("address"));
+//                    screenNameText.setText(dataResidentJSON.getString("screenName"));
+                    eNot = Integer.parseInt(dataResidentJSON.getString("emailNotification"));
+                    sChange = Integer.parseInt(dataResidentJSON.getString("statusChange"));
+                    ana = Integer.parseInt(dataResidentJSON.getString("anonymous"));
+                    //Log.d(TAG, dataResidentJSON.getString("anonymous"));
+                    //Log.d(TAG, dataResidentJSON.toString(4));
+
+                    Log.d("e indide", String.valueOf(eNot));
+
+                    Log.d("e indideemai", String.valueOf(sChange));
+                    Log.d("emai e indide ", String.valueOf(ana));
+                    if(eNot == 1) {
+                        emailNotification.setChecked(true);
+
+                        Log.d("notification ","is on email not ");
+                    }
+                    else {
+                        emailNotification.setChecked(false);
+
+                        Log.d("notification ","is off emaul not ");
+                    }
+
+                    if(sChange == 1) {
+                        statusChange.setChecked(true);
+
+                        Log.d("notification ","is on status chnge");
+                    }
+                    else {
+                        statusChange.setChecked(false);
+
+                        Log.d("notification ","is off ststus change ");
+                    }
+                    if(ana == 1) {
+                        anonymous.setChecked(true);
+
+                        Log.d("notification ","is on ana ");
+                    }
+                    else {
+                        anonymous.setChecked(false);
+
+                        Log.d("notification ","is off ana ");
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.d(TAG,residentData);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                progressDialog.hide();
+                Log.d(TAG,"Failed to get User data : Status Code : " + statusCode );
+            }
+        });
+
+        Log.d("emai", String.valueOf(eNot));
+
+        Log.d("emai", String.valueOf(sChange));
+        Log.d("emai", String.valueOf(ana));
 
         //set the switch to ON
        // mySwitch.setChecked(true);
@@ -121,19 +214,10 @@ public class UserSettingsActivity extends AppCompatActivity {
             }
         });
 
-        //check the current state before we display the screen
-        if(emailNotification.isChecked()){
-            //switchStatus.setText("Switch is currently ON");
 
-            Log.d("notification ","is on 2 ");
-        }
-        else {
-           // switchStatus.setText("Switch is currently OFF");
-
-            Log.d("notification ","is off 2 ");
-        }
 
 //eNot sChange ana
+
 
         saveButtonText = (Button) findViewById(R.id.buttonSave);
         saveButtonText.setOnClickListener(new View.OnClickListener() {
@@ -172,6 +256,42 @@ public class UserSettingsActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) { switch(item.getItemId()) {
+        case R.id.add:
+            Intent reportActivity = new Intent(UserSettingsActivity.this,ReportActivity.class);
+            reportActivity.putExtra("resident_id",resident_id);
+            startActivity(reportActivity);
+            return true;
+        case R.id.myReport:
+            Intent residentActivity = new Intent(UserSettingsActivity.this,ResidentActivity.class);
+            residentActivity.putExtra("resident_id",resident_id);
+            startActivity(residentActivity);
+            return true;
+        case R.id.update:
+            Intent updateActivity = new Intent(UserSettingsActivity.this,UpdateActivity.class);
+            updateActivity.putExtra("resident_id",resident_id);
+            startActivity(updateActivity);
+            return true;
+        case R.id.signout:
+            FirebaseAuth.getInstance().signOut();
+            Intent goBackLogin = new Intent(UserSettingsActivity.this,LoginActivity.class);
+            startActivity(goBackLogin);
+            return(true);
+//        case R.id.exit:
+//            finish();
+//            return(true);
+    }
+        return(super.onOptionsItemSelected(item));
     }
 
 }

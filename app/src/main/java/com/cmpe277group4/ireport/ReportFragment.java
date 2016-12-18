@@ -355,7 +355,7 @@ public class ReportFragment extends Fragment {
         final LocationListener locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
-                System.out.println("**********VINAY OnLocationChanged  "+location.getLatitude()+" , "+location.getLongitude());
+                //System.out.println("**********VINAY OnLocationChanged  "+location.getLatitude()+" , "+location.getLongitude());
                 ulatitude = location.getLatitude();
                 ulongitude = location.getLongitude();
                 //mLatLng.setText(ulatitude+"\n"+ulongitude);
@@ -365,7 +365,7 @@ public class ReportFragment extends Fragment {
                     geocoder = new Geocoder(getActivity(), Locale.getDefault());
                     addresses = geocoder.getFromLocation(ulatitude, ulongitude, 1);
                     String address = addresses.get(0).getAddressLine(0);
-                    System.out.println("Lat and Lon " + address);
+                   // System.out.println("Lat and Lon " + address);
                     mLatLng.setText(/*ulatitude+"\n"+ulongitude+"\n"+*/address);
                 }catch (Exception e){
                     e.printStackTrace();

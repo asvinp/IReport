@@ -138,7 +138,7 @@ public class OfficialActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_main_official, menu);
         return true;
     }
 
@@ -149,15 +149,16 @@ public class OfficialActivity extends AppCompatActivity {
             Intent goBackLogin = new Intent(OfficialActivity.this,LoginActivity.class);
             startActivity(goBackLogin);
             return(true);
-        case R.id.about:
-            Toast.makeText(this, "Made by Group 4", Toast.LENGTH_SHORT).show();
-            return(true);
-        case R.id.exit:
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.addCategory(Intent.CATEGORY_HOME);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            return(true);
+        case R.id.myReport:
+            Intent residentActivity = new Intent(OfficialActivity.this,ResidentActivity.class);
+            startActivity(residentActivity);
+            return true;
+//        case R.id.exit:
+//            Intent intent = new Intent(Intent.ACTION_MAIN);
+//            intent.addCategory(Intent.CATEGORY_HOME);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            startActivity(intent);
+//            return(true);
     }
         return(super.onOptionsItemSelected(item));
     }

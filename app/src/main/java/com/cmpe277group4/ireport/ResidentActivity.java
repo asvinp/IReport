@@ -117,17 +117,7 @@ public class ResidentActivity extends AppCompatActivity {
             }
         });
 
-        //HeatMapbutton
-        final Button heatbutton = (Button) findViewById(R.id.heatmapbtn);
-        final Context heatbtncontext = this;
-        heatbutton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Perform action on click
-                Intent heatmapIntent = new Intent(heatbtncontext, HeatMapActivity.class);
-                heatmapIntent.putExtra("resident_id",resident_id);
-                startActivity(heatmapIntent);
-            }
-        });
+
 
         final Context context = this;
 
@@ -147,7 +137,6 @@ public class ResidentActivity extends AppCompatActivity {
 //                // 3
                 detailIntent.putExtra("resident_id", selectedReport.resident_id);
                 detailIntent.putExtra("date", selectedReport.date);
-//                detailIntent.putExtra("url", selectedReport.instructionUrl);
                 detailIntent.putExtra("image_litter", selectedReport.image_litter);
                 detailIntent.putExtra("desc_litter", selectedReport.desc_litter);
                 detailIntent.putExtra("status_litter", selectedReport.status_litter);
@@ -212,9 +201,9 @@ public class ResidentActivity extends AppCompatActivity {
             Intent goBackLogin = new Intent(ResidentActivity.this,LoginActivity.class);
             startActivity(goBackLogin);
             return(true);
-        case R.id.exit:
-            finish();
-            return(true);
+//        case R.id.exit:
+//            finish();
+//            return(true);
     }
         return(super.onOptionsItemSelected(item));
     }

@@ -15,7 +15,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -68,6 +71,9 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.TileOverlay;
+import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.maps.android.heatmaps.HeatmapTileProvider;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -117,6 +123,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public HashMap<String, Integer> markerhash = new HashMap<>();
 
     final ArrayList<Report> reportList = new ArrayList<Report>();
+    ArrayList<LatLng> list = new ArrayList<LatLng>();
+    ArrayList<Marker> myMarkers = new ArrayList<Marker>();
+
+
+    private TileOverlay mOverlay;
+    private MarkerOptions litterMarkers;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,7 +171,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             report.lon_loc = reports.getJSONObject(i).getString("lon_loc");
                             //report.imageBm = decodeBase64Image(report.image_litter);
                             reportList.add(report);
+
                             drawMarker(new LatLng(Double.parseDouble(report.lat_loc),Double.parseDouble(report.lon_loc)),report.resident_id,report.date);
+
+                            //HEATMAP OVERLAY LAT LON DATA
+                            double heatlat = Double.parseDouble(report.lat_loc);
+
+                            double heatlon = Double.parseDouble(report.lon_loc);
+
+                            list.add(new LatLng(heatlat, heatlon));
+                            Log.d("MAPS",list.toString());
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -173,6 +195,44 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }catch (Exception e){
             e.printStackTrace();
         }
+
+        //set buttons
+        final Button LVBtn = (Button) findViewById(R.id.btnLVonMap);
+
+        LVBtn.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+
+                finish();
+            }
+
+        });
+
+
+
+        final Switch mySwitch = (Switch) findViewById(R.id.switch1);
+
+        //set the switch to ON
+        mySwitch.setChecked(false);
+        //attach a listener to check for changes in state
+        mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if(isChecked){
+                    hideMarkers();
+                    addMyHeatMap();
+                }else{
+                    removeMyHeatMap();
+                    showMarkers();
+                }
+
+            }
+        });
+
+
+
     }
 
 
@@ -290,13 +350,25 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //        mGoogleMap.addMarker(multioptions);
         Log.d("MARKER",id);
 
-        MarkerOptions marker = new MarkerOptions()
+        litterMarkers = new MarkerOptions()
                 .position(point)
                 .title(id)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
                 .snippet(time);
-        mGoogleMap.addMarker(marker);
+        myMarkers.add(mGoogleMap.addMarker(litterMarkers));
 
+    }
+
+    private void hideMarkers(){
+        for (Marker m : myMarkers) {
+            m.setVisible(false);
+        }
+    }
+
+    private void showMarkers(){
+        for (Marker m : myMarkers) {
+            m.setVisible(true);
+        }
     }
 
     private void splitlatlng(String x) {
@@ -410,6 +482,24 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //        Drawable d = new BitmapDrawable(getResources(), decodedByte);
 //        return d;
     }
+
+    private void addMyHeatMap() {
+
+        // Create a heat map tile provider, passing it the latlngs of the trash.
+        HeatmapTileProvider provider = new HeatmapTileProvider.Builder().data(list).build();
+        provider.setRadius(50);
+        // Add a tile overlay to the map, using the heat map tile provider.
+        mOverlay = mGoogleMap.addTileOverlay(new TileOverlayOptions().tileProvider(provider));
+    }
+
+    private void removeMyHeatMap(){
+        mOverlay.remove();
+    }
+
+
+
+
+
 }
 
 

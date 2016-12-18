@@ -5,8 +5,6 @@
     tools:context=".MainActivity">
 
     <item
-        android:id="@+id/add" android:icon="@android:drawable/ic_menu_add" app:showAsAction="always"   android:title="Add"/>
-    <item
         android:id="@+id/myReport" android:icon="@android:drawable/ic_menu_revert" app:showAsAction="never" android:title="My Reports"/>
     <item
         android:id="@+id/update" android:icon="@android:drawable/ic_dialog_info" app:showAsAction="never" android:title="Update Profile" />
