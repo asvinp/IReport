@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -134,6 +135,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if (googleServicesAvailable()) {
             Toast.makeText(this, "Gplay services are working", Toast.LENGTH_LONG).show();
             setContentView(R.layout.activity_maps);
@@ -496,6 +498,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void removeMyHeatMap(){
         mOverlay.remove();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem m){
+        switch(m.getItemId()){
+            case android.R.id.home:
+                Intent parentActivityIntent = new Intent(this, ResidentActivity.class);
+                parentActivityIntent.putExtra("resident_id", resident_id);
+                startActivity(parentActivityIntent);
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(m);
+        }
     }
 
 

@@ -3,6 +3,7 @@ package com.cmpe277group4.ireport;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,6 +17,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -79,7 +81,7 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_detail);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         AsyncHttpClient reportClient = new AsyncHttpClient();
         
@@ -259,6 +261,19 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
         });
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem m){
+        switch(m.getItemId()){
+            case android.R.id.home:
+                Intent parentActivityIntent = new Intent(this, ResidentActivity.class);
+                parentActivityIntent.putExtra("resident_id", resident_id);
+                startActivity(parentActivityIntent);
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(m);
+        }
+    }
 
     //DECODE IMAGE
     private Bitmap decodeBase64Image(String base64){
