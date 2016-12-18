@@ -99,7 +99,7 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
 
         resident_id = this.getIntent().getExtras().getString("resident_id");
         date = this.getIntent().getExtras().getString("date");
-        description = this.getIntent().getExtras().getString("desc_report");
+        description = this.getIntent().getExtras().getString("desc_litter");
         status = this.getIntent().getExtras().getString("status_litter");
         severity = this.getIntent().getExtras().getString("severity_litter");
         size = this.getIntent().getExtras().getString("size_litter");

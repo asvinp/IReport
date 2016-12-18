@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:text="Go"
             android:id="@+id/button"
-            android:onClick="geoLocate (MapsActivity)"
+            android:onClick="geoLocate"
             android:layout_gravity="right" />
     </LinearLayout>
 

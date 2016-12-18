@@ -76,6 +76,9 @@ public class OfficialActivity extends AppCompatActivity {
                             report.lon_loc = reports.getJSONObject(i).getString("lon_loc");
                             reportList.add(report);
                         }
+
+                        ReportAdapter adapter = new ReportAdapter(OfficialActivity.this, reportList);
+                        mListView.setAdapter(adapter);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -90,8 +93,8 @@ public class OfficialActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        ReportAdapter adapter = new ReportAdapter(this, reportList);
-        mListView.setAdapter(adapter);
+//        ReportAdapter adapter = new ReportAdapter(this, reportList);
+//        mListView.setAdapter(adapter);
 
         //Mapbutton
         final Button button = (Button) findViewById(R.id.mapbtn);
@@ -99,7 +102,7 @@ public class OfficialActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
-                Intent mapIntent = new Intent(btncontext, MapsActivity.class);
+                Intent mapIntent = new Intent(btncontext, OfficialMapsActivity.class);
 
 //                mapIntent.putExtra("location", selectedReport.location);
 
@@ -117,6 +120,22 @@ public class OfficialActivity extends AppCompatActivity {
 
                 // 2
                 Intent detailIntent = new Intent(context, report_detail.class);
+                String address;
+                detailIntent.putExtra("report_id",selectedReport.report_id);
+//                Log.d("ACTIVITY",selectedReport.report_id);
+//
+//                // 3
+                detailIntent.putExtra("resident_id", selectedReport.resident_id);
+                detailIntent.putExtra("date", selectedReport.date);
+                detailIntent.putExtra("image_litter", selectedReport.image_litter);
+                detailIntent.putExtra("desc_litter", selectedReport.desc_litter);
+                detailIntent.putExtra("status_litter", selectedReport.status_litter);
+                detailIntent.putExtra("severity_litter", selectedReport.severity_litter);
+                detailIntent.putExtra("size_litter", selectedReport.size_litter);
+                detailIntent.putExtra("lat_loc", selectedReport.lat_loc);
+                detailIntent.putExtra("lon_loc", selectedReport.lon_loc);
+                detailIntent.putExtra("address", selectedReport.address);
+
 
                 // 3
 //                detailIntent.putExtra("id", selectedReport.id);
@@ -149,10 +168,10 @@ public class OfficialActivity extends AppCompatActivity {
             Intent goBackLogin = new Intent(OfficialActivity.this,LoginActivity.class);
             startActivity(goBackLogin);
             return(true);
-        case R.id.myReport:
-            Intent residentActivity = new Intent(OfficialActivity.this,ResidentActivity.class);
-            startActivity(residentActivity);
-            return true;
+//        case R.id.myReport:
+//            Intent residentActivity = new Intent(OfficialActivity.this,ResidentActivity.class);
+//            startActivity(residentActivity);
+//            return true;
 //        case R.id.exit:
 //            Intent intent = new Intent(Intent.ACTION_MAIN);
 //            intent.addCategory(Intent.CATEGORY_HOME);

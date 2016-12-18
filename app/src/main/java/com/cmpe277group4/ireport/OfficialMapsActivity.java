@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -24,40 +25,6 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import android.app.Dialog;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Geocoder;
-import android.location.Location;
-import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.Toast;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.identity.intents.Address;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -66,7 +33,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -81,12 +47,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -94,7 +56,7 @@ import java.util.Locale;
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleMap.OnInfoWindowClickListener {
+public class OfficialMapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleMap.OnInfoWindowClickListener {
 
     private GoogleMap mGoogleMap;
     private GoogleApiClient mGoogleApiClient;
@@ -141,16 +103,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         } else {
 
         }
-        Intent residentIntent = getIntent();
-        resident_id = residentIntent.getExtras().getString("resident_id");
+//        Intent residentIntent = getIntent();
+//        resident_id = residentIntent.getExtras().getString("resident_id");
 
         try {
-            serverdataJSON.put("resident_id", resident_id);
+            //serverdataJSON.put("resident_id", resident_id);
             serverdataentity = new StringEntity(serverdataJSON.toString());
-            reportclient.get(MapsActivity.this, getString(R.string.server_url) + "getReport", serverdataentity, "application/json", new AsyncHttpResponseHandler() {
+            reportclient.get(OfficialMapsActivity.this, getString(R.string.server_url) + "getAllReports", serverdataentity, "application/json", new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                    Log.d("MAP", "got Data");
+                    Log.d("OFFICIAL MAPS", "got Data");
                     try {
                         reportdataobject = new JSONObject(new String(responseBody));
                         reports = reportdataobject.getJSONArray("data");
@@ -208,8 +170,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
 
         });
-
-
 
 
 
@@ -290,13 +250,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        Log.d("MAP","Marker clicked");
+        Log.d("OFFICIAL MAP","Marker clicked");
         int count = 0;
         for(Report report: reportList){
             Log.d("MARKER COUNT",Integer.toString(count++));
             if(marker.getSnippet().contentEquals(report.date)){
                 Log.d("MARKER","found report");
-                Intent detailIntent = new Intent(MapsActivity.this, ResidentDetail.class);
+                Intent detailIntent = new Intent(OfficialMapsActivity.this, ResidentDetail.class);
 
                 detailIntent.putExtra("report_id",report.report_id);
 //                detailIntent.putExtra("image", decodeBase64Image(report.image_litter));
@@ -314,7 +274,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 try {
                     Geocoder geocoder;
                     List<android.location.Address> addresses;
-                    geocoder = new Geocoder(MapsActivity.this, Locale.getDefault());
+                    geocoder = new Geocoder(OfficialMapsActivity.this, Locale.getDefault());
                     addresses = geocoder.getFromLocation(Double.parseDouble(report.lat_loc), Double.parseDouble(report.lon_loc), 1);
                     report.address = addresses.get(0).getAddressLine(0);
                 }catch (Exception e){
