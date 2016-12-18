@@ -58,6 +58,7 @@
         <activity android:name=".ResidentActivity" />
         <activity android:name=".UpdateActivity" />
         <activity android:name=".UserSettingsActivity" />
+        <activity android:name=".OfficialMapsActivity" />
     </application>
 
 </manifest>

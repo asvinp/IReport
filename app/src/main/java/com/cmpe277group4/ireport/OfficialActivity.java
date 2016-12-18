@@ -102,7 +102,7 @@ public class OfficialActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
-                Intent mapIntent = new Intent(btncontext, MapsActivity.class);
+                Intent mapIntent = new Intent(btncontext, OfficialMapsActivity.class);
 
 //                mapIntent.putExtra("location", selectedReport.location);
 
