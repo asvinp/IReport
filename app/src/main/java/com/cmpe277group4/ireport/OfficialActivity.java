@@ -76,6 +76,9 @@ public class OfficialActivity extends AppCompatActivity {
                             report.lon_loc = reports.getJSONObject(i).getString("lon_loc");
                             reportList.add(report);
                         }
+
+                        ReportAdapter adapter = new ReportAdapter(OfficialActivity.this, reportList);
+                        mListView.setAdapter(adapter);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -90,8 +93,8 @@ public class OfficialActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        ReportAdapter adapter = new ReportAdapter(this, reportList);
-        mListView.setAdapter(adapter);
+//        ReportAdapter adapter = new ReportAdapter(this, reportList);
+//        mListView.setAdapter(adapter);
 
         //Mapbutton
         final Button button = (Button) findViewById(R.id.mapbtn);
