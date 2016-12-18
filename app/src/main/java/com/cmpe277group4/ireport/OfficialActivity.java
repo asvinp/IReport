@@ -46,7 +46,7 @@ public class OfficialActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_official);
         Intent officialIntent = getIntent();
-        String emailTest = officialIntent.getExtras().getString("emailId");
+//        String emailTest = officialIntent.getExtras().getString("emailId");
         mListView = (ListView) findViewById(R.id.report_list_view);
 // 1
         final ArrayList<Report> reportList = new ArrayList<Report>();

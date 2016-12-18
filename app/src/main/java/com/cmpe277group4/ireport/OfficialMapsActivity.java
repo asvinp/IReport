@@ -15,6 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -96,6 +97,7 @@ public class OfficialMapsActivity extends AppCompatActivity implements OnMapRead
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if (googleServicesAvailable()) {
             Toast.makeText(this, "Gplay services are working", Toast.LENGTH_LONG).show();
             setContentView(R.layout.activity_maps);
@@ -443,6 +445,19 @@ public class OfficialMapsActivity extends AppCompatActivity implements OnMapRead
         return decodedByte;
 //        Drawable d = new BitmapDrawable(getResources(), decodedByte);
 //        return d;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem m){
+        switch(m.getItemId()){
+            case android.R.id.home:
+                Intent parentActivityIntent = new Intent(this, OfficialActivity.class);
+                startActivity(parentActivityIntent);
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(m);
+        }
     }
 
     private void addMyHeatMap() {
