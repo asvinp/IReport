@@ -208,6 +208,3 @@ public class ResidentActivity extends AppCompatActivity {
         return(super.onOptionsItemSelected(item));
     }
 }
-
-
-

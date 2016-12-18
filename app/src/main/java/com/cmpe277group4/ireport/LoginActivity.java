@@ -383,7 +383,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 //        Log.d("UIUPDATE",email);
 //        Log.d("UIUPPDATE",name);
         Intent residentIntent = new Intent(LoginActivity.this, ProfileActivity.class);
-        residentIntent.putExtra("email", email);
+        residentIntent.putExtra("resident_id", email);
         residentIntent.putExtra("name",name);
         startActivity(residentIntent);
     }

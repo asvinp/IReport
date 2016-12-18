@@ -3,6 +3,7 @@ package com.cmpe277group4.ireport;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -219,7 +220,7 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
                                     } catch (UnsupportedEncodingException e) {
                                         e.printStackTrace();
                                     }
-                                    client.get(ResidentDetail.this, getString(R.string.server_url) + "officialNewRegister", entity, "application/json", new AsyncHttpResponseHandler() {
+                                    client.get(ResidentDetail.this, getString(R.string.server_url) + "updateReport", entity, "application/json", new AsyncHttpResponseHandler() {
                                         @Override
                                         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                                             Log.d("Server","selection updated");
@@ -305,5 +306,12 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
             //disable spinner
             statusSpinner.setEnabled(false);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent residentIntent = new Intent(ResidentDetail.this,ResidentActivity.class);
+        residentIntent.putExtra("resident_id",resident_id);
+        startActivity(residentIntent);
     }
 }
