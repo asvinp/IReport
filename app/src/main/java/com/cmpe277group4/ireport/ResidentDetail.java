@@ -80,49 +80,9 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_detail);
 
-        try {
-            serverdataJSON.put("report_id",this.getIntent().getExtras().getString("report_id"));
-            Log.d("DETAILSREQ",serverdataJSON.toString());
-            serverdataentity = new StringEntity(serverdataJSON.toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
 
         AsyncHttpClient reportClient = new AsyncHttpClient();
-        Log.d("DETAILSREQ", serverdataentity.toString());
-//        reportClient.get(ResidentDetail.this, getString(R.string.server_url) + "getReportRid", serverdataentity, "application/json", new AsyncHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-//                Log.d("SERVERDEATILS"," " +statusCode);
-//                try {
-//                    JSONObject dataServer = new JSONObject(new String(responseBody));
-//                    JSONObject data = dataServer.getJSONObject("data");
-//                    Log.d("DETAILSREQ", data.toString());
-//                    resident_id = data.getString("resident_id");
-//                    date = data.getString("date");
-//                    description = data.getString("desc_report");
-//                    status = data.getString("status_litter");
-//                    severity = data.getString("severity_litter");
-//                    size = data.getString("size_litter");
-//                    lat_loc = data.getString("lat_loc");
-//                    lon_loc = data.getString("lon_loc");
-////                    String address = data.getString("address");
-//                    image = data.getString("image_litter");
-//
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-//                Log.d("DETAILSREQ","FAILURE STATUS " + statusCode);
-//            }
-//        });
-
+        
         //getLocation
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
