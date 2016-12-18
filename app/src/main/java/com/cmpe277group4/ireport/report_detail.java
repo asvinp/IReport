@@ -3,6 +3,7 @@ package com.cmpe277group4.ireport;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,9 +14,11 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -82,6 +85,7 @@ public class report_detail extends AppCompatActivity {
 
 
         AsyncHttpClient reportClient = new AsyncHttpClient();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 //        //getLocation
 //        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -266,6 +270,19 @@ public class report_detail extends AppCompatActivity {
         return decodedByte;
 //        Drawable d = new BitmapDrawable(getResources(), decodedByte);
 //        return d;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem m){
+        switch(m.getItemId()){
+            case android.R.id.home:
+                Intent parentActivityIntent = new Intent(this, OfficialActivity.class);
+                startActivity(parentActivityIntent);
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(m);
+        }
     }
 
 //    @Override
