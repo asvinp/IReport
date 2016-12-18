@@ -24,15 +24,5 @@
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="16dp" />
 
-    <Button
-        android:text="Heatmap"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/heatmapbtn"
-        android:layout_marginBottom="55dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="16dp" />
-
 
 </RelativeLayout>

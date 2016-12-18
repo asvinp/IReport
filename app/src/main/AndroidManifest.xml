@@ -58,9 +58,6 @@
         <activity android:name=".ResidentActivity" />
         <activity android:name=".UpdateActivity" />
         <activity android:name=".UserSettingsActivity" />
-        <activity
-            android:name=".HeatMapActivity"
-            android:exported="true"></activity>
     </application>
 
 </manifest>
