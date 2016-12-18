@@ -211,6 +211,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
 
+
+
         final Switch mySwitch = (Switch) findViewById(R.id.switch1);
 
         //set the switch to ON
