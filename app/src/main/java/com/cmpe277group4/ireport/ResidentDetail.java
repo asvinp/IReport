@@ -215,6 +215,7 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
                                     try {
                                         data.put("report_id",report_id);
                                         data.put("status_litter",selected);
+                                        data.put("resident_id",resident_id);
                                         entity = new StringEntity(data.toString());
                                     } catch (JSONException e) {
                                         e.printStackTrace();
