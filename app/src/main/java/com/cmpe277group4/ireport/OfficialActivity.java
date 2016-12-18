@@ -168,10 +168,10 @@ public class OfficialActivity extends AppCompatActivity {
             Intent goBackLogin = new Intent(OfficialActivity.this,LoginActivity.class);
             startActivity(goBackLogin);
             return(true);
-        case R.id.myReport:
-            Intent residentActivity = new Intent(OfficialActivity.this,ResidentActivity.class);
-            startActivity(residentActivity);
-            return true;
+//        case R.id.myReport:
+//            Intent residentActivity = new Intent(OfficialActivity.this,ResidentActivity.class);
+//            startActivity(residentActivity);
+//            return true;
 //        case R.id.exit:
 //            Intent intent = new Intent(Intent.ACTION_MAIN);
 //            intent.addCategory(Intent.CATEGORY_HOME);
