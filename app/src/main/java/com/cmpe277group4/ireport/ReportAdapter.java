@@ -113,7 +113,7 @@ public class ReportAdapter extends BaseAdapter {
         //new AsyncTaskLoadImage(report.image_litter, thumbnailImageView).execute();
 // 2
         titleTextView.setText(report.date);
-        subtitleTextView.setText(report.resident_id);
+        subtitleTextView.setText("");
         detailTextView.setText(report.status_litter);
         new AsyncTaskLoadImage(report.image_litter, thumbnailImageView).execute();
 

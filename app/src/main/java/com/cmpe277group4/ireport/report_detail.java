@@ -50,8 +50,10 @@ public class report_detail extends AppCompatActivity {
     protected LocationListener locationListener;
     String currentLoc;
     String trashLoc;
-
-
+    private JSONObject serverDataJSON = new JSONObject();
+    private StringEntity serverDataEntity;
+    private AsyncHttpClient updateClient = new AsyncHttpClient();
+    private JSONObject residentDataJSON;
     protected Context context;
     final Context alertcontext = this;
     TextView txtLat;
@@ -59,7 +61,7 @@ public class report_detail extends AppCompatActivity {
     String provider;
     protected String latitude, longitude;
     protected boolean gps_enabled, network_enabled;
-
+    private int  ana ;
     String resident_id = null;
 
     String date;
@@ -115,8 +117,62 @@ public class report_detail extends AppCompatActivity {
         trashLoc = lat_loc + "," + lon_loc;
 
 
+        try {
+            serverDataJSON.put("resident_id",resident_id);
+            serverDataEntity = new StringEntity(serverDataJSON.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+
+        updateClient.get(report_detail.this, getString(R.string.server_url) + "/getResidentSettingsData", serverDataEntity, "application/json", new AsyncHttpResponseHandler() {
+
+            private final String TAG = "SERVER_UPDATE";
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+               // progressDialog.hide();
+                Log.d("ServerData Entity" , String.valueOf(serverDataEntity));
+                Log.d(TAG,"Got User Settings Data");
+                String residentData = new String(responseBody);
+                try {
+                    residentDataJSON = new JSONObject(residentData);
+                    JSONObject dataResidentJSON = residentDataJSON.getJSONObject("data");
+//                    emailText.setText(dataResidentJSON.getString("email"));
+//                    nameText.setText(dataResidentJSON.getString("name"));
+//                    addressText.setText(dataResidentJSON.getString("address"));
+//                    screenNameText.setText(dataResidentJSON.getString("screenName"));
+             //       eNot = Integer.parseInt(dataResidentJSON.getString("emailNotification"));
+               //     sChange = Integer.parseInt(dataResidentJSON.getString("statusChange"));
+                    ana = Integer.parseInt(dataResidentJSON.getString("anonymous"));
+                    //Log.d(TAG, dataResidentJSON.getString("anonymous"));
+                    //Log.d(TAG, dataResidentJSON.toString(4));
+
+                    if(ana == 1) {
+                        setTitle("Anonymous User");
+
+                           }
+                    else {
+                        setTitle(resident_id);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.d(TAG,residentData);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                //progressDialog.hide();
+                Log.d(TAG,"Failed to get User data : Status Code : " + statusCode );
+            }
+        });
+
         //Set title of appscreen to id of report
-        setTitle(resident_id);
+      //  setTitle(resident_id);
 
         // set imageview
         ImageView detailImageView = (ImageView) findViewById(R.id.imgDetail);
