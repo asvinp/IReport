@@ -147,7 +147,7 @@ public class report_detail extends AppCompatActivity {
         try {
             Geocoder geocoder;
             List<Address> addresses;
-            geocoder = new Geocoder(context, Locale.getDefault());
+            geocoder = new Geocoder(this, Locale.getDefault());
             addresses = geocoder.getFromLocation(Double.parseDouble(lat_loc), Double.parseDouble(lon_loc), 1);
             address = addresses.get(0).getAddressLine(0);
         }catch (Exception e){
