@@ -192,6 +192,9 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
 
         }
 
+        statusSpinner.setEnabled(false);
+
+
         //set spinner listener
         statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

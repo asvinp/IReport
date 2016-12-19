@@ -355,28 +355,30 @@ public class OfficialMapsActivity extends AppCompatActivity implements OnMapRead
         mGoogleMap.moveCamera(update);
     }
 
-    public void geoLocate (View view) throws IOException{
+    public void geoLocate (View view) throws IOException, IllegalArgumentException{
         EditText et = (EditText) findViewById(R.id.editText);
         String location = et.getText().toString();
 
-        Geocoder gc = new Geocoder(this);
-        List<android.location.Address> list = gc.getFromLocationName(location, 1);
-        android.location.Address address = list.get(0);
-        String locality = address.getLocality();
+            Geocoder gc = new Geocoder(this);
+            List<android.location.Address> list = gc.getFromLocationName(location, 1);
+            android.location.Address address = list.get(0);
+            String locality = address.getLocality();
 
-        Toast.makeText(this, locality, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, locality, Toast.LENGTH_LONG).show();
 
-        double lat = address.getLatitude();
-        double lng = address.getLongitude();
-        goToLocationZoom(lat, lng, 15);
+            double lat = address.getLatitude();
+            double lng = address.getLongitude();
+            goToLocationZoom(lat, lng, 15);
 
 
-        MarkerOptions options = new MarkerOptions()
-                .title("Target Location")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-                .position(new LatLng(lat, lng))
-                .snippet(locality);
-        mGoogleMap.addMarker(options);
+            MarkerOptions options = new MarkerOptions()
+                    .title("Target Location")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                    .position(new LatLng(lat, lng))
+                    .snippet(locality);
+            mGoogleMap.addMarker(options);
+
+
     }
 
     public boolean googleServicesAvailable() {
