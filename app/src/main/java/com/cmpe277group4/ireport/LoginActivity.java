@@ -100,87 +100,87 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         };
         mAuth.addAuthStateListener(mAuthListener);
 
-        emailText = (EditText) findViewById(R.id.residentemail);
-        passText = (EditText) findViewById(R.id.residentpassword);
-        registerButton = (Button) findViewById(R.id.residentregister);
-        normalLoginButton = (Button) findViewById(R.id.normalLoginButton);
+//        emailText = (EditText) findViewById(R.id.residentemail);
+//        passText = (EditText) findViewById(R.id.residentpassword);
+//        registerButton = (Button) findViewById(R.id.residentregister);
+//        normalLoginButton = (Button) findViewById(R.id.normalLoginButton);
         progressDialog = new ProgressDialog(this);
 
-        normalLoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                progressDialog.setMessage("Signing In");
-                progressDialog.show();
-                final String email = emailText.getText().toString().trim();
-                String password = passText.getText().toString().trim();
-                firebase.signInResidentUser(email, password).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Log.d("LOGIN", "Resident sign in");
-                            try {
-                                fetchResidentData(email);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            } catch (UnsupportedEncodingException e) {
-                                e.printStackTrace();
-                            }
-                        }else{
-                            Log.d("LOGIN", "Unable to sign in");
-                            Toast.makeText(LoginActivity.this,"Unable to sign in",Toast.LENGTH_SHORT);
-                        }
-                        progressDialog.hide();
-                    }
-                });
-            }
-        });
+//        normalLoginButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                progressDialog.setMessage("Signing In");
+//                progressDialog.show();
+//                final String email = emailText.getText().toString().trim();
+//                String password = passText.getText().toString().trim();
+//                firebase.signInResidentUser(email, password).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                        if(task.isSuccessful()){
+//                            Log.d("LOGIN", "Resident sign in");
+//                            try {
+//                                fetchResidentData(email);
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            } catch (UnsupportedEncodingException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }else{
+//                            Log.d("LOGIN", "Unable to sign in");
+//                            Toast.makeText(LoginActivity.this,"Unable to sign in",Toast.LENGTH_SHORT);
+//                        }
+//                        progressDialog.hide();
+//                    }
+//                });
+//            }
+//        });
 
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final String email = emailText.getText().toString().trim();
-                String password = passText.getText().toString().trim();
-
-                if(factory.isStringEmpty(email)){
-                    Toast.makeText(LoginActivity.this,getString(R.string.email_null),Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if(factory.isStringEmpty(password)){
-                    Toast.makeText(LoginActivity.this,getString(R.string.password_null),Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if(factory.isStringShort(password,6)){
-                    Toast.makeText(LoginActivity.this,getString(R.string.password_short), Toast.LENGTH_SHORT).show();
-                }
-
-                progressDialog.setMessage("Registering resident");
-
-                progressDialog.show();
-                firebase.registerResidentUser(email, password)
-                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if(task.isComplete()){
-                                    if(task.isSuccessful()){
-                                        // intent for profile activity ( pass email )
-                                        Intent intent= new Intent(LoginActivity.this, ProfileActivity.class);
-                                        intent.putExtra("resident_id",email);
-                                        startActivity(intent);
-                                        emailText.setText("");
-                                        passText.setText("");
-                                    }else{
-                                        Toast.makeText(LoginActivity.this,"Unable to register",Toast.LENGTH_SHORT).show();
-                                    }
-                                }else {
-                                    Toast.makeText(LoginActivity.this,"Not Complete",Toast.LENGTH_SHORT).show();
-                                }
-                                progressDialog.hide();
-                            }
-                        });
-            }
-        });
+//        registerButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                final String email = emailText.getText().toString().trim();
+//                String password = passText.getText().toString().trim();
+//
+//                if(factory.isStringEmpty(email)){
+//                    Toast.makeText(LoginActivity.this,getString(R.string.email_null),Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//
+//                if(factory.isStringEmpty(password)){
+//                    Toast.makeText(LoginActivity.this,getString(R.string.password_null),Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//
+//                if(factory.isStringShort(password,6)){
+//                    Toast.makeText(LoginActivity.this,getString(R.string.password_short), Toast.LENGTH_SHORT).show();
+//                }
+//
+//                progressDialog.setMessage("Registering resident");
+//
+//                progressDialog.show();
+//                firebase.registerResidentUser(email, password)
+//                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<AuthResult> task) {
+//                                if(task.isComplete()){
+//                                    if(task.isSuccessful()){
+//                                        // intent for profile activity ( pass email )
+//                                        Intent intent= new Intent(LoginActivity.this, ProfileActivity.class);
+//                                        intent.putExtra("resident_id",email);
+//                                        startActivity(intent);
+//                                        emailText.setText("");
+//                                        passText.setText("");
+//                                    }else{
+//                                        Toast.makeText(LoginActivity.this,"Unable to register",Toast.LENGTH_SHORT).show();
+//                                    }
+//                                }else {
+//                                    Toast.makeText(LoginActivity.this,"Not Complete",Toast.LENGTH_SHORT).show();
+//                                }
+//                                progressDialog.hide();
+//                            }
+//                        });
+//            }
+//        });
 
         callBackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton)findViewById(R.id.login_button);
