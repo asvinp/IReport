@@ -306,7 +306,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 detailIntent.putExtra("resident_id", report.resident_id);
                 detailIntent.putExtra("date", report.date);
 //            detailIntent.putExtra("url", stringurl.instructionUrl);
-                detailIntent.putExtra("image", report.image_litter);
+                detailIntent.putExtra("image_litter", report.image_litter);
                 detailIntent.putExtra("desc_litter", report.desc_litter);
                 detailIntent.putExtra("status_litter", report.status_litter);
                 detailIntent.putExtra("severity_litter", report.severity_litter);
