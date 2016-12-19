@@ -202,7 +202,7 @@ public class report_detail extends AppCompatActivity {
                     Log.d("TAG",Boolean.toString(isFirstFire));
                     Log.v("statusspinner item", (String) parent.getItemAtPosition(position));
 
-                    String selected = statusSpinner.getSelectedItem().toString();
+                    final String selected = statusSpinner.getSelectedItem().toString();
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(alertcontext);
                     alertDialogBuilder.setTitle("You chose " + (String)parent.getItemAtPosition(position));
                     // set dialog message
@@ -216,13 +216,15 @@ public class report_detail extends AppCompatActivity {
                                     StringEntity entity = null;
                                     try {
                                         data.put("report_id",report_id);
+                                        data.put("status_litter",selected);
+                                        data.put("resident_id",resident_id);
                                         entity = new StringEntity(data.toString());
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     } catch (UnsupportedEncodingException e) {
                                         e.printStackTrace();
                                     }
-                                    client.get(report_detail.this, getString(R.string.server_url) + "officialNewRegister", entity, "application/json", new AsyncHttpResponseHandler() {
+                                    client.get(report_detail.this, getString(R.string.server_url) + "updateReport", entity, "application/json", new AsyncHttpResponseHandler() {
                                         @Override
                                         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                                             Log.d("Server","selection updated");
