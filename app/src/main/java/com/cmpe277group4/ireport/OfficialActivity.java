@@ -38,7 +38,6 @@ public class OfficialActivity extends AppCompatActivity {
     private static final String OFFICIAL_TAG = "OFFICIAL";
 
     private ListView mListView;
-    private EditText searchBox;
 
     private static AsyncHttpClient reportclient = new AsyncHttpClient();
     private static JSONObject serverdataJSON = new JSONObject();
@@ -46,6 +45,10 @@ public class OfficialActivity extends AppCompatActivity {
     private static JSONObject reportdataobject;
     private static JSONArray reports = new JSONArray();
     ReportAdapter adapter;
+
+
+    private EditText searchBox;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +59,9 @@ public class OfficialActivity extends AppCompatActivity {
         mListView = (ListView) findViewById(R.id.report_list_view);
 // 1
         final ArrayList<Report> reportList = new ArrayList<Report>();
-
         searchBox = (EditText) findViewById(R.id.searchField);
+
+
         try {
             reportclient.get(OfficialActivity.this, getString(R.string.server_url) + "getAllReports", new AsyncHttpResponseHandler() {
                 @Override
@@ -86,6 +90,28 @@ public class OfficialActivity extends AppCompatActivity {
 
                         adapter = new ReportAdapter(OfficialActivity.this, reportList);
                         mListView.setAdapter(adapter);
+
+
+                        searchBox.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                                String text = searchBox.getText().toString().toLowerCase(Locale.getDefault());
+
+                                adapter.filter(text);
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable editable) {
+
+                            }
+                        });
+
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -99,24 +125,6 @@ public class OfficialActivity extends AppCompatActivity {
         }catch (Exception e){
             e.printStackTrace();
         }
-
-        searchBox.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                String text = searchBox.getText().toString().toLowerCase(Locale.getDefault());
-                adapter.filter(text);
-            }
-        });
 
 //        ReportAdapter adapter = new ReportAdapter(this, reportList);
 //        mListView.setAdapter(adapter);
@@ -215,3 +223,6 @@ public class OfficialActivity extends AppCompatActivity {
         startActivity(intent);
     }
 }
+
+
+

@@ -1,11 +1,13 @@
 package com.cmpe277group4.ireport;
 
 import android.content.Context;
+import android.media.Image;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,6 +28,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -37,21 +40,28 @@ public class ReportAdapter extends BaseAdapter {
     private Context mContext;
     private LayoutInflater mInflater;
     private ArrayList<Report> mDataSource;
-    private ArrayList<Report> filterlist = null;
+
+    private ArrayList<Report> arraylist;
+
 
     public ReportAdapter(Context context, ArrayList<Report> items) {
         mContext = context;
         mDataSource = items;
+
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        this.filterlist = new ArrayList<Report>();
-        this.filterlist.addAll(items);
+
+        this.arraylist = new ArrayList<Report>();
+        this.arraylist.addAll(items);
+
     }
 
 
     //1
     @Override
     public int getCount() {
+
         return mDataSource.size();
+
     }
 
     //2
@@ -69,59 +79,82 @@ public class ReportAdapter extends BaseAdapter {
     //4
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // Get view for row item
-        View rowView = mInflater.inflate(R.layout.list_item_report, parent, false);
 
-        // Get title element
-        TextView titleTextView =
-                (TextView) rowView.findViewById(R.id.report_list_title);
-
-        TextView subtitleTextView =
-                (TextView) rowView.findViewById(R.id.report_list_subtitle);
+        ViewHolder holder;
 
 
-// Get detail element
-        TextView detailTextView =
-                (TextView) rowView.findViewById(R.id.report_list_detail);
+        if (convertView == null){
 
-// Get thumbnail element
-        ImageView thumbnailImageView =
-                (ImageView) rowView.findViewById(R.id.report_list_thumbnail);
+            convertView = mInflater.inflate(R.layout.list_item_report, parent, false);
+
+            holder = new ViewHolder();
+            holder.thumbnailImageView = (ImageView) convertView.findViewById(R.id.report_list_thumbnail);
+            holder.titleTextView = (TextView) convertView.findViewById(R.id.report_list_title);
+            holder.subtitleTextView = (TextView) convertView.findViewById(R.id.report_list_subtitle);
+            holder.detailTextView = (TextView) convertView.findViewById(R.id.report_list_detail);
+
+
+            convertView.setTag(holder);
+
+        }
+        else {
+            holder = (ViewHolder) convertView.getTag();
+        }
+
+        TextView titleTextView = holder.titleTextView;
+        TextView subtitleTextView = holder.subtitleTextView;
+        TextView detailTextView = holder.detailTextView;
+        ImageView thumbnailImageView = holder.thumbnailImageView;
 
         Report report = (Report) getItem(position);
-
         Log.d("ADAPTER_REPORT",report.date);
 
         //thumbnailImageView.setImageBitmap(report.imageBm);
         //new AsyncTaskLoadImage(report.image_litter, thumbnailImageView).execute();
 // 2
         titleTextView.setText(report.date);
-//        subtitleTextView.setText(report.time);
+        subtitleTextView.setText(report.resident_id);
         detailTextView.setText(report.status_litter);
         new AsyncTaskLoadImage(report.image_litter, thumbnailImageView).execute();
 
 // 3
 //        Picasso.with(mContext).load(report.imageUrl).placeholder(R.mipmap.ic_launcher).into(thumbnailImageView);
 
-        return rowView;
+        return convertView;
     }
 
+    private static class ViewHolder {
+        public TextView titleTextView;
+        public TextView subtitleTextView;
+        public TextView detailTextView;
+        public ImageView thumbnailImageView;
+    }
+
+    // Filter Class
     public void filter(String charText) {
         charText = charText.toLowerCase(Locale.getDefault());
         mDataSource.clear();
         if (charText.length() == 0) {
-            mDataSource.addAll(filterlist);
+            mDataSource.addAll(arraylist);
         }
         else
         {
-            for (Report wp : filterlist)
+            for (Report wp : arraylist)
             {
-                if (wp.status_litter.toLowerCase(Locale.getDefault()).contains(charText))
+                if (wp.resident_id.toLowerCase(Locale.getDefault()).contains(charText))
                 {
                     mDataSource.add(wp);
+                }
+                else if (wp.status_litter.toLowerCase(Locale.getDefault()).contains(charText)){
+                    mDataSource.add(wp);
+
                 }
             }
         }
         notifyDataSetChanged();
     }
+
+
+
+
 }
