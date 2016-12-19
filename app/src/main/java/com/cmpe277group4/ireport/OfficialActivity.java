@@ -75,6 +75,7 @@ public class OfficialActivity extends AppCompatActivity {
                         for (int i = 0; i < reports.length(); i++) {
                             Report report = new Report();
 
+                            report.report_id = reports.getJSONObject(i).getString("_id");
                             report.resident_id = reports.getJSONObject(i).getString("resident_id");
                             report.date = reports.getJSONObject(i).getString("date");
                             report.desc_litter = reports.getJSONObject(i).getString("desc_report");
