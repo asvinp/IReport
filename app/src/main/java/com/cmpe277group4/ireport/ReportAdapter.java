@@ -26,6 +26,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by Asvin on 12/2/2016.
@@ -36,12 +37,14 @@ public class ReportAdapter extends BaseAdapter {
     private Context mContext;
     private LayoutInflater mInflater;
     private ArrayList<Report> mDataSource;
+    private ArrayList<Report> filterlist = null;
 
     public ReportAdapter(Context context, ArrayList<Report> items) {
         mContext = context;
         mDataSource = items;
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
+        this.filterlist = new ArrayList<Report>();
+        this.filterlist.addAll(items);
     }
 
 
@@ -101,5 +104,24 @@ public class ReportAdapter extends BaseAdapter {
 //        Picasso.with(mContext).load(report.imageUrl).placeholder(R.mipmap.ic_launcher).into(thumbnailImageView);
 
         return rowView;
+    }
+
+    public void filter(String charText) {
+        charText = charText.toLowerCase(Locale.getDefault());
+        mDataSource.clear();
+        if (charText.length() == 0) {
+            mDataSource.addAll(filterlist);
+        }
+        else
+        {
+            for (Report wp : filterlist)
+            {
+                if (wp.status_litter.toLowerCase(Locale.getDefault()).contains(charText))
+                {
+                    mDataSource.add(wp);
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 }

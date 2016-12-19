@@ -5,12 +5,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
@@ -34,12 +38,14 @@ public class OfficialActivity extends AppCompatActivity {
     private static final String OFFICIAL_TAG = "OFFICIAL";
 
     private ListView mListView;
+    private EditText searchBox;
 
     private static AsyncHttpClient reportclient = new AsyncHttpClient();
     private static JSONObject serverdataJSON = new JSONObject();
     private static StringEntity serverdataentity;
     private static JSONObject reportdataobject;
     private static JSONArray reports = new JSONArray();
+    ReportAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +57,7 @@ public class OfficialActivity extends AppCompatActivity {
 // 1
         final ArrayList<Report> reportList = new ArrayList<Report>();
 
+        searchBox = (EditText) findViewById(R.id.searchField);
         try {
             reportclient.get(OfficialActivity.this, getString(R.string.server_url) + "getAllReports", new AsyncHttpResponseHandler() {
                 @Override
@@ -77,7 +84,7 @@ public class OfficialActivity extends AppCompatActivity {
                             reportList.add(report);
                         }
 
-                        ReportAdapter adapter = new ReportAdapter(OfficialActivity.this, reportList);
+                        adapter = new ReportAdapter(OfficialActivity.this, reportList);
                         mListView.setAdapter(adapter);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -92,6 +99,24 @@ public class OfficialActivity extends AppCompatActivity {
         }catch (Exception e){
             e.printStackTrace();
         }
+
+        searchBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String text = searchBox.getText().toString().toLowerCase(Locale.getDefault());
+                adapter.filter(text);
+            }
+        });
 
 //        ReportAdapter adapter = new ReportAdapter(this, reportList);
 //        mListView.setAdapter(adapter);
@@ -190,6 +215,3 @@ public class OfficialActivity extends AppCompatActivity {
         startActivity(intent);
     }
 }
-
-
-
