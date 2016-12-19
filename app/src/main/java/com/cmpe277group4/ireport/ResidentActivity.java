@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -197,6 +198,7 @@ public class ResidentActivity extends AppCompatActivity {
             startActivity(updateActivity);
             return true;
         case R.id.signout:
+            LoginManager.getInstance().logOut();
             FirebaseAuth.getInstance().signOut();
             Intent goBackLogin = new Intent(ResidentActivity.this,LoginActivity.class);
             startActivity(goBackLogin);
