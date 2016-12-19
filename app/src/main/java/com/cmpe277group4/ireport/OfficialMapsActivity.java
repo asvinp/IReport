@@ -258,7 +258,7 @@ public class OfficialMapsActivity extends AppCompatActivity implements OnMapRead
             Log.d("MARKER COUNT",Integer.toString(count++));
             if(marker.getSnippet().contentEquals(report.date)){
                 Log.d("MARKER","found report");
-                Intent detailIntent = new Intent(OfficialMapsActivity.this, ResidentDetail.class);
+                Intent detailIntent = new Intent(OfficialMapsActivity.this, report_detail.class);
 
                 detailIntent.putExtra("report_id",report.report_id);
 //                detailIntent.putExtra("image", decodeBase64Image(report.image_litter));
