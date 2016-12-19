@@ -110,7 +110,7 @@ public class report_detail extends AppCompatActivity {
         lat_loc = this.getIntent().getExtras().getString("lat_loc");
         lon_loc = this.getIntent().getExtras().getString("lon_loc");
         image = this.getIntent().getExtras().getString("image_litter");
-        String address = this.getIntent().getExtras().getString("address");
+        address = this.getIntent().getExtras().getString("address");
         final String report_id = this.getIntent().getExtras().getString("report_id");
         trashLoc = lat_loc + "," + lon_loc;
 
@@ -143,7 +143,7 @@ public class report_detail extends AppCompatActivity {
         severityTextView.setText(severity);
         timeTextView.setText(date);
         sizeTextView.setText(size);
-
+//
         try {
             Geocoder geocoder;
             List<Address> addresses;

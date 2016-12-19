@@ -108,7 +108,7 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
         lat_loc = this.getIntent().getExtras().getString("lat_loc");
         lon_loc = this.getIntent().getExtras().getString("lon_loc");
         image = this.getIntent().getExtras().getString("image_litter");
-        String address = this.getIntent().getExtras().getString("address");
+        address = this.getIntent().getExtras().getString("address");
         final String report_id = this.getIntent().getExtras().getString("report_id");
         trashLoc = lat_loc + "," + lon_loc;
 
@@ -141,11 +141,11 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
         severityTextView.setText(severity);
         timeTextView.setText(date);
         sizeTextView.setText(size);
-
+//
         try {
             Geocoder geocoder;
             List<Address> addresses;
-            geocoder = new Geocoder(context, Locale.getDefault());
+            geocoder = new Geocoder(this, Locale.getDefault());
             addresses = geocoder.getFromLocation(Double.parseDouble(lat_loc), Double.parseDouble(lon_loc), 1);
             address = addresses.get(0).getAddressLine(0);
         }catch (Exception e){
