@@ -26,7 +26,6 @@ import cz.msebera.android.httpclient.entity.StringEntity;
 
 public class UserSettingsActivity extends AppCompatActivity {
     private Switch emailNotification , statusChange , anonymous;
-    //switchEmailNotification switchStatusChange switchAnonymous
     private JSONObject residentDataJSON;
     private AsyncHttpClient updateClient = new AsyncHttpClient();
     private JSONObject serverDataJSON = new JSONObject();
@@ -44,7 +43,6 @@ public class UserSettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_settings);
-        //emailNotification = (TextView) findViewById(R.id.switchStatus);
         emailNotification = (Switch) findViewById(R.id.switchEmailNotification);
 
         statusChange = (Switch) findViewById(R.id.switchStatusChange);
@@ -78,15 +76,9 @@ public class UserSettingsActivity extends AppCompatActivity {
                 try {
                     residentDataJSON = new JSONObject(residentData);
                     JSONObject dataResidentJSON = residentDataJSON.getJSONObject("data");
-//                    emailText.setText(dataResidentJSON.getString("email"));
-//                    nameText.setText(dataResidentJSON.getString("name"));
-//                    addressText.setText(dataResidentJSON.getString("address"));
-//                    screenNameText.setText(dataResidentJSON.getString("screenName"));
                     eNot = Integer.parseInt(dataResidentJSON.getString("emailNotification"));
                     sChange = Integer.parseInt(dataResidentJSON.getString("statusChange"));
                     ana = Integer.parseInt(dataResidentJSON.getString("anonymous"));
-                    //Log.d(TAG, dataResidentJSON.getString("anonymous"));
-                    //Log.d(TAG, dataResidentJSON.toString(4));
 
                     Log.d("e indide", String.valueOf(eNot));
 
@@ -138,13 +130,9 @@ public class UserSettingsActivity extends AppCompatActivity {
         });
 
         Log.d("emai", String.valueOf(eNot));
-
         Log.d("emai", String.valueOf(sChange));
         Log.d("emai", String.valueOf(ana));
 
-        //set the switch to ON
-       // mySwitch.setChecked(true);
-        //attach a listener to check for changes in state
         emailNotification.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
@@ -214,11 +202,6 @@ public class UserSettingsActivity extends AppCompatActivity {
             }
         });
 
-
-
-//eNot sChange ana
-
-
         saveButtonText = (Button) findViewById(R.id.buttonSave);
         saveButtonText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -287,9 +270,6 @@ public class UserSettingsActivity extends AppCompatActivity {
             Intent goBackLogin = new Intent(UserSettingsActivity.this,LoginActivity.class);
             startActivity(goBackLogin);
             return(true);
-//        case R.id.exit:
-//            finish();
-//            return(true);
     }
         return(super.onOptionsItemSelected(item));
     }

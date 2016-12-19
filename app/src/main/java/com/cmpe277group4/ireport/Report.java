@@ -61,32 +61,6 @@ public class Report {
             reportclient.get(context, context.getString(R.string.server_url) + "getReport", serverdataentity, "application/json", new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-//                    Log.d("reports", "got Data");
-//                    try {
-//                        reportdataobject = new JSONObject(new String(responseBody));
-//                        reports = reportdataobject.getJSONArray("data");
-//                        // Get Report objects from data
-//                        for(int i = 0; i < reports.length(); i++){
-//                            Report report = new Report();
-//
-//                            report.id = reports.getJSONObject(i).getString("user_resident");
-////                report.time = reports.getJSONObject(i).getString("time");
-//                            report.description = reports.getJSONObject(i).getString("desc_litter");
-////                report.imageUrl = reports.getJSONObject(i).getString("image");
-////                report.instructionUrl = reports.getJSONObject(i).getString("url");
-//                            report.status = reports.getJSONObject(i).getString("status_litter");
-//                            report.severity = reports.getJSONObject(i).getString("severity_litter");
-//                            report.size = reports.getJSONObject(i).getString("size_litter");
-//                            report.lat = reports.getJSONObject(i).getString("lat_loc");
-//                            report.lon = reports.getJSONObject(i).getString("lon_loc");
-//
-//                            reportList.add(report);
-//                        }
-//
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//
 
                 }
 
@@ -97,11 +71,6 @@ public class Report {
                 }
             });
 
-//            // Load data
-//            String jsonString = loadJsonFromAsset("reports.json", context);
-//            JSONObject json = new JSONObject(jsonString);
-//            JSONArray reports = json.getJSONArray("reports");
-
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -110,11 +79,6 @@ public class Report {
         }
         android.os.Handler handler = new android.os.Handler() ;
 
-//        handler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//            }
-//        },10000);
 
         try {
             Thread.sleep(10000);

@@ -259,9 +259,6 @@ public class UpdateActivity extends AppCompatActivity {
             Intent goBackLogin = new Intent(UpdateActivity.this,LoginActivity.class);
             startActivity(goBackLogin);
             return(true);
-//        case R.id.exit:
-//            finish();
-//            return(true);
     }
         return(super.onOptionsItemSelected(item));
     }

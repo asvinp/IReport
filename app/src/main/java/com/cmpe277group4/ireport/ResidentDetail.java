@@ -58,12 +58,8 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
     String provider;
     protected String latitude, longitude;
     protected boolean gps_enabled, network_enabled;
-
     String resident_id = null;
-
     String date;
-    //        String url = this.getIntent().getExtras().getString("url");
-//        String imageUrl = this.getIntent().getExtras().getString("image");
     String description;
     String status;
     String severity;
@@ -88,13 +84,6 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
         //getLocation
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 10, this);
@@ -128,20 +117,10 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
         TextView locationTextView = (TextView) findViewById(R.id.locationDetail);
         TextView descriptionTextView = (TextView) findViewById(R.id.descriptionDetail);
 
-
-        //Loading image from below url into imageView
-
-//        Picasso.with(this)
-//                .load(imageUrl)
-//                .into(detailImageView);
-
-        //send strings to TextViews
-//        if(image != null)
-//            detailImageView.setImageBitmap(decodeBase64Image(image));
         severityTextView.setText(severity);
         timeTextView.setText(date);
         sizeTextView.setText(size);
-//
+
         try {
             Geocoder geocoder;
             List<Address> addresses;
@@ -158,12 +137,7 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
         }
         descriptionTextView.setText(description);
 
-
-
-
-
         //Spinner
-
         //Set spinner view
         statusSpinner = (Spinner) findViewById(R.id.statusSpinner);
 
@@ -279,14 +253,6 @@ public class ResidentDetail extends AppCompatActivity implements GeoTask.Geo, Lo
         }
     }
 
-    //DECODE IMAGE
-    private Bitmap decodeBase64Image(String base64){
-        byte[] decodedString = Base64.decode(base64, Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        return decodedByte;
-//        Drawable d = new BitmapDrawable(getResources(), decodedByte);
-//        return d;
-    }
 
     @Override
     public void onLocationChanged(Location location) {

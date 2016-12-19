@@ -4,19 +4,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,7 +21,6 @@ import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,7 +33,7 @@ import java.util.Locale;
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
 
-public class report_detail extends AppCompatActivity {
+public class OfficialDetailActivity extends AppCompatActivity {
 
     private boolean isFirstFire = true;
 
@@ -63,10 +55,7 @@ public class report_detail extends AppCompatActivity {
     protected boolean gps_enabled, network_enabled;
     private int  ana ;
     String resident_id = null;
-
     String date;
-    //        String url = this.getIntent().getExtras().getString("url");
-//        String imageUrl = this.getIntent().getExtras().getString("image");
     String description;
     String status;
     String severity;
@@ -88,20 +77,6 @@ public class report_detail extends AppCompatActivity {
 
         AsyncHttpClient reportClient = new AsyncHttpClient();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-//        //getLocation
-//        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-//        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            // TODO: Consider calling
-//            //    ActivityCompat#requestPermissions
-//            // here to request the missing permissions, and then overriding
-//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//            //                                          int[] grantResults)
-//            // to handle the case where the user grants the permission. See the documentation
-//            // for ActivityCompat#requestPermissions for more details.
-//            return;
-//        }
-//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 10, this);
 
         resident_id = this.getIntent().getExtras().getString("resident_id");
         date = this.getIntent().getExtras().getString("date");
@@ -127,7 +102,7 @@ public class report_detail extends AppCompatActivity {
         }
 
 
-        updateClient.get(report_detail.this, getString(R.string.server_url) + "/getResidentSettingsData", serverDataEntity, "application/json", new AsyncHttpResponseHandler() {
+        updateClient.get(OfficialDetailActivity.this, getString(R.string.server_url) + "/getResidentSettingsData", serverDataEntity, "application/json", new AsyncHttpResponseHandler() {
 
             private final String TAG = "SERVER_UPDATE";
 
@@ -140,15 +115,7 @@ public class report_detail extends AppCompatActivity {
                 try {
                     residentDataJSON = new JSONObject(residentData);
                     JSONObject dataResidentJSON = residentDataJSON.getJSONObject("data");
-//                    emailText.setText(dataResidentJSON.getString("email"));
-//                    nameText.setText(dataResidentJSON.getString("name"));
-//                    addressText.setText(dataResidentJSON.getString("address"));
-//                    screenNameText.setText(dataResidentJSON.getString("screenName"));
-             //       eNot = Integer.parseInt(dataResidentJSON.getString("emailNotification"));
-               //     sChange = Integer.parseInt(dataResidentJSON.getString("statusChange"));
                     ana = Integer.parseInt(dataResidentJSON.getString("anonymous"));
-                    //Log.d(TAG, dataResidentJSON.getString("anonymous"));
-                    //Log.d(TAG, dataResidentJSON.toString(4));
 
                     if(ana == 1) {
                         setTitle("Anonymous User");
@@ -171,9 +138,6 @@ public class report_detail extends AppCompatActivity {
             }
         });
 
-        //Set title of appscreen to id of report
-      //  setTitle(resident_id);
-
         // set imageview
         ImageView detailImageView = (ImageView) findViewById(R.id.imgDetail);
         System.out.println("ResidentDetail ireportvinay imageurl string"+image);
@@ -185,21 +149,10 @@ public class report_detail extends AppCompatActivity {
         TextView sizeTextView = (TextView) findViewById(R.id.sizeDetail);
         TextView locationTextView = (TextView) findViewById(R.id.locationDetail);
         TextView descriptionTextView = (TextView) findViewById(R.id.descriptionDetail);
-
-
-        //Loading image from below url into imageView
-
-//        Picasso.with(this)
-//                .load(imageUrl)
-//                .into(detailImageView);
-
-        //send strings to TextViews
-//        if(image != null)
-//            detailImageView.setImageBitmap(decodeBase64Image(image));
         severityTextView.setText(severity);
         timeTextView.setText(date);
         sizeTextView.setText(size);
-//
+
         try {
             Geocoder geocoder;
             List<Address> addresses;
@@ -216,15 +169,9 @@ public class report_detail extends AppCompatActivity {
         }
         descriptionTextView.setText(description);
 
-
-
-
-
         //Spinner
-
         //Set spinner view
         statusSpinner = (Spinner) findViewById(R.id.statusSpinner);
-
 
         //items for spinner
         String[] items = new String[]{"Still There", "Removal Confirmed", "Removal Claimed"};
@@ -280,7 +227,7 @@ public class report_detail extends AppCompatActivity {
                                     } catch (UnsupportedEncodingException e) {
                                         e.printStackTrace();
                                     }
-                                    client.get(report_detail.this, getString(R.string.server_url) + "updateReport", entity, "application/json", new AsyncHttpResponseHandler() {
+                                    client.get(OfficialDetailActivity.this, getString(R.string.server_url) + "updateReport", entity, "application/json", new AsyncHttpResponseHandler() {
                                         @Override
                                         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                                             Log.d("Server","selection updated");
@@ -320,16 +267,6 @@ public class report_detail extends AppCompatActivity {
         });
     }
 
-
-    //DECODE IMAGE
-    private Bitmap decodeBase64Image(String base64){
-        byte[] decodedString = Base64.decode(base64, Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        return decodedByte;
-//        Drawable d = new BitmapDrawable(getResources(), decodedByte);
-//        return d;
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem m){
         switch(m.getItemId()){
@@ -342,42 +279,4 @@ public class report_detail extends AppCompatActivity {
                 return super.onOptionsItemSelected(m);
         }
     }
-
-//    @Override
-//    public void onLocationChanged(Location location) {
-//        currentLoc= "" + location.getLatitude() + "," + location.getLongitude();
-//        trashLoc = trashLoc.replace(" ", "");
-//
-//        String url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=" + currentLoc + "&destinations=" + trashLoc + "&mode=walking&language=fr-FR&avoid=tolls&key=AIzaSyAP8hnEOoMqRMpvQ7glzj6phn7Z1M45g4M";
-//        new GeoTask(report_detail.this).execute(url);
-//    }
-
-//    @Override
-//    public void onStatusChanged(String provider, int status, Bundle extras) {
-//
-//    }
-//
-//    @Override
-//    public void onProviderEnabled(String provider) {
-//
-//    }
-//
-//    @Override
-//    public void onProviderDisabled(String provider) {
-//
-//    }
-//
-//    @Override
-//    public void setDouble(String result) {
-//        Double dist=Double.parseDouble(result)/0.3048;
-//        Log.d("dist in feet", String.valueOf(dist));
-//        if (dist <= 30){
-//            //enable spinner
-//            statusSpinner.setEnabled(true);
-//        }
-//        else {
-//            //disable spinner
-//            statusSpinner.setEnabled(false);
-//        }
-//    }
 }

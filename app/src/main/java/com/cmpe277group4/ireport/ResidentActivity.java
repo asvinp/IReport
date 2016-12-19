@@ -2,16 +2,12 @@ package com.cmpe277group4.ireport;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,8 +16,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.facebook.login.LoginManager;
@@ -90,13 +84,11 @@ public class ResidentActivity extends AppCompatActivity {
                             report.date = reports.getJSONObject(i).getString("date");
                             report.desc_litter = reports.getJSONObject(i).getString("desc_report");
                             report.image_litter = reports.getJSONObject(i).getString("image_litter");
-                            //                report.instructionUrl = reports.getJSONObject(i).getString("url");
                             report.status_litter = reports.getJSONObject(i).getString("status_litter");
                             report.severity_litter = reports.getJSONObject(i).getString("severity_litter");
                             report.size_litter = reports.getJSONObject(i).getString("size_litter");
                             report.lat_loc = reports.getJSONObject(i).getString("lat_loc");
                             report.lon_loc = reports.getJSONObject(i).getString("lon_loc");
-                            //report.imageBm = reports.getJSONObject(i).getString("image_litter");
                             Log.d("RESIDENTACT",report.date);
                             reportList.add(report);
                         }
@@ -122,10 +114,6 @@ public class ResidentActivity extends AppCompatActivity {
                             }
                         });
 
-
-
-
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -146,12 +134,11 @@ public class ResidentActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
-                Intent mapIntent = new Intent(btncontext, MapsActivity.class);
+                Intent mapIntent = new Intent(btncontext, ResidentMapsActivity.class);
                 mapIntent.putExtra("resident_id",resident_id);
                 startActivity(mapIntent);
             }
         });
-
 
 
         final Context context = this;
@@ -160,16 +147,10 @@ public class ResidentActivity extends AppCompatActivity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // 1
                 Report selectedReport = reportList.get(position);
-
-                // 2
                 Intent detailIntent = new Intent(context, ResidentDetail.class);
-                String address;
                 detailIntent.putExtra("report_id",selectedReport.report_id);
                 Log.d("ACTIVITY",selectedReport.report_id);
-//
-//                // 3
                 detailIntent.putExtra("resident_id", selectedReport.resident_id);
                 detailIntent.putExtra("date", selectedReport.date);
                 detailIntent.putExtra("image_litter", selectedReport.image_litter);
@@ -196,15 +177,6 @@ public class ResidentActivity extends AppCompatActivity {
                 // 4
                 startActivity(detailIntent);
             }});
-    }
-
-    //DECODE IMAGE
-    private Bitmap decodeBase64Image(String base64){
-        byte[] decodedString = Base64.decode(base64, Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        return decodedByte;
-//        Drawable d = new BitmapDrawable(getResources(), decodedByte);
-//        return d;
     }
 
     @Override
@@ -237,9 +209,6 @@ public class ResidentActivity extends AppCompatActivity {
             Intent goBackLogin = new Intent(ResidentActivity.this,LoginActivity.class);
             startActivity(goBackLogin);
             return(true);
-//        case R.id.exit:
-//            finish();
-//            return(true);
     }
         return(super.onOptionsItemSelected(item));
     }

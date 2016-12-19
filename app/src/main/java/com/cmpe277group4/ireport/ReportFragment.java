@@ -287,7 +287,6 @@ public class ReportFragment extends Fragment {
         mLatLng = (TextView)v.findViewById(R.id.textViewLatLng);
         mSendButton = (Button)v.findViewById(R.id.mSendButton);
         descriptiontext = (EditText) v.findViewById(R.id.editText);
-//        bitmapTest = (ImageView)v.findViewById(R.id.imageView3);
 
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -3,8 +3,6 @@ package com.cmpe277group4.ireport;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
@@ -13,7 +11,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -258,15 +255,12 @@ public class OfficialMapsActivity extends AppCompatActivity implements OnMapRead
             Log.d("MARKER COUNT",Integer.toString(count++));
             if(marker.getSnippet().contentEquals(report.date)){
                 Log.d("MARKER","found report");
-                Intent detailIntent = new Intent(OfficialMapsActivity.this, report_detail.class);
+                Intent detailIntent = new Intent(OfficialMapsActivity.this, OfficialDetailActivity.class);
 
                 detailIntent.putExtra("report_id",report.report_id);
-//                detailIntent.putExtra("image", decodeBase64Image(report.image_litter));
-//                // 3
                 detailIntent.putExtra("resident_id", report.resident_id);
                 detailIntent.putExtra("date", report.date);
-//            detailIntent.putExtra("url", stringurl.instructionUrl);
-                detailIntent.putExtra("image", report.image_litter);
+                detailIntent.putExtra("image_litter", report.image_litter);
                 detailIntent.putExtra("desc_litter", report.desc_litter);
                 detailIntent.putExtra("status_litter", report.status_litter);
                 detailIntent.putExtra("severity_litter", report.severity_litter);
@@ -287,31 +281,10 @@ public class OfficialMapsActivity extends AppCompatActivity implements OnMapRead
                 startActivity(detailIntent);
             }
         }
-//        String markertitle = marker.getTitle();
-//        if(markertitle.equals("Target Location")){
-//            Toast.makeText(this, "You searched for this place", Toast.LENGTH_LONG).show();
-//        }
-//
-//        else{
-//            int m = markerhash.get(marker.getTitle());
-//
-//            if (m==m)
-//            {
-//                // 2
-//
-//
-//            }
-//        }
 
     }
 
     private void drawMarker(LatLng point, String id, String time) {
-//        MarkerOptions multioptions = new MarkerOptions()
-//                .title(id)
-//                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
-//                .position(point)
-//                .snippet(time);
-//        mGoogleMap.addMarker(multioptions);
         Log.d("MARKER",id);
 
         litterMarkers = new MarkerOptions()
@@ -406,13 +379,6 @@ public class OfficialMapsActivity extends AppCompatActivity implements OnMapRead
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
                 return;
             }
         }
@@ -440,14 +406,6 @@ public class OfficialMapsActivity extends AppCompatActivity implements OnMapRead
         }
     }
 
-    //DECODE IMAGE
-    private Bitmap decodeBase64Image(String base64){
-        byte[] decodedString = Base64.decode(base64, Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        return decodedByte;
-//        Drawable d = new BitmapDrawable(getResources(), decodedByte);
-//        return d;
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem m){
@@ -480,86 +438,3 @@ public class OfficialMapsActivity extends AppCompatActivity implements OnMapRead
 
 
 }
-
-
-
-//        List<String> locationarr = new ArrayList();
-//        List<String> idarr = new ArrayList();
-//        List<String> timearr = new ArrayList();
-//        List<String> imagearr = new ArrayList();
-//        List<String> descriptionarr = new ArrayList();
-//        List<String> severityarr = new ArrayList();
-//        List<String> sizearr = new ArrayList();
-//        List<String> statusarr = new ArrayList();
-//
-//
-//        // Reading json file from assets folder
-//        StringBuffer sb = new StringBuffer();
-//        BufferedReader br = null;
-//        try {
-//            br = new BufferedReader(new InputStreamReader(getAssets().open(
-//                    "reports.json")));
-//            String temp;
-//            while ((temp = br.readLine()) != null)
-//                sb.append(temp);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } finally {
-//            try {
-//                br.close(); // stop reading
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//        String myjsonstring = sb.toString();
-//        // Try to parse JSON
-//        try {
-//            // Creating JSONObject from String
-//            JSONObject jsonObjMain = new JSONObject(myjsonstring);
-//
-//            // Creating JSONArray from JSONObject
-//            JSONArray jsonArray = jsonObjMain.getJSONArray("reports");
-//
-////            // JSONArray has x JSONObject
-////            for (int i = 0; i < jsonArray.length(); i++) {
-////
-////                // Creating JSONObject from JSONArray
-////                JSONObject jsonObj = jsonArray.getJSONObject(i);
-////
-////                // Getting data from individual JSONObject
-////                id = jsonObj.getString("id");
-////                location = jsonObj.getString("location");
-////                time = jsonObj.getString("time");
-////                image = jsonObj.getString("image");
-////                description = jsonObj.getString("description");
-////                severity = jsonObj.getString("severity");
-////                size = jsonObj.getString("size");
-////                status = jsonObj.getString("status");
-////
-////
-////                locationarr.add(jsonObj.getString("location"));
-////                stringlocations = locationarr.toArray(new String[locationarr.size()]);
-////
-////                idarr.add(jsonObj.getString("id"));
-////                stringid = idarr.toArray(new String[idarr.size()]);
-////
-////                timearr.add(jsonObj.getString("time"));
-////                stringtime = timearr.toArray(new String[timearr.size()]);
-////
-////                imagearr.add(jsonObj.getString("image"));
-////                stringimage = imagearr.toArray(new String[imagearr.size()]);
-////
-////                descriptionarr.add(jsonObj.getString("description"));
-////                stringdescription = descriptionarr.toArray(new String[descriptionarr.size()]);
-////
-////                severityarr.add(jsonObj.getString("severity"));
-////                stringseverity = severityarr.toArray(new String[severityarr.size()]);
-////
-////                sizearr.add(jsonObj.getString("size"));
-////                stringsize = sizearr.toArray(new String[sizearr.size()]);
-////
-////                statusarr.add(jsonObj.getString("status"));
-////                stringstatus = statusarr.toArray(new String[statusarr.size()]);
-////
-////
-////            }

@@ -40,7 +40,6 @@ public class ReportAdapter extends BaseAdapter {
     private Context mContext;
     private LayoutInflater mInflater;
     private ArrayList<Report> mDataSource;
-
     private ArrayList<Report> arraylist;
 
 
@@ -55,8 +54,6 @@ public class ReportAdapter extends BaseAdapter {
 
     }
 
-
-    //1
     @Override
     public int getCount() {
 
@@ -108,18 +105,10 @@ public class ReportAdapter extends BaseAdapter {
 
         Report report = (Report) getItem(position);
         Log.d("ADAPTER_REPORT",report.date);
-
-        //thumbnailImageView.setImageBitmap(report.imageBm);
-        //new AsyncTaskLoadImage(report.image_litter, thumbnailImageView).execute();
-// 2
         titleTextView.setText(report.date);
         subtitleTextView.setText("");
         detailTextView.setText(report.status_litter);
         new AsyncTaskLoadImage(report.image_litter, thumbnailImageView).execute();
-
-// 3
-//        Picasso.with(mContext).load(report.imageUrl).placeholder(R.mipmap.ic_launcher).into(thumbnailImageView);
-
         return convertView;
     }
 
@@ -153,8 +142,5 @@ public class ReportAdapter extends BaseAdapter {
         }
         notifyDataSetChanged();
     }
-
-
-
 
 }

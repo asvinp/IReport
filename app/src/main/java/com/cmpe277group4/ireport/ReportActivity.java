@@ -50,9 +50,6 @@ public class ReportActivity extends AppCompatActivity {
                 settingIntent.putExtra("resident_id",resident_id);
                 startActivity(settingIntent);
                 return true;
-//            case R.id.exit:
-//                finish();
-//                return true;
         }
         return super.onOptionsItemSelected(item);
     }

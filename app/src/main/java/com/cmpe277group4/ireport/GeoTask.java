@@ -37,16 +37,7 @@ public class GeoTask extends AsyncTask<String, Void, String> {
         this.mContext = mContext;
         geo1= (Geo) mContext;
     }
-    //Executed before "doInBackground(String...params)" to display the progress dialog --> Giving errors so commenting it out
-/*    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        pd=new ProgressDialog(mContext);
-        pd.setMessage("Loading");
-        pd.setCancelable(false);
-        pd.show();
-    }
-    */
+
     //Executed after the "doInBackground(String...params)" to dismiss displayed progress dialog and call "setDouble(Double)" defined in "MainActivity.java"
     @Override
     protected void onPostExecute(String aDouble) {

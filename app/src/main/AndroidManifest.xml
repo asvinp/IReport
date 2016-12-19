@@ -50,9 +50,9 @@
         <activity android:name=".OfficialActivity" />
         <activity android:name=".ProfileActivity" />
         <activity
-            android:name=".MapsActivity"
+            android:name=".ResidentMapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".report_detail" />
+        <activity android:name=".OfficialDetailActivity" />
         <activity android:name=".ReportActivity" />
         <activity android:name=".ResidentDetail" />
         <activity android:name=".ResidentActivity" />
